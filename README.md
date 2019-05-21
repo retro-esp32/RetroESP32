@@ -1,4 +1,4 @@
-# ![Gaboze Express](Assets/GabozeExpress.png)
+# ![Gaboze Express](assets/GabozeExpress.png)
 > Software Branch
 
 This branch contains the specific modification for the Odroid Go hardware to use the 320x240 ILI9342 2.6" display
