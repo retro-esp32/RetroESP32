@@ -39,11 +39,12 @@ export IDF_PATH=~/esp/esp-idf
 #---------------------------------
 # EDIT PATHS FOR REPOSITORY
 #---------------------------------
-# REPLACE path_to_repository with the actual path to your local repository
+# REPLACE REPO with the actual path to your local repository
+REPO="YOU PATH GOES HERE"
 #---------------------------------
-GOGO_PATH="[path_to_repository]/GabozeExpressOfficial/gogo/"
-GOPLAY_PATH="[path_to_repository]/GabozeExpressOfficial/go-play/"
-MKFW_PATH="[path_to_repository]/GabozeExpressOfficial/odroid-go-firmware/tools/mkfw"
+GOGO_PATH="$REPO/GabozeExpressOfficial/gogo/"
+GOPLAY_PATH="$REPO/GabozeExpressOfficial/go-play/"
+MKFW_PATH="$REPO/GabozeExpressOfficial/odroid-go-firmware/tools/mkfw"
 ```
 ##### execute the firmware file
 > follow the prompts on screen
