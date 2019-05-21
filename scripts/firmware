@@ -12,7 +12,7 @@ export IDF_PATH=~/esp/esp-idf
 # EDIT PATHS FOR REPOSITORY
 #---------------------------------
 # REPLACE REPO with the actual path to your local repository
-REPO="YOU PATH GOES HERE"
+REPO="/path/to/repo"
 #---------------------------------
 GOGO_PATH="$REPO/GabozeExpressOfficial/gogo/"
 GOPLAY_PATH="$REPO/GabozeExpressOfficial/go-play/"
@@ -106,7 +106,7 @@ make
 cd $SRC_PATH
 ffmpeg -i assets/gaboze.png -f rawvideo -pix_fmt rgb565 assets/gaboze.raw -y
 
-$MKFW_PATH/mkfw gogo assets/gaboze.raw \
+$MKFW_PATH/mkfw 'Gaboze Express' assets/gaboze.raw \
 0 16 1048576 gogo gogo.bin \
 0 17 1048576 nesemu-go nesemu-go.bin \
 0 18 1048576 gnuboy-go gnuboy-go.bin \
