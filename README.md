@@ -13,9 +13,9 @@ Based on the popularity of:
 
 We have assemebled a team to pursue the development of:
 
-* Hardware
-* Software
-* Firmware
+* Hardware Branch
+* Software Branch
+* Firmware Branch (soon)
 
 A **new** *Game Boy Pocket* footprint based on the [ESP32 Wrover](https://www.espressif.com/en/products/hardware/esp32/overview) from [Espressif Systems](https://www.espressif.com)
 
@@ -35,27 +35,6 @@ It has full support for
 - [x] ESP-ISP Dev Toolchain
 - [x] Arduino Toolchain
 - [x] Whatever else you want to throw at it
-
-
-
-### Measurements
-
-| Front Measurements | Back Measurement |
-| ------------------ | ---------------- |
-| ![Gaboze Express](Assets/MeasurementsFront.png) | ![Gaboze Express](Assets/MeasurementsBack.png) |
-
-### Layout
-
-| Front Layout | Back Layout |
-| ------------------ | ---------------- |
-| ![Gaboze Express](Assets/LayoutFront.png) | ![Gaboze Express](Assets/LayoutBack.png) |
-
-### DXF
-
-| Front Layout | Back Layout |
-| ------------------ | ---------------- |
-| ![Gaboze Express](Assets/DxfFront.png) | ![Gaboze Express](Assets/DxfBack.png) |
-
 
 ### More Soon
 > Stay Tuned
