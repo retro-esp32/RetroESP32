@@ -13,9 +13,11 @@ Based on the popularity of:
 
 We have assemebled a team to pursue the development of:
 
-* Hardware Branch
-* Software Branch
-* Firmware Branch (soon)
+* [**Hardware Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Hardware)
+
+* [**Software Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Sofware)
+
+  
 
 A **new** *Game Boy Pocket* footprint based on the [ESP32 Wrover](https://www.espressif.com/en/products/hardware/esp32/overview) from [Espressif Systems](https://www.espressif.com)
 
