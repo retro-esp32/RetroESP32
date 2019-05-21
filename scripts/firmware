@@ -12,7 +12,7 @@ export IDF_PATH=~/esp/esp-idf
 # EDIT PATHS FOR REPOSITORY
 #---------------------------------
 # REPLACE REPO with the actual path to your local repository
-REPO="/path/to/repo"
+REPO="/Your/Path/To/Repo"
 #---------------------------------
 GOGO_PATH="$REPO/GabozeExpressOfficial/gogo/"
 GOPLAY_PATH="$REPO/GabozeExpressOfficial/go-play/"
