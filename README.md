@@ -1,68 +1,69 @@
-# ![Gaboze Express](Assets/GabozeExpress.png)
-> An ESP32 Wrover based Game Boy Pocket
+# Gaboze Express
+> Software Branch
 
+This branch contains the specific modification for the Odroid Go hardware to use the 320x240 ILI9342 2.6" display
 
+- [x] Odroid Go - [Firmware](https://github.com/OtherCrashOverride/odroid-go-firmware)
+- [x] Odroid Go - [Go Play Emulators](https://github.com/OtherCrashOverride/go-play)
+- [x] Launcher based on [GoGo](https://bitbucket.org/odroid_go_stuff/gogo/src/master/) Launcher 
 
-## Welcome
+## Usage
+> How To
 
-Based on the popularity of: 
-- [Gaboze Pocaio](https://github.com/32teeth/GabozePocaio-Round1)
-- [Gaboze Pocaio Round 2](https://github.com/32teeth/GabozePocaio-Round2)
+Clone the Software Branch of the [Official Gaboze Express](https://github.com/gaboze-express/GabozeExpress)
 
+```shell
+$ git clone -b Software --single-branch git@github.com:gaboze-express/GabozeExpress.git
+```
 
+### firmware.sh
+> inside scripts folder
 
-We have assemebled a team to pursue the development of:
+Navigate to the /scripts folder of your newly cloned repository and set permission for ```firmware``` shell file
 
-* Hardware
-* Software
-* Firmware
+##### permissions for  firmware file
 
-A **new** *Game Boy Pocket* footprint based on the [ESP32 Wrover](https://www.espressif.com/en/products/hardware/esp32/overview) from [Espressif Systems](https://www.espressif.com)
+```shell
+$ chmod 777 firmware
+```
 
-### Why?
+##### edit the firmware file
 
-We love [Hard Kernel](https://www.hardkernel.com/) and their amazing product base including the [Odroid GO](https://www.hardkernel.com/shop/odroid-go/)
+```shell
+#---------------------------------
+# EDIT PATHS FOR ESP AND IDF
+#---------------------------------
+export PATH="$PATH:$HOME/esp/xtensa-esp32-elf/bin"
+export IDF_PATH=~/esp/esp-idf
 
-We wanted to design, build and solution on trusted ***<abbr title="System on a Chip"><u>SoC</u></abbr>***. The ESP32 Wroom was selected for ease of use and extensive build tools available across all development platforms
+#---------------------------------
+# EDIT PATHS FOR REPOSITORY
+#---------------------------------
+# REPLACE path_to_repository with the actual path to your local repository
+#---------------------------------
+GOGO_PATH="[path_to_repository]/GabozeExpressOfficial/gogo/"
+GOPLAY_PATH="[path_to_repository]/GabozeExpressOfficial/go-play/"
+MKFW_PATH="[path_to_repository]/GabozeExpressOfficial/odroid-go-firmware/tools/mkfw"
+```
+##### execute the firmware file
+> follow the prompts on screen
+> if this is your first time running the executable, answer **Y** to the options
+```
+$ ./firmware
+```
 
-### What?
+You will now have a file called **GabozeExpress.fw** in the scripts folder. You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 
-The **Gaboze Express** is intended as an educational *'toy'* for the world of **Makers**
-A low barrier to entry and NO soldering experience needed, AT ALL, there is NOTHING to solder, plug in and go!
+## Enabling new firmware
+> Insert the sd card into your Gaboze Express (Odroid Go) and follow the prompts
 
-It has full support for
-
-- [x] ESP-ISP Dev Toolchain
-- [x] Arduino Toolchain
-- [x] Whatever else you want to throw at it
-
-
-
-### Measurements
-
-| Front Measurements | Back Measurement |
-| ------------------ | ---------------- |
-| ![Gaboze Express](Assets/MeasurementsFront.png) | ![Gaboze Express](Assets/MeasurementsBack.png) |
-
-### Layout
-
-| Front Layout | Back Layout |
-| ------------------ | ---------------- |
-| ![Gaboze Express](Assets/LayoutFront.png) | ![Gaboze Express](Assets/LayoutBack.png) |
-
-### DXF
-
-| Front Layout | Back Layout |
-| ------------------ | ---------------- |
-| ![Gaboze Express](Assets/DxfFront.png) | ![Gaboze Express](Assets/DxfBack.png) |
-
-
-### More Soon
-> Stay Tuned
-
-* Be sure to **Star** or **Fork** the repo as it will be updated often 
-* Pull Requests are welcome
-* Join the [Organization](https://github.com/gaboze-express)
-
+| Step     | Image                                     |
+| -------- | ----------------------------------------- |
+| Power On | ![Power on your hardware](assets/001.jpg) |
+| Firmware List | ![Firmware List](assets/002.jpg) |
+| Firmware Selection | ![Firmware Selection](assets/003.jpg) |
+| Firmware Verification | ![Firmware Verification](assets/004.jpg) |
+| Firmware Write | ![Firmware Write](assets/006.gif) |
+| Reboot into new Firmware | ![Reboot into new Firmware](assets/007.jpg) |
 
 

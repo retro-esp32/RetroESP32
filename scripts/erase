@@ -1,0 +1,49 @@
+#!/bin/zsh
+
+export nc='\e[0m' # No Color
+export red='\e[1;31m'
+export green='\e[1;32m'
+export yellow='\e[1;33m'
+export blue='\e[1;34m'
+export magenta='\e[1;35m'
+export cyan='\e[1;36m'
+export white='\e[1;37m'
+export today=`date +%A\ %B\ %d\ %Y\ %T`
+
+export squid=🐙
+export robot=🤖
+export unicorn=🦄
+export fox=🦊
+export lion=🦁
+export monkey=🐵
+export chicken=🐔
+export panda=🐼
+export whale=🐳
+
+export PORT='/dev/cu.SLAB_USBtoUART'
+#export PORT='/dev/cu.usbserial-A700eFiW'
+
+clear
+echo "\n--------------------------------------------------------------------------"
+echo "\n${monkey}  ${red}Erasing Flash and Storage ${nc}[y/N]"
+echo "\n--------------------------------------------------------------------------"
+read -rs -k 1 response
+if [[ "$response" = "y" ]]
+then
+    clear
+    echo "\n--------------------------------------------------------------------------"
+    echo "\n${monkey}  ${red}Erasing${nc} --> Flash"
+    echo "\n--------------------------------------------------------------------------"
+    esptool.py --chip esp32 --port ${PORT} --baud 921600 --before default_reset --after hard_reset erase_flash
+
+    clear
+    echo "\n--------------------------------------------------------------------------"
+    echo "\n${monkey}  ${red}Erasing${nc} --> Storage"
+    echo "\n--------------------------------------------------------------------------"
+    esptool.py --chip esp32 --port ${PORT} --baud 921600 erase_region 0xf00000 0x100000
+fi
+
+clear
+echo "\n--------------------------------------------------------------------------"
+echo "\n${unicorn}  ${green}GOODBYE${nc}"
+echo "\n--------------------------------------------------------------------------"
