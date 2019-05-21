@@ -1,4 +1,4 @@
-# ![Gaboze Express](assets/GabozeExpress.png)
+# ![Gaboze Express](Assets/GabozeExpress.png)
 > Software Branch
 
 This branch contains the specific modification for the Odroid Go hardware to use the 320x240 ILI9342 2.6" display
@@ -59,11 +59,11 @@ You will now have a file called **GabozeExpress.fw** in the scripts folder. You 
 
 | Step     | Image                                     |
 | -------- | ----------------------------------------- |
-| Power On | ![Power on your hardware](assets/001.jpg) |
-| Firmware List | ![Firmware List](assets/002.jpg) |
-| Firmware Selection | ![Firmware Selection](assets/003.jpg) |
-| Firmware Verification | ![Firmware Verification](assets/004.jpg) |
-| Firmware Write | ![Firmware Write](assets/006.gif) |
-| Reboot into new Firmware | ![Reboot into new Firmware](assets/007.jpg) |
+| Power On | ![Power on your hardware](Assets/001.jpg) |
+| Firmware List | ![Firmware List](Assets/002.jpg) |
+| Firmware Selection | ![Firmware Selection](Assets/003.jpg) |
+| Firmware Verification | ![Firmware Verification](Assets/004.jpg) |
+| Firmware Write | ![Firmware Write](Assets/006.gif) |
+| Reboot into new Firmware | ![Reboot into new Firmware](Assets/007.jpg) |
 
 
