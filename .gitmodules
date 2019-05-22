@@ -1,6 +1,6 @@
 [submodule "odroid-go-firmware"]
 	path = odroid-go-firmware
-	url = git@github.com:OtherCrashOverride/odroid-go-firmware.git
+	url = git@github.com:gaboze-express/odroid-go-firmware.git
 [submodule "go-play"]
 	path = go-play
-	url = git@github.com:OtherCrashOverride/go-play.git
+	url = git@github.com:gaboze-express/go-play.git
