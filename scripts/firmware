@@ -14,6 +14,7 @@ export IDF_PATH=~/esp/esp-idf
 REPO=$(dirname $PWD)
 GOGO_PATH="$REPO/gogo/"
 GOPLAY_PATH="$REPO/go-play/"
+FIRMWARE_PATH="$REPO/Firmware"
 MKFW_PATH="$REPO/odroid-go-firmware/tools/mkfw"
 
 #---------------------------------
@@ -111,7 +112,7 @@ $MKFW_PATH/mkfw 'Gaboze Express' assets/gaboze.raw \
 0 18 1048576 gnuboy-go gnuboy-go.bin \
 0 19 2097152 smsplusgx-go smsplusgx-go.bin
 
-mv firmware.fw GabozeExpress.fw
+mv firmware.fw $FIRMWARE_PATH/GabozeExpress.fw
 
 clear
 

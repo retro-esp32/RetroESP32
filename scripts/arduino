@@ -1,0 +1,69 @@
+#!/bin/zsh
+
+SRC_PATH=`pwd`
+
+#---------------------------------
+# EDIT SKECTH NAME
+#---------------------------------
+REPO=$(dirname $PWD)
+MKFW_PATH="$REPO/odroid-go-firmware/tools/mkfw"
+ARDUINO_PATH="$REPO/Arduino"
+SKETCH="Buttons"
+
+#---------------------------------
+# DON'T TOUCH START
+#---------------------------------
+REPO=$(dirname $PWD)
+
+
+#---------------------------------
+# FANCY STUFF
+#---------------------------------
+export nc='\e[0m' # No Color
+export red='\e[1;31m'
+export green='\e[1;32m'
+export yellow='\e[1;33m'
+export blue='\e[1;34m'
+export magenta='\e[1;35m'
+export cyan='\e[1;36m'
+export white='\e[1;37m'
+export today=`date +%A\ %B\ %d\ %Y\ %T`
+
+export squid=🐙
+export robot=🤖
+export unicorn=🦄
+export fox=🦊
+export lion=🦁
+export monkey=🐵
+export chicken=🐔
+export panda=🐼
+export whale=🐳
+export game=🕹️
+
+
+echo "\n--------------------------------------------------------------------------"
+echo "\n${panda}  ${green}Creating ${cyan}Arduino${nc} Firmware"
+echo "\n--------------------------------------------------------------------------"
+
+cd $SRC_PATH
+
+echo "Building mkfw"
+cd $MKFW_PATH
+make 
+
+cd $SRC_PATH
+ffmpeg -i $ARDUINO_PATH/assets/$SKETCH.png -f rawvideo -pix_fmt rgb565 $ARDUINO_PATH/raw/$SKETCH.raw -y
+
+$MKFW_PATH/mkfw $SKETCH $ARDUINO_PATH/raw/$SKETCH.raw \
+0 16 1048576 $SKETCH $ARDUINO_PATH/bin/$SKETCH.ino.bin
+
+mv firmware.fw $ARDUINO_PATH/firmware/$SKETCH.fw
+
+clear
+echo "\n--------------------------------------------------------------------------"
+echo "\n${unicorn}  ${green}Copmleted ${cyan}Gaboze Express${nc}"
+echo "\n--------------------------------------------------------------------------"
+exit
+#---------------------------------
+# DON'T TOUCH END
+#---------------------------------

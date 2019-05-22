@@ -27,25 +27,6 @@ Navigate to the /scripts folder of your newly cloned repository and set permissi
 $ chmod 777 firmware
 ```
 
-##### edit the firmware file
-
-```shell
-#---------------------------------
-# EDIT PATHS FOR ESP AND IDF
-#---------------------------------
-export PATH="$PATH:$HOME/esp/xtensa-esp32-elf/bin"
-export IDF_PATH=~/esp/esp-idf
-
-#---------------------------------
-# EDIT PATHS FOR REPOSITORY
-#---------------------------------
-# REPLACE REPO with the actual path to your local repository
-REPO="YOU PATH GOES HERE"
-#---------------------------------
-GOGO_PATH="$REPO/GabozeExpressOfficial/gogo/"
-GOPLAY_PATH="$REPO/GabozeExpressOfficial/go-play/"
-MKFW_PATH="$REPO/GabozeExpressOfficial/odroid-go-firmware/tools/mkfw"
-```
 ##### execute the firmware file
 > follow the prompts on screen
 > if this is your first time running the executable, answer **Y** to the options
@@ -53,7 +34,9 @@ MKFW_PATH="$REPO/GabozeExpressOfficial/odroid-go-firmware/tools/mkfw"
 $ ./firmware
 ```
 
-You will now have a file called **GabozeExpress.fw** in the scripts folder. You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
+You will now have a file called **GabozeExpress.fw** in the Firmware folder. 
+
+You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 
 ## Enabling new firmware
 > Insert the sd card into your Gaboze Express (Odroid Go) and follow the prompts
