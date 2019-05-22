@@ -13,7 +13,7 @@
 #define BUILTIN_DAC_ENABLED 1
 
 static float Volume = 1.0f;
-static odroid_volume_level volumeLevel = ODROID_VOLUME_LEVEL3;
+static odroid_volume_level volumeLevel = ODROID_VOLUME_LEVEL4;
 static int volumeLevels[] = {0, 125, 250, 500, 1000};
 static int audio_sample_rate;
 

@@ -1,14 +1,14 @@
 odroid_display.o: \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/odroid_display.c \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/odroid_display.h \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/odroid_display.c \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/odroid_display.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/stdint.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/machine/_default_types.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/sys/features.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/sys/_intsup.h \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/image_sd_card_alert.h \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/image_sd_card_unknown.h \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/hourglass_empty_black_48dp.h \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/image_splash.h \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/image_sd_card_alert.h \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/image_sd_card_unknown.h \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/hourglass_empty_black_48dp.h \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/image_splash.h \
  /Users/eugene/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/sys/reent.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/_ansi.h \
@@ -20,7 +20,7 @@ odroid_display.o: \
  /Users/eugene/esp/esp-idf/components/newlib/include/machine/_types.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/sys/lock.h \
  /Users/eugene/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/build/include/sdkconfig.h \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/build/include/sdkconfig.h \
  /Users/eugene/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h \
  /Users/eugene/esp/esp-idf/components/esp32/include/xtensa/hal.h \
  /Users/eugene/esp/esp-idf/components/esp32/include/xtensa/config/core.h \
@@ -142,7 +142,7 @@ odroid_display.o: \
  /Users/eugene/esp/esp-idf/components/newlib/include/string.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/sys/string.h
 
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/odroid_display.h:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/odroid_display.h:
 
 /Users/eugene/esp/esp-idf/components/newlib/include/stdint.h:
 
@@ -152,13 +152,13 @@ odroid_display.o: \
 
 /Users/eugene/esp/esp-idf/components/newlib/include/sys/_intsup.h:
 
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/image_sd_card_alert.h:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/image_sd_card_alert.h:
 
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/image_sd_card_unknown.h:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/image_sd_card_unknown.h:
 
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/hourglass_empty_black_48dp.h:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/hourglass_empty_black_48dp.h:
 
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/image_splash.h:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/image_splash.h:
 
 /Users/eugene/esp/esp-idf/components/freertos/include/freertos/FreeRTOS.h:
 
@@ -182,7 +182,7 @@ odroid_display.o: \
 
 /Users/eugene/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h:
 
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/build/include/sdkconfig.h:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/build/include/sdkconfig.h:
 
 /Users/eugene/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h:
 
@@ -423,4 +423,4 @@ odroid_display.o: \
 /Users/eugene/esp/esp-idf/components/newlib/include/string.h:
 
 /Users/eugene/esp/esp-idf/components/newlib/include/sys/string.h:
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/./odroid_display.c:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/./odroid_display.c:

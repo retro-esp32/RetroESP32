@@ -1,7 +1,7 @@
 odroid_audio.o: \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/odroid_audio.c \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/odroid_audio.h \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/odroid_settings.h \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/odroid_audio.c \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/odroid_audio.h \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/odroid_settings.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/stdint.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/machine/_default_types.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/sys/features.h \
@@ -17,7 +17,7 @@ odroid_audio.o: \
  /Users/eugene/esp/esp-idf/components/newlib/include/machine/_types.h \
  /Users/eugene/esp/esp-idf/components/newlib/include/sys/lock.h \
  /Users/eugene/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h \
- /Users/eugene/Desktop/github/GabozeExpress/Software/gogo/build/include/sdkconfig.h \
+ /Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/build/include/sdkconfig.h \
  /Users/eugene/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h \
  /Users/eugene/esp/esp-idf/components/esp32/include/xtensa/hal.h \
  /Users/eugene/esp/esp-idf/components/esp32/include/xtensa/config/core.h \
@@ -96,9 +96,9 @@ odroid_audio.o: \
  /Users/eugene/esp/esp-idf/components/soc/include/soc/rtc_periph.h \
  /Users/eugene/esp/esp-idf/components/soc/esp32/include/soc/rtc_cntl_reg.h
 
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/odroid_audio.h:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/odroid_audio.h:
 
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/odroid_settings.h:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/odroid_settings.h:
 
 /Users/eugene/esp/esp-idf/components/newlib/include/stdint.h:
 
@@ -130,7 +130,7 @@ odroid_audio.o: \
 
 /Users/eugene/esp/esp-idf/components/freertos/include/freertos/FreeRTOSConfig.h:
 
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/build/include/sdkconfig.h:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/build/include/sdkconfig.h:
 
 /Users/eugene/esp/esp-idf/components/freertos/include/freertos/xtensa_config.h:
 
@@ -285,4 +285,4 @@ odroid_audio.o: \
 /Users/eugene/esp/esp-idf/components/soc/include/soc/rtc_periph.h:
 
 /Users/eugene/esp/esp-idf/components/soc/esp32/include/soc/rtc_cntl_reg.h:
-/Users/eugene/Desktop/github/GabozeExpress/Software/gogo/components/odroid/./odroid_audio.c:
+/Users/eugene/Desktop/github/GabozeExpressOfficial/gogo/components/odroid/./odroid_audio.c:
