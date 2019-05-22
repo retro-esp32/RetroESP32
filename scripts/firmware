@@ -12,11 +12,11 @@ export IDF_PATH=~/esp/esp-idf
 # EDIT PATHS FOR REPOSITORY
 #---------------------------------
 # REPLACE REPO with the actual path to your local repository
-REPO="/Your/Path/To/Repo"
+REPO="/Path/To/Github/Repo" # no trailing slash please
 #---------------------------------
-GOGO_PATH="$REPO/GabozeExpressOfficial/gogo/"
-GOPLAY_PATH="$REPO/GabozeExpressOfficial/go-play/"
-MKFW_PATH="$REPO/GabozeExpressOfficial/odroid-go-firmware/tools/mkfw"
+GOGO_PATH="$REPO/gogo/"
+GOPLAY_PATH="$REPO/go-play/"
+MKFW_PATH="$REPO/odroid-go-firmware/tools/mkfw"
 
 #---------------------------------
 # DON'T TOUCH START
@@ -40,6 +40,7 @@ export monkey=🐵
 export chicken=🐔
 export panda=🐼
 export whale=🐳
+export game=🕹️
 
 
 echo "\n--------------------------------------------------------------------------"
