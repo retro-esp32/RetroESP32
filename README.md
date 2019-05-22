@@ -42,8 +42,14 @@ It has full support for
 > Stay Tuned
 
 * Be sure to **Star** or **Fork** the repo as it will be updated often 
+
 * Pull Requests are welcome
-* Join the [Organization](https://github.com/gaboze-express)
+
+* Join the [Organization](https://github.com/gaboze-express) 
+
+  * *Once you have forked or starred one of the repositories, you will receive an invite to join*
+
+  
 
 
 
