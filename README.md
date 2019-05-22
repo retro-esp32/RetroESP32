@@ -13,7 +13,7 @@ This branch contains the specific modification for the Odroid Go hardware to use
 Clone the Software Branch of the [Official Gaboze Express](https://github.com/gaboze-express/GabozeExpress)
 
 ```shell
-$ git clone -b Software --single-branch git@github.com:gaboze-express/GabozeExpress.git
+$ git clone -b Software --single-branch git@github.com:gaboze-express/GabozeExpress.git --recursive
 ```
 
 ### firmware.sh

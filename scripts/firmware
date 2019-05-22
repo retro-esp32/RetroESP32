@@ -112,6 +112,7 @@ $MKFW_PATH/mkfw 'Gaboze Express' assets/gaboze.raw \
 0 19 2097152 smsplusgx-go smsplusgx-go.bin
 
 mv firmware.fw GabozeExpress.fw
+
 clear
 
 echo "\n--------------------------------------------------------------------------"
