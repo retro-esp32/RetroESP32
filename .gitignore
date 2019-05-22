@@ -55,4 +55,8 @@ gogo/sdkconfig.old
 modules.order
 Module.symvers
 Mkfile.old
+<<<<<<< HEAD
 dkms.conf
+=======
+dkms.conf
+>>>>>>> 0b494eda689bcfecbdf8044deb5c491ae542114b
