@@ -60,3 +60,4 @@ dkms.conf
 # Everything Else
 *.fw
 *.bin
+local
