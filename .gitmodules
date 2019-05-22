@@ -1,6 +1,8 @@
 [submodule "odroid-go-firmware"]
 	path = odroid-go-firmware
 	url = git@github.com:gaboze-express/odroid-go-firmware.git
+	branch = master
 [submodule "go-play"]
 	path = go-play
 	url = git@github.com:gaboze-express/go-play.git
+	branch = master
