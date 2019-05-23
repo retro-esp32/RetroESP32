@@ -132,13 +132,6 @@ then
   esptool.py --chip esp32 --port ${PORT} --baud 921600 erase_region 0xf00000 0x100000
 fi
 
-# 0x1000 /Users/eugene/Desktop/github/GabozeExpress/Public/Software/gogo/build/bootloader/bootloader.bin 
-# 0x10000 /Users/eugene/Desktop/github/GabozeExpress/Public/Software/gogo/build/gogo.bin 
-# 0x8000 /Users/eugene/Desktop/github/GabozeExpress/Public/Software/gogo/build/partitions.bin
-# 0x200000 build/nesemu-go.bin
-# 0x300000 build/gnuboy-go.bin
-# 0x400000 build/smsplusgx-go.bin
-
 clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${game}  ${green}Flashing Device ${nc} - Hang Tight"
@@ -155,6 +148,7 @@ esptool.py \
 0x1000 bin/bootloader.bin \
 0x8000 bin/partitions.bin \
 0x10000 bin/gogo.bin \
+0x200000 bin/gogo.bin \
 0x300000 bin/nesemu-go.bin \
 0x400000 bin/gnuboy-go.bin \
 0x500000 bin/smsplusgx-go.bin
