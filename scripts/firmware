@@ -123,10 +123,10 @@ read -rs -k 1 response
 if [[ "$response" = "y" ]]
 then
     clear
-    rm gogo.bin
-    rm gnuboy-go.bin
-    rm nesemu-go.bin
-    rm smsplusgx-go.bin  
+    rm bin/gogo.bin
+    rm bin/gnuboy-go.bin
+    rm bin/nesemu-go.bin
+    rm bin/smsplusgx-go.bin  
 fi
 clear
 echo "\n--------------------------------------------------------------------------"

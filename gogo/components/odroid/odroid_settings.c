@@ -19,107 +19,107 @@ static const char* NvsKey_Backlight = "Backlight";
 
 char* odroid_util_GetFileName(const char* path)
 {
-	int length = strlen(path);
-	int fileNameStart = length;
+    int length = strlen(path);
+    int fileNameStart = length;
 
-	if (fileNameStart < 1) abort();
+    if (fileNameStart < 1) abort();
 
-	while (fileNameStart > 0)
-	{
-		if (path[fileNameStart] == '/')
-		{
-			++fileNameStart;
-			break;
-		}
+    while (fileNameStart > 0)
+    {
+        if (path[fileNameStart] == '/')
+        {
+            ++fileNameStart;
+            break;
+        }
 
-		--fileNameStart;
-	}
+        --fileNameStart;
+    }
 
-	int size = length - fileNameStart + 1;
+    int size = length - fileNameStart + 1;
 
-	char* result = malloc(size);
-	if (!result) abort();
+    char* result = malloc(size);
+    if (!result) abort();
 
-	result[size - 1] = 0;
-	for (int i = 0; i < size - 1; ++i)
-	{
-		result[i] = path[fileNameStart + i];
-	}
+    result[size - 1] = 0;
+    for (int i = 0; i < size - 1; ++i)
+    {
+        result[i] = path[fileNameStart + i];
+    }
 
-	//printf("GetFileName: result='%s'\n", result);
+    //printf("GetFileName: result='%s'\n", result);
 
-	return result;
+    return result;
 }
 
 char* odroid_util_GetFileExtenstion(const char* path)
 {
-	// Note: includes '.'
-	int length = strlen(path);
-	int extensionStart = length;
+    // Note: includes '.'
+    int length = strlen(path);
+    int extensionStart = length;
 
-	if (extensionStart < 1) abort();
+    if (extensionStart < 1) abort();
 
-	while (extensionStart > 0)
-	{
-		if (path[extensionStart] == '.')
-		{
-			break;
-		}
+    while (extensionStart > 0)
+    {
+        if (path[extensionStart] == '.')
+        {
+            break;
+        }
 
-		--extensionStart;
-	}
+        --extensionStart;
+    }
 
-	int size = length - extensionStart + 1;
+    int size = length - extensionStart + 1;
 
-	char* result = malloc(size);
-	if (!result) abort();
+    char* result = malloc(size);
+    if (!result) abort();
 
-	result[size - 1] = 0;
-	for (int i = 0; i < size - 1; ++i)
-	{
-		result[i] = path[extensionStart + i];
-	}
+    result[size - 1] = 0;
+    for (int i = 0; i < size - 1; ++i)
+    {
+        result[i] = path[extensionStart + i];
+    }
 
-	//printf("GetFileExtenstion: result='%s'\n", result);
+    //printf("GetFileExtenstion: result='%s'\n", result);
 
-	return result;
+    return result;
 }
 
 char* odroid_util_GetFileNameWithoutExtension(const char* path)
 {
-	char* fileName = odroid_util_GetFileName(path);
+    char* fileName = odroid_util_GetFileName(path);
 
-	int length = strlen(fileName);
-	int extensionStart = length;
+    int length = strlen(fileName);
+    int extensionStart = length;
 
-	if (extensionStart < 1) abort();
+    if (extensionStart < 1) abort();
 
-	while (extensionStart > 0)
-	{
-		if (fileName[extensionStart] == '.')
-		{
-			break;
-		}
+    while (extensionStart > 0)
+    {
+        if (fileName[extensionStart] == '.')
+        {
+            break;
+        }
 
-		--extensionStart;
-	}
+        --extensionStart;
+    }
 
-	int size = extensionStart + 1;
+    int size = extensionStart + 1;
 
-	char* result = malloc(size);
-	if (!result) abort();
+    char* result = malloc(size);
+    if (!result) abort();
 
-	result[size - 1] = 0;
-	for (int i = 0; i < size - 1; ++i)
-	{
-		result[i] = fileName[i];
-	}
+    result[size - 1] = 0;
+    for (int i = 0; i < size - 1; ++i)
+    {
+        result[i] = fileName[i];
+    }
 
-	free(fileName);
+    free(fileName);
 
-	//printf("GetFileNameWithoutExtension: result='%s'\n", result);
+    //printf("GetFileNameWithoutExtension: result='%s'\n", result);
 
-	return result;
+    return result;
 }
 
 
@@ -127,22 +127,22 @@ int32_t odroid_settings_VRef_get()
 {
     int32_t result = 1100;
 
-	// Open
-	nvs_handle my_handle;
-	esp_err_t err = nvs_open(NvsNamespace, NVS_READWRITE, &my_handle);
-	if (err != ESP_OK) abort();
+    // Open
+    nvs_handle my_handle;
+    esp_err_t err = nvs_open(NvsNamespace, NVS_READWRITE, &my_handle);
+    if (err != ESP_OK) abort();
 
 
-	// Read
-	err = nvs_get_i32(my_handle, NvsKey_VRef, &result);
-	if (err == ESP_OK)
+    // Read
+    err = nvs_get_i32(my_handle, NvsKey_VRef, &result);
+    if (err == ESP_OK)
     {
         printf("odroid_settings_VRefGet: value=%d\n", result);
-	}
+    }
 
 
-	// Close
-	nvs_close(my_handle);
+    // Close
+    nvs_close(my_handle);
 
     return result;
 }
@@ -202,13 +202,13 @@ char* odroid_settings_RomFilePath_get()
 {
     char* result = NULL;
 
-	// Open
-	nvs_handle my_handle;
-	esp_err_t err = nvs_open(NvsNamespace, NVS_READWRITE, &my_handle);
-	if (err != ESP_OK) abort();
+    // Open
+    nvs_handle my_handle;
+    esp_err_t err = nvs_open(NvsNamespace, NVS_READWRITE, &my_handle);
+    if (err != ESP_OK) abort();
 
 
-	// Read
+    // Read
     size_t required_size;
     err = nvs_get_str(my_handle, NvsKey_RomFilePath, NULL, &required_size);
     if (err == ESP_OK)
@@ -221,12 +221,12 @@ char* odroid_settings_RomFilePath_get()
 
         result = value;
 
-        printf("ODROID Settings -> ROM File Path:'%s'\n", value);
+        printf("odroid_settings_RomFilePathGet: value='%s'\n", value);
     }
 
 
-	// Close
-	nvs_close(my_handle);
+    // Close
+    nvs_close(my_handle);
 
     return result;
 }
@@ -249,22 +249,22 @@ int32_t odroid_settings_AppSlot_get()
 {
     int32_t result = -1;
 
-	// Open
-	nvs_handle my_handle;
-	esp_err_t err = nvs_open(NvsNamespace, NVS_READWRITE, &my_handle);
-	if (err != ESP_OK) abort();
+    // Open
+    nvs_handle my_handle;
+    esp_err_t err = nvs_open(NvsNamespace, NVS_READWRITE, &my_handle);
+    if (err != ESP_OK) abort();
 
 
-	// Read
-	err = nvs_get_i32(my_handle, NvsKey_AppSlot, &result);
-	if (err == ESP_OK)
+    // Read
+    err = nvs_get_i32(my_handle, NvsKey_AppSlot, &result);
+    if (err == ESP_OK)
     {
         printf("odroid_settings_AppSlot_get: value=%d\n", result);
-	}
+    }
 
 
-	// Close
-	nvs_close(my_handle);
+    // Close
+    nvs_close(my_handle);
 
     return result;
 }
@@ -287,22 +287,22 @@ int32_t odroid_settings_DataSlot_get()
 {
     int32_t result = -1;
 
-	// Open
-	nvs_handle my_handle;
-	esp_err_t err = nvs_open(NvsNamespace, NVS_READWRITE, &my_handle);
-	if (err != ESP_OK) abort();
+    // Open
+    nvs_handle my_handle;
+    esp_err_t err = nvs_open(NvsNamespace, NVS_READWRITE, &my_handle);
+    if (err != ESP_OK) abort();
 
 
-	// Read
-	err = nvs_get_i32(my_handle, NvsKey_DataSlot, &result);
-	if (err == ESP_OK)
+    // Read
+    err = nvs_get_i32(my_handle, NvsKey_DataSlot, &result);
+    if (err == ESP_OK)
     {
         printf("odroid_settings_DataSlot_get: value=%d\n", result);
-	}
+    }
 
 
-	// Close
-	nvs_close(my_handle);
+    // Close
+    nvs_close(my_handle);
 
     return result;
 }
@@ -323,7 +323,7 @@ void odroid_settings_DataSlot_set(int32_t value)
 
 int32_t odroid_settings_Backlight_get()
 {
-	// TODO: Move to header
+    // TODO: Move to header
     int result = 2;
 
     // Open

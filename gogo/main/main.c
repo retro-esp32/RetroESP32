@@ -56,7 +56,7 @@ int read_config()
        fscanf(fp,"%s %s %i\n",&emulator[num_emulators][0],
                               &emu_dir[num_emulators][0],
                               &emu_slot[num_emulators]);
-	num_emulators++;    
+  num_emulators++;    
      }
    }
    return(0);
@@ -82,10 +82,10 @@ void print(short x, short y, char *s)
       c=s[k];     
       for (i=0; i<8; i++) {
         a=font_8x8[c][i];
-	for (n=7,idx=i*len*8+k*8; n>=0; n--, idx++) {
-	  if (a%2==1) buffer[idx]=colour; else buffer[idx]=0;
-	  a=a>>1;
-	}
+  for (n=7,idx=i*len*8+k*8; n>=0; n--, idx++) {
+    if (a%2==1) buffer[idx]=colour; else buffer[idx]=0;
+    a=a>>1;
+  }
       }   
     }
     ili9341_write_frame_rectangleLE(x*8,y*8,len*8,8,buffer);
@@ -123,42 +123,37 @@ int print_emulator(int e, int y)
   print(0,18,s);
  
   strcat(&path[strlen(path)-1],emu_dir[e]);
-
-  if(e == 'Nintendo') {
-    printf('Nintendo');
-  }
-
   count=0; for (i=0; i<40; i++) s[i]=' '; s[i]=0;
   if (!(dr = opendir(path))) {for (i=20; i<30; i++) print(0,i,s); return(0);}
   while ((de = readdir(dr)) != NULL) {
             
             len=strlen(de->d_name); dotlen=strlen(emu_dir[e]);
-	    // only show files that have matching extension...
+      // only show files that have matching extension...
             if ( strcmp(&de->d_name[len-dotlen],emu_dir[e])==0 &&
-	         de->d_name[0]!='.')
+           de->d_name[0]!='.')
            {
-	      // printf("file: %s\n",de->d_name);
-	      if (count==y) {
-	         strcpy(target,path); 
-		 i=strlen(target); target[i]='/'; target[i+1]=0;
-	         strcat(target,de->d_name);
-		 //printf("target=%s\n",target);
-	      }
-	      // strip extension from file...
-	      de->d_name[len-dotlen-1]=0;
-	      if (strlen(de->d_name)>39) de->d_name[39]=0;
-	      if (y/10==count/10) {  // right page?
-	        for (i=0; i<40; i++) s[i]=' ';
-		for (i=0; i<strlen(de->d_name); i++) s[i]=de->d_name[i];
-	        if (count==y) print_y(0,(count%10)+20, s); // highlight
-	                 else print(0,(count%10)+20, s);
-	      }
-	      count++;
-	    }	    
+        printf("file: %s\n",de->d_name);
+        if (count==y) {
+           strcpy(target,path); 
+     i=strlen(target); target[i]='/'; target[i+1]=0;
+           strcat(target,de->d_name);
+     printf("target=%s\n",target);
+        }
+        // strip extension from file...
+        de->d_name[len-dotlen-1]=0;
+        if (strlen(de->d_name)>39) de->d_name[39]=0;
+        if (y/10==count/10) {  // right page?
+          for (i=0; i<40; i++) s[i]=' ';
+    for (i=0; i<strlen(de->d_name); i++) s[i]=de->d_name[i];
+          if (count==y) print_y(0,(count%10)+20, s); // highlight
+                   else print(0,(count%10)+20, s);
+        }
+        count++;
+      }     
       }
       if (y/10==count/10) for (i=count%10; i<10; i++) print(0,i+20,"                                        ");
       closedir(dr);
-      //printf("total=%i\n",count);
+      printf("total=%i\n",count);
       return(0);
 }
 
@@ -169,8 +164,9 @@ int resume(void)
   int i;
   char *extension;
   char *romPath;
+  
 
-  //printf("trying to resume...\n");
+  printf("trying to resume...\n");
   romPath = odroid_settings_RomFilePath_get();
   if (romPath)
   {
@@ -178,13 +174,9 @@ int resume(void)
      for (i=0; i<strlen(extension); i++) extension[i]=extension[i+1]; 
      printf("extension=%s\n",extension);
      
-  } else {
-    printf(romPath);
-    //printf("can't resume!\n");
-    return(0);
-  } 
+  } else {printf("can't resume!\n"); return(0);} 
   for (i=0; i<num_emulators; i++) if (strcmp(extension,&emu_dir[i][0])==0) {
-    printf("resume - extension:%s, slot:%i emulator:%i\n",extension,i,emu_slot[i]);
+    printf("resume - extension=%s, slot=%i\n",extension,i);
     odroid_system_application_set(emu_slot[i]); // set emulator slot
     print(14,15,"RESUMING....");
     usleep(500000);
@@ -276,7 +268,7 @@ void app_main(void)
    ili9341_clear(0); // clear screen
    sprintf(s,"Volume: %i%%   ",odroid_settings_Volume_get()*25);
    print(0,0,s);
-   print(16,0,"GABOZE");
+   print(16,0,"ODROID");
    odroid_input_battery_level_read(&battery_state);
    sprintf(s,"Battery: %i%%",battery_state.percentage);
    print(26,0,s);
@@ -287,8 +279,7 @@ void app_main(void)
    while(1) {    
      odroid_input_gamepad_read(&joystick);
       if (joystick.values[ODROID_INPUT_LEFT]) {
-      y=0; e--; if (e<0) e=num_emulators-1; 
-      //printf(e);    
+      y=0; e--; if (e<0) e=num_emulators-1;     
       print_emulator(e,y);
       debounce(ODROID_INPUT_LEFT);     
     }
@@ -327,8 +318,8 @@ void app_main(void)
     if (joystick.values[ODROID_INPUT_A]) {
       if (count!=0) { // not in an empty directory...
         odroid_settings_RomFilePath_set(target);
-	      odroid_system_application_set(emu_slot[e]); // set emulator slot 
-	      esp_restart(); // reboot!
+  odroid_system_application_set(emu_slot[e]); // set emulator slot 
+  esp_restart(); // reboot!
       }
       debounce(ODROID_INPUT_A);   
     }

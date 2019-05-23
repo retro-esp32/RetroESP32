@@ -61,6 +61,7 @@ then
   echo "Compiling Launcher"
   rm $SRC_PATH/bin/bootloader.bin
   rm $SRC_PATH/bin/partitions.bin
+  rm $SRC_PATH/bin/partitions_singleapp.bin
   rm $SRC_PATH/bin/gogo.bin
 
   cd $GOGO_PATH
@@ -155,8 +156,8 @@ esptool.py \
 0x8000 bin/partitions.bin \
 0x10000 bin/gogo.bin \
 0x300000 bin/nesemu-go.bin \
-0x200000 bin/gnuboy-go.bin \
-0x400000 bin/smsplusgx-go.bin
+0x400000 bin/gnuboy-go.bin \
+0x500000 bin/smsplusgx-go.bin
 
 echo "\n--------------------------------------------------------------------------"
 echo "\n${unicorn}  ${green}Copmleted ${cyan}Gaboze Express${nc}"
