@@ -35,8 +35,15 @@ then
     echo "\n${monkey}  ${red}Erasing${nc} --> Flash"
     echo "\n--------------------------------------------------------------------------"
     esptool.py --chip esp32 --port ${PORT} --baud 921600 --before default_reset --after hard_reset erase_flash
+fi
 
-    clear
+echo "\n--------------------------------------------------------------------------"
+echo "\n${monkey}  ${red}Erasing Storage ${nc}[y/N]"
+echo "\n--------------------------------------------------------------------------"
+read -rs -k 1 response
+if [[ "$response" = "y" ]]
+then
+clear
     echo "\n--------------------------------------------------------------------------"
     echo "\n${monkey}  ${red}Erasing${nc} --> Storage"
     echo "\n--------------------------------------------------------------------------"

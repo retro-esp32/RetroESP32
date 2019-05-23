@@ -9,6 +9,11 @@ export PATH="$PATH:$HOME/esp/xtensa-esp32-elf/bin"
 export IDF_PATH=~/esp/esp-idf
 
 #---------------------------------
+# EDIT PORT ESP32
+#---------------------------------
+export PORT='/dev/cu.SLAB_USBtoUART'
+
+#---------------------------------
 # DON'T TOUCH START
 #---------------------------------
 REPO=$(dirname $PWD)
@@ -54,9 +59,16 @@ then
   echo "\n${squid}  ${green}Compiling ${cyan}Launcher${nc}"
   echo "\n--------------------------------------------------------------------------"  
   echo "Compiling Launcher"
+  rm $SRC_PATH/bin/bootloader.bin
+  rm $SRC_PATH/bin/partitions.bin
+  rm $SRC_PATH/bin/gogo.bin
+
   cd $GOGO_PATH
+  make clean
   make -j8
-  cp ./build/gogo.bin $SRC_PATH/bin
+  cp ./build/bootloader/bootloader.bin $SRC_PATH/bin
+  cp ./build/partitions.bin $SRC_PATH/bin  
+  cp ./build/gogo.bin $SRC_PATH/bin $SRC_PATH/bin
 fi
 clear
 
@@ -72,7 +84,9 @@ then
   echo "\n--------------------------------------------------------------------------"
   echo "\n${lion}  ${green}Compiling ${cyan}gnuboy${nc}"
   echo "\n--------------------------------------------------------------------------"
+  rm $SRC_PATH/bin/gnuboy-go.bin
   cd gnuboy-go
+  make clean  
   make -j8
   cp ./build/gnuboy-go.bin $SRC_PATH/bin
 
@@ -80,7 +94,9 @@ then
   echo "\n--------------------------------------------------------------------------"
   echo "\n${fox}  ${green}Compiling ${cyan}nesemu${nc}"
   echo "\n--------------------------------------------------------------------------"  
+  rm $SRC_PATH/bin/nesemu-go.bin
   cd ../nesemu-go
+  make clean  
   make -j8
   cp ./build/nesemu-go.bin $SRC_PATH/bin
 
@@ -88,47 +104,60 @@ then
   echo "\n--------------------------------------------------------------------------"
   echo "\n${panda}  ${green}Compiling ${cyan}smsplusgx${nc}"
   echo "\n--------------------------------------------------------------------------"    
+  rm $SRC_PATH/bin/smsplusgx-go.bin
   cd ../smsplusgx-go
+  make clean  
   make -j8
   cp ./build/smsplusgx-go.bin $SRC_PATH/bin
 fi
 
-echo "\n--------------------------------------------------------------------------"
-echo "\n${panda}  ${green}Creating ${cyan}Gaboze Express${nc} Firmware"
-echo "\n--------------------------------------------------------------------------"
-
 cd $SRC_PATH
-
-echo "Building mkfw"
-cd $MKFW_PATH
-make 
-
-cd $SRC_PATH
-ffmpeg -i assets/gaboze.png -f rawvideo -pix_fmt rgb565 assets/gaboze.raw -y
-
-$MKFW_PATH/mkfw 'Gaboze Express' assets/gaboze.raw \
-0 16 1048576 gogo bin/gogo.bin \
-0 17 1048576 nesemu-go bin/nesemu-go.bin \
-0 18 1048576 gnuboy-go bin/gnuboy-go.bin \
-0 19 2097152 smsplusgx-go bin/smsplusgx-go.bin
-
-mv firmware.fw $FIRMWARE_PATH/GabozeExpress.fw
 
 clear
-
 echo "\n--------------------------------------------------------------------------"
-echo "\n${squid}  ${red}Delete ${cyan}Binaries? ${nc}[y/${white}N${nc}]"
+echo "\n${monkey}  ${red}Erasing Flash and Storage ${nc}[y/${white}N${nc}]"
 echo "\n--------------------------------------------------------------------------"
 read -rs -k 1 response
 if [[ "$response" = "y" ]]
 then
-    clear
-    rm gogo.bin
-    rm gnuboy-go.bin
-    rm nesemu-go.bin
-    rm smsplusgx-go.bin  
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${monkey}  ${red}Erasing${nc} --> Flash"
+  echo "\n--------------------------------------------------------------------------"
+  esptool.py --chip esp32 --port ${PORT} --baud 921600 --before default_reset --after hard_reset erase_flash
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${monkey}  ${red}Erasing${nc} --> Storage"
+  echo "\n--------------------------------------------------------------------------"  
+  esptool.py --chip esp32 --port ${PORT} --baud 921600 erase_region 0xf00000 0x100000
 fi
+
+# 0x1000 /Users/eugene/Desktop/github/GabozeExpress/Public/Software/gogo/build/bootloader/bootloader.bin 
+# 0x10000 /Users/eugene/Desktop/github/GabozeExpress/Public/Software/gogo/build/gogo.bin 
+# 0x8000 /Users/eugene/Desktop/github/GabozeExpress/Public/Software/gogo/build/partitions.bin
+# 0x200000 build/nesemu-go.bin
+# 0x300000 build/gnuboy-go.bin
+# 0x400000 build/smsplusgx-go.bin
+
 clear
+echo "\n--------------------------------------------------------------------------"
+echo "\n${game}  ${green}Flashing Device ${nc}[y/N]"
+echo "\n--------------------------------------------------------------------------"
+esptool.py \
+--chip esp32 \
+--port ${PORT} \
+--baud 921600 \
+--before default_reset \
+--after hard_reset write_flash -z \
+--flash_mode dio \
+--flash_freq 80m \
+--flash_size detect \
+0x1000 bin/bootloader.bin \
+0x8000 bin/partitions.bin \
+0x10000 bin/gogo.bin \
+0x200000 bin/nesemu-go.bin \
+0x300000 bin/gnuboy-go.bin \
+0x400000 bin/smsplusgx-go.bin
+
 echo "\n--------------------------------------------------------------------------"
 echo "\n${unicorn}  ${green}Copmleted ${cyan}Gaboze Express${nc}"
 echo "\n--------------------------------------------------------------------------"
