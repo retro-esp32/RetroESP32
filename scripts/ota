@@ -86,7 +86,7 @@ then
   echo "\n--------------------------------------------------------------------------"
   rm $SRC_PATH/bin/gnuboy-go.bin
   cd gnuboy-go
-  make clean  
+  #make clean  
   make -j8
   cp ./build/gnuboy-go.bin $SRC_PATH/bin
 
@@ -96,7 +96,7 @@ then
   echo "\n--------------------------------------------------------------------------"  
   rm $SRC_PATH/bin/nesemu-go.bin
   cd ../nesemu-go
-  make clean  
+  #make clean  
   make -j8
   cp ./build/nesemu-go.bin $SRC_PATH/bin
 
@@ -106,7 +106,7 @@ then
   echo "\n--------------------------------------------------------------------------"    
   rm $SRC_PATH/bin/smsplusgx-go.bin
   cd ../smsplusgx-go
-  make clean  
+  #make clean  
   make -j8
   cp ./build/smsplusgx-go.bin $SRC_PATH/bin
 fi
@@ -140,7 +140,7 @@ fi
 
 clear
 echo "\n--------------------------------------------------------------------------"
-echo "\n${game}  ${green}Flashing Device ${nc}[y/N]"
+echo "\n${game}  ${green}Flashing Device ${nc} - Hang Tight"
 echo "\n--------------------------------------------------------------------------"
 esptool.py \
 --chip esp32 \
@@ -154,8 +154,8 @@ esptool.py \
 0x1000 bin/bootloader.bin \
 0x8000 bin/partitions.bin \
 0x10000 bin/gogo.bin \
-0x200000 bin/nesemu-go.bin \
-0x300000 bin/gnuboy-go.bin \
+0x300000 bin/nesemu-go.bin \
+0x200000 bin/gnuboy-go.bin \
 0x400000 bin/smsplusgx-go.bin
 
 echo "\n--------------------------------------------------------------------------"

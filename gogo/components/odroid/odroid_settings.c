@@ -221,7 +221,7 @@ char* odroid_settings_RomFilePath_get()
 
         result = value;
 
-        printf("odroid_settings_RomFilePathGet: value='%s'\n", value);
+        printf("ODROID Settings -> ROM File Path:'%s'\n", value);
     }
 
 
