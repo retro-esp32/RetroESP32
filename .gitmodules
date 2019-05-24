@@ -1,14 +1,11 @@
-[submodule "esp-idf"]
-    path = ESP/esp-idf
-    url = git@github.com:OtherCrashOverride/esp-idf.git
+[submodule "Tools/esp-idf"]
+	path = Tools/esp-idf
+	url = git@github.com:OtherCrashOverride/esp-idf.git
     branch = v3.2-odroid
-
-[submodule "odroid-go-firmware"]
-    path = Odroid/odroid-go-firmware
-    url = git@github.com:OtherCrashOverride/odroid-go-firmware.git
-    branch = esp-idf-v3.2   
-
-[submodule "go-play"]
-    path = Launchers/go-play
-    url = git@github.com:OtherCrashOverride/go-play.git
-    branch = master
+[submodule "Odroid/odroid-go-firmware"]
+	path = Odroid/odroid-go-firmware
+	url = git@github.com:OtherCrashOverride/odroid-go-firmware.git
+	branch = esp-idf-v3.2   
+[submodule "Launchers/go-play"]
+	path = Launchers/go-play
+	url = git@github.com:OtherCrashOverride/go-play.git
