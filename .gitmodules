@@ -1,4 +1,0 @@
-[submodule "go-play"]
-	path = go-play
-	url = git@github.com:gaboze-express/go-play.git
-	branch = master
