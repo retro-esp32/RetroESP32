@@ -1,8 +1,5 @@
 # Build folder
-gogo/build
-
-# Backup sdkconfig
-gogo/sdkconfig.old
+**/build/*
 
 # Prerequisites
 *.d
@@ -60,4 +57,3 @@ dkms.conf
 # Everything Else
 *.fw
 *.bin
-local
