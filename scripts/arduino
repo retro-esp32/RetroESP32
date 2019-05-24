@@ -6,9 +6,9 @@ SRC_PATH=`pwd`
 # EDIT SKECTH NAME
 #---------------------------------
 REPO=$(dirname $PWD)
-MKFW_PATH="$REPO/odroid-go-firmware/tools/mkfw"
+MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
 ARDUINO_PATH="$REPO/Arduino"
-SKETCH="Buttons"
+SKETCH="Buttons" # <-- change the name and leave out .ino.bin
 
 #---------------------------------
 # DON'T TOUCH START

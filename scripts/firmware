@@ -6,7 +6,6 @@ SRC_PATH=`pwd`
 # EDIT PATHS FOR ESP AND IDF
 #---------------------------------
 export PATH="$PATH:$HOME/esp/xtensa-esp32-elf/bin"
-export IDF_PATH=~/esp/esp-idf
 
 #---------------------------------
 # DON'T TOUCH START
@@ -15,6 +14,7 @@ REPO=$(dirname $PWD)
 GOGO_PATH="$REPO/gogo/"
 GOPLAY_PATH="$REPO/go-play/"
 MKFW_PATH="$REPO/odroid-go-firmware/tools/mkfw"
+export IDF_PATH=$REPO/Tools/esp-idf
 
 #---------------------------------
 # FANCY STUFF
