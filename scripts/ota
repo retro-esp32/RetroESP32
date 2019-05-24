@@ -79,15 +79,19 @@ echo "\n------------------------------------------------------------------------
 read -rs -k 1 response
 if [[ "$response" = "y" ]]
 then
+  rm $SRC_PATH/bin/gnuboy-go.bin
+  rm $SRC_PATH/bin/nesemu-go.bin
+  rm $SRC_PATH/bin/smsplusgx-go.bin   
+    
   cd $GOPLAY_PATH
+
 
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${lion}  ${green}Compiling ${cyan}gnuboy${nc}"
   echo "\n--------------------------------------------------------------------------"
-  rm $SRC_PATH/bin/gnuboy-go.bin
   cd gnuboy-go
-  #make clean  
+  make clean  
   make -j8
   cp ./build/gnuboy-go.bin $SRC_PATH/bin
 
@@ -95,9 +99,8 @@ then
   echo "\n--------------------------------------------------------------------------"
   echo "\n${fox}  ${green}Compiling ${cyan}nesemu${nc}"
   echo "\n--------------------------------------------------------------------------"  
-  rm $SRC_PATH/bin/nesemu-go.bin
   cd ../nesemu-go
-  #make clean  
+  make clean  
   make -j8
   cp ./build/nesemu-go.bin $SRC_PATH/bin
 
@@ -105,9 +108,8 @@ then
   echo "\n--------------------------------------------------------------------------"
   echo "\n${panda}  ${green}Compiling ${cyan}smsplusgx${nc}"
   echo "\n--------------------------------------------------------------------------"    
-  rm $SRC_PATH/bin/smsplusgx-go.bin
   cd ../smsplusgx-go
-  #make clean  
+  make clean  
   make -j8
   cp ./build/smsplusgx-go.bin $SRC_PATH/bin
 fi

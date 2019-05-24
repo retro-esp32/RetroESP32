@@ -132,12 +132,12 @@ int print_emulator(int e, int y)
             if ( strcmp(&de->d_name[len-dotlen],emu_dir[e])==0 &&
            de->d_name[0]!='.')
            {
-        printf("file: %s\n",de->d_name);
+        //printf("file: %s\n",de->d_name);
         if (count==y) {
            strcpy(target,path); 
      i=strlen(target); target[i]='/'; target[i+1]=0;
            strcat(target,de->d_name);
-     printf("target=%s\n",target);
+     //printf("target=%s\n",target);
         }
         // strip extension from file...
         de->d_name[len-dotlen-1]=0;
@@ -153,7 +153,7 @@ int print_emulator(int e, int y)
       }
       if (y/10==count/10) for (i=count%10; i<10; i++) print(0,i+20,"                                        ");
       closedir(dr);
-      printf("total=%i\n",count);
+      //printf("total=%i\n",count);
       return(0);
 }
 
@@ -166,7 +166,7 @@ int resume(void)
   char *romPath;
   
 
-  printf("trying to resume...\n");
+  //printf("trying to resume...\n");
   romPath = odroid_settings_RomFilePath_get();
   if (romPath)
   {
@@ -174,7 +174,10 @@ int resume(void)
      for (i=0; i<strlen(extension); i++) extension[i]=extension[i+1]; 
      printf("extension=%s\n",extension);
      
-  } else {printf("can't resume!\n"); return(0);} 
+  } else {
+    //printf("can't resume!\n"); 
+    return(0);
+  } 
   for (i=0; i<num_emulators; i++) if (strcmp(extension,&emu_dir[i][0])==0) {
     printf("resume - extension=%s, slot=%i\n",extension,i);
     odroid_system_application_set(emu_slot[i]); // set emulator slot
