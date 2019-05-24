@@ -11,9 +11,10 @@ export PATH="$PATH:$HOME/esp/xtensa-esp32-elf/bin"
 # DON'T TOUCH START
 #---------------------------------
 REPO=$(dirname $PWD)
-GOGO_PATH="$REPO/gogo/"
-GOPLAY_PATH="$REPO/go-play/"
-MKFW_PATH="$REPO/odroid-go-firmware/tools/mkfw"
+FIRMWARE_PATH="$REPO/Firmware"
+GOGO_PATH="$REPO/Launchers/gogo/"
+GOPLAY_PATH="$REPO/Launchers/go-play/"
+MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
 export IDF_PATH=$REPO/Tools/esp-idf
 
 #---------------------------------
@@ -55,7 +56,7 @@ then
   echo "Compiling Launcher"
   cd $GOGO_PATH
   make -j8
-  cp ./build/gogo.bin $SRC_PATH/bin
+  cp ./build/gogo.bin $FIRMWARE_PATH/Bins/
 fi
 clear
 
@@ -73,7 +74,7 @@ then
   echo "\n--------------------------------------------------------------------------"
   cd gnuboy-go
   make -j8
-  cp ./build/gnuboy-go.bin $SRC_PATH/bin
+  cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
 
   clear
   echo "\n--------------------------------------------------------------------------"
@@ -81,7 +82,7 @@ then
   echo "\n--------------------------------------------------------------------------"  
   cd ../nesemu-go
   make -j8
-  cp ./build/nesemu-go.bin $SRC_PATH/bin
+  cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
 
   clear
   echo "\n--------------------------------------------------------------------------"
@@ -89,7 +90,7 @@ then
   echo "\n--------------------------------------------------------------------------"    
   cd ../smsplusgx-go
   make -j8
-  cp ./build/smsplusgx-go.bin $SRC_PATH/bin
+  cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
 fi
 
 echo "\n--------------------------------------------------------------------------"
@@ -103,15 +104,15 @@ cd $MKFW_PATH
 make 
 
 cd $SRC_PATH
-ffmpeg -i assets/gaboze.png -f rawvideo -pix_fmt rgb565 assets/gaboze.raw -y
+ffmpeg -i $FIRMWARE_PATH/Assets/gaboze.png -f rawvideo -pix_fmt rgb565 $FIRMWARE_PATH/Assets/gaboze.raw -y
 
-$MKFW_PATH/mkfw 'Gaboze Express' assets/gaboze.raw \
-0 16 1048576 gogo bin/gogo.bin \
-0 17 1048576 nesemu-go bin/nesemu-go.bin \
-0 18 1048576 gnuboy-go bin/gnuboy-go.bin \
-0 19 2097152 smsplusgx-go bin/smsplusgx-go.bin
+$MKFW_PATH/mkfw 'Gaboze Express' $FIRMWARE_PATH/Assets/gaboze.raw \
+0 16 1048576 gogo $FIRMWARE_PATH/Bins/gogo.bin \
+0 17 1048576 nesemu-go $FIRMWARE_PATH/Bins/nesemu-go.bin \
+0 18 1048576 gnuboy-go $FIRMWARE_PATH/Bins/gnuboy-go.bin \
+0 19 2097152 smsplusgx-go $FIRMWARE_PATH/Bins/smsplusgx-go.bin
 
-mv firmware.fw firmware/GabozeExpress.fw
+mv firmware.fw $FIRMWARE_PATH/Releases/GabozeExpress.fw
 
 clear
 
@@ -122,10 +123,10 @@ read -rs -k 1 response
 if [[ "$response" = "y" ]]
 then
     clear
-    rm bin/gogo.bin
-    rm bin/gnuboy-go.bin
-    rm bin/nesemu-go.bin
-    rm bin/smsplusgx-go.bin  
+    rm $FIRMWARE_PATH/Bins/gogo.bin
+    rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
+    rm $FIRMWARE_PATH/Bins/nesemu-go.bin
+    rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin  
 fi
 clear
 echo "\n--------------------------------------------------------------------------"
