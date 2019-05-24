@@ -51,7 +51,7 @@ cd Scripts
 > if this is your first time running the executable, answer **Y** to the options
 
 ```
-$ ./firmware
+./firmware
 ```
 
 You will now have a file called **GabozeExpress.fw** in the Firmware/Release folder. 
