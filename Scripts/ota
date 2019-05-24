@@ -6,7 +6,6 @@ SRC_PATH=`pwd`
 # EDIT PATHS FOR ESP AND IDF
 #---------------------------------
 export PATH="$PATH:$HOME/esp/xtensa-esp32-elf/bin"
-export IDF_PATH=~/esp/esp-idf
 
 #---------------------------------
 # EDIT PORT ESP32
@@ -17,10 +16,11 @@ export PORT='/dev/cu.SLAB_USBtoUART'
 # DON'T TOUCH START
 #---------------------------------
 REPO=$(dirname $PWD)
-GOGO_PATH="$REPO/gogo/"
-GOPLAY_PATH="$REPO/go-play/"
 FIRMWARE_PATH="$REPO/Firmware"
-MKFW_PATH="$REPO/odroid-go-firmware/tools/mkfw"
+GOGO_PATH="$REPO/Launchers/gogo/"
+GOPLAY_PATH="$REPO/Launchers/go-play/"
+MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
+export IDF_PATH=$REPO/Tools/esp-idf
 
 #---------------------------------
 # FANCY STUFF
@@ -58,18 +58,17 @@ then
   echo "\n--------------------------------------------------------------------------"
   echo "\n${squid}  ${green}Compiling ${cyan}Launcher${nc}"
   echo "\n--------------------------------------------------------------------------"  
-  echo "Compiling Launcher"
-  rm $SRC_PATH/bin/bootloader.bin
-  rm $SRC_PATH/bin/partitions.bin
-  rm $SRC_PATH/bin/partitions_singleapp.bin
-  rm $SRC_PATH/bin/gogo.bin
+  rm $FIRMWARE_PATH/Bins/bootloader.bin
+  rm $FIRMWARE_PATH/Bins/partitions.bin
+  rm $FIRMWARE_PATH/Bins/partitions_singleapp.bin
+  rm $FIRMWARE_PATH/Bins/gogo.bin
 
   cd $GOGO_PATH
   make clean
   make -j8
-  cp ./build/bootloader/bootloader.bin $SRC_PATH/bin
-  cp ./build/partitions.bin $SRC_PATH/bin  
-  cp ./build/gogo.bin $SRC_PATH/bin $SRC_PATH/bin
+  cp ./build/bootloader/bootloader.bin $FIRMWARE_PATH/Bins/
+  cp ./build/partitions.bin $FIRMWARE_PATH/Bins/  
+  cp ./build/gogo.bin $FIRMWARE_PATH/Bins/
 fi
 clear
 
@@ -79,9 +78,9 @@ echo "\n------------------------------------------------------------------------
 read -rs -k 1 response
 if [[ "$response" = "y" ]]
 then
-  rm $SRC_PATH/bin/gnuboy-go.bin
-  rm $SRC_PATH/bin/nesemu-go.bin
-  rm $SRC_PATH/bin/smsplusgx-go.bin   
+  rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
+  rm $FIRMWARE_PATH/Bins/nesemu-go.bin
+  rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin   
     
   cd $GOPLAY_PATH
 
@@ -93,7 +92,7 @@ then
   cd gnuboy-go
   make clean  
   make -j8
-  cp ./build/gnuboy-go.bin $SRC_PATH/bin
+  cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
 
   clear
   echo "\n--------------------------------------------------------------------------"
@@ -102,7 +101,7 @@ then
   cd ../nesemu-go
   make clean  
   make -j8
-  cp ./build/nesemu-go.bin $SRC_PATH/bin
+  cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
 
   clear
   echo "\n--------------------------------------------------------------------------"
@@ -111,7 +110,7 @@ then
   cd ../smsplusgx-go
   make clean  
   make -j8
-  cp ./build/smsplusgx-go.bin $SRC_PATH/bin
+  cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
 fi
 
 cd $SRC_PATH
@@ -147,13 +146,13 @@ esptool.py \
 --flash_mode dio \
 --flash_freq 80m \
 --flash_size detect \
-0x1000 bin/bootloader.bin \
-0x8000 bin/partitions.bin \
-0x10000 bin/gogo.bin \
-0x200000 bin/gogo.bin \
-0x300000 bin/nesemu-go.bin \
-0x400000 bin/gnuboy-go.bin \
-0x500000 bin/smsplusgx-go.bin
+0x1000 $FIRMWARE_PATH/Bins/bootloader.bin \
+0x8000 $FIRMWARE_PATH/Bins/partitions.bin \
+0x10000 $FIRMWARE_PATH/Bins/gogo.bin \
+0x200000 $FIRMWARE_PATH/Bins/gogo.bin \
+0x300000 $FIRMWARE_PATH/Bins/nesemu-go.bin \
+0x400000 $FIRMWARE_PATH/Bins/gnuboy-go.bin \
+0x500000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin
 
 echo "\n--------------------------------------------------------------------------"
 echo "\n${unicorn}  ${green}Copmleted ${cyan}Gaboze Express${nc}"

@@ -15,39 +15,78 @@ Clone the Software Branch of the [Official Gaboze Express](https://github.com/ga
 ```shell
 $ git clone -b Software --single-branch git@github.com:gaboze-express/GabozeExpress.git --recursive
 ```
+It will take a while since we run a few ```git submodule``` inside the repository
 
-### firmware.sh
-> inside scripts folder
+## Bash Scripts
+> Some tools to help you along your way
 
-Navigate to the /scripts folder of your newly cloned repository and set permission for ```firmware``` shell file
-
-##### permissions for  firmware file
-
-```shell
-$ chmod 777 firmware
+Navigate to you newly cloned repository and execute the following
+```
+chmod -R 777 Scripts
+cd Scripts
 ```
 
-##### execute the firmware file
-> follow the prompts on screen
+### Submodule Branches
+> Make sure all the submodules are on the right branches
+
+```
+./branches
+```
+
+### Replace files for ILI9342 drivers
+> Copy relevant files for ILI9342 TFT LCD
+
+```
+./replace
+```
+
+### Build Firmware
+> Copy relevant files for ILI9342 TFT LCD
+
+```
+./replace
+```
+
+##### Follow Onscreen Prompts
 > if this is your first time running the executable, answer **Y** to the options
+
 ```
 $ ./firmware
 ```
 
-You will now have a file called **GabozeExpress.fw** in the Firmware folder. 
+You will now have a file called **GabozeExpress.fw** in the Firmware/Release folder. 
 
 You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 
-## Enabling new firmware
+##### Enabling new firmware
 > Insert the sd card into your Gaboze Express (Odroid Go) and follow the prompts
 
-| Step     | Image                                     |
-| -------- | ----------------------------------------- |
-| Power On | ![Power on your hardware](Assets/001.jpg) |
-| Firmware List | ![Firmware List](Assets/002.jpg) |
-| Firmware Selection | ![Firmware Selection](Assets/003.jpg) |
-| Firmware Verification | ![Firmware Verification](Assets/004.jpg) |
-| Firmware Write | ![Firmware Write](Assets/006.gif) |
-| Reboot into new Firmware | ![Reboot into new Firmware](Assets/007.jpg) |
+| Power On | List                    | Selection     |    Verification  |   Write   |   Reboot   |
+| ----------------------------------------- | -------------------------------- | ---- | ---- | ---- | ---- |
+| ![Power on your hardware](Assets/001.jpg) | ![Firmware List](Assets/002.jpg) |   ![Firmware Selection](Assets/003.jpg)   |  ![Firmware Verification](Assets/004.jpg)    |   ![Firmware Write](Assets/006.gif)    |   ![Reboot into new Firmware](Assets/007.jpg)   |
 
 
+### OTA
+> Flash directly to ESP32
+
+```
+./ota
+```
+
+### Erase
+> Erase flash and storage from ESP32
+
+```
+./erase
+```
+
+### Arduino
+> Create Firmware from Arduino ```.ino.bin``` file
+
+```
+./arduino
+```
+
+You will now have a ```.fw``` file in Arduino/firmware folder. 
+
+You can copy this onto your *SD Card* into the ***odroid/firmware*** folder

@@ -53,7 +53,3 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-
-# Everything Else
-*.fw
-*.bin
