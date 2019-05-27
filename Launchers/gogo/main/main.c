@@ -161,6 +161,7 @@ int print_emulator(int e, int y)
 // Return to last emulator if 'B' pressed....
 int resume(void)
 {
+
   int i;
   char *extension;
   char *romPath;

@@ -60,7 +60,6 @@ then
   echo "\n--------------------------------------------------------------------------"  
   rm $FIRMWARE_PATH/Bins/bootloader.bin
   rm $FIRMWARE_PATH/Bins/partitions.bin
-  rm $FIRMWARE_PATH/Bins/partitions_singleapp.bin
   rm $FIRMWARE_PATH/Bins/gogo.bin
 
   cd $GOGO_PATH
