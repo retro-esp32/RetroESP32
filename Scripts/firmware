@@ -18,8 +18,12 @@ export IDF_PATH=$HOME/esp/esp-idf
 REPO=$(dirname $PWD)
 FIRMWARE_PATH="$REPO/Firmware"
 GOGO_PATH="$REPO/Launchers/gogo/"
+GENERIC_PATH="$REPO/Launchers/emulator-launcher-odroid-go/"
 GOPLAY_PATH="$REPO/Launchers/go-play/"
 MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
+LAUNCHER_PATH=""
+LAUNCHER=""
+BIN=""
 
 #---------------------------------
 # FANCY STUFF
@@ -45,6 +49,27 @@ export panda=🐼
 export whale=🐳
 export game=🕹️
 
+OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
+
+echo "\n--------------------------------------------------------------------------"
+echo "\n${OPTION}"
+echo "\n--------------------------------------------------------------------------"
+select launcher in "GoGo" "Generic" "Exit"; do
+  case $launcher in
+    GoGo )
+      LAUNCHER="GoGo"
+      LAUNCHER_PATH=${GOGO_PATH}
+      BIN="gogo"
+    break;;
+    Generic )
+      LAUNCHER="Generic"
+      LAUNCHER_PATH=${GENERIC_PATH}
+      BIN="emulator-launcher-odroid-go"
+    break;;
+    Exit ) break;;
+    * ) echo "${OPTION}";;
+  esac
+done
 
 echo "\n--------------------------------------------------------------------------"
 echo "\n${squid}  ${red}Recompile ${cyan}Launcher? ${nc}[y/${white}N${nc}]"
@@ -58,9 +83,18 @@ then
   echo "\n${squid}  ${green}Compiling ${cyan}Launcher${nc}"
   echo "\n--------------------------------------------------------------------------"
   echo "Compiling Launcher"
-  cd $GOGO_PATH
+  cd $LAUNCHER_PATH
   make -j8
-  cp ./build/gogo.bin $FIRMWARE_PATH/Bins/
+
+  if [[ "$LAUNCHER" = "GoGo" ]]
+  then
+    cp ./build/gogo.bin $FIRMWARE_PATH/Bins/
+  fi
+
+  if [[ "$LAUNCHER" = "Generic" ]]
+  then
+    cp ./build/emulator-launcher-odroid-go.bin $FIRMWARE_PATH/Bins/
+  fi
 fi
 clear
 
@@ -111,27 +145,13 @@ cd $SRC_PATH
 ffmpeg -i $FIRMWARE_PATH/Assets/gaboze.png -f rawvideo -pix_fmt rgb565 $FIRMWARE_PATH/Assets/gaboze.raw -y
 
 $MKFW_PATH/mkfw 'Gaboze Express' $FIRMWARE_PATH/Assets/gaboze.raw \
-0 16 1048576 gogo $FIRMWARE_PATH/Bins/gogo.bin \
+0 16 1048576 ${BIN} $FIRMWARE_PATH/Bins/${BIN}.bin \
 0 17 1048576 nesemu-go $FIRMWARE_PATH/Bins/nesemu-go.bin \
 0 18 1048576 gnuboy-go $FIRMWARE_PATH/Bins/gnuboy-go.bin \
 0 19 2097152 smsplusgx-go $FIRMWARE_PATH/Bins/smsplusgx-go.bin
 
-mv firmware.fw $FIRMWARE_PATH/Releases/GabozeExpress.fw
+mv firmware.fw $FIRMWARE_PATH/Releases/${BIN}.fw
 
-clear
-
-echo "\n--------------------------------------------------------------------------"
-echo "\n${squid}  ${red}Delete ${cyan}Binaries? ${nc}[y/${white}N${nc}]"
-echo "\n--------------------------------------------------------------------------"
-read -rs -k 1 response
-if [[ "$response" = "y" ]]
-then
-    clear
-    rm $FIRMWARE_PATH/Bins/gogo.bin
-    rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
-    rm $FIRMWARE_PATH/Bins/nesemu-go.bin
-    rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin
-fi
 clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${unicorn}  ${green}Copmleted ${cyan}Gaboze Express${nc}"
