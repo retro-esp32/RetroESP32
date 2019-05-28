@@ -18,3 +18,6 @@
 [submodule "Launchers/esplay-retro-emulation"]
 	path = Launchers/esplay-retro-emulation
 	url = git@github.com:gaboze-express/esplay-retro-emulation.git
+[submodule "Launchers/esplay-base-firmware"]
+	path = Launchers/esplay-base-firmware
+	url = git@github.com:gaboze-express/esplay-base-firmware.git
