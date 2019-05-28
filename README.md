@@ -14,6 +14,7 @@ Clone the Software Branch of the [Official Gaboze Express](https://github.com/ga
 
 ```shell
 git clone -b Software --single-branch git@github.com:gaboze-express/GabozeExpress.git --recursive
+git submodule update --init --recursive
 git submodule foreach git pull origin master
 ```
 It will take a while since we run a few ```git submodule``` inside the repository
