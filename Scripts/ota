@@ -77,9 +77,9 @@ echo "\n------------------------------------------------------------------------
 read -rs -k 1 response
 if [[ "$response" = "y" ]]
 then
-  rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
-  rm $FIRMWARE_PATH/Bins/nesemu-go.bin
-  rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin   
+  #rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
+  #rm $FIRMWARE_PATH/Bins/nesemu-go.bin
+  #rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin   
     
   cd $GOPLAY_PATH
 
@@ -89,7 +89,7 @@ then
   echo "\n${lion}  ${green}Compiling ${cyan}gnuboy${nc}"
   echo "\n--------------------------------------------------------------------------"
   cd gnuboy-go
-  make clean  
+  #make clean  
   make -j8
   cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
 
@@ -98,7 +98,7 @@ then
   echo "\n${fox}  ${green}Compiling ${cyan}nesemu${nc}"
   echo "\n--------------------------------------------------------------------------"  
   cd ../nesemu-go
-  make clean  
+  #make clean  
   make -j8
   cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
 
@@ -107,7 +107,7 @@ then
   echo "\n${panda}  ${green}Compiling ${cyan}smsplusgx${nc}"
   echo "\n--------------------------------------------------------------------------"    
   cd ../smsplusgx-go
-  make clean  
+  #make clean  
   make -j8
   cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
 fi
@@ -143,7 +143,7 @@ esptool.py \
 --before default_reset \
 --after hard_reset write_flash -z \
 --flash_mode dio \
---flash_freq 80m \
+--flash_freq 40m \
 --flash_size detect \
 0x1000 $FIRMWARE_PATH/Bins/bootloader.bin \
 0x8000 $FIRMWARE_PATH/Bins/partitions.bin \
