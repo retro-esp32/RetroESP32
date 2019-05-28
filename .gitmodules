@@ -15,3 +15,6 @@
 [submodule "Launchers/emulator-launcher-odroid-go.git"]
 	path = Launchers/emulator-launcher-odroid-go
 	url = git@github.com:IlyaMZP/emulator-launcher-odroid-go.git
+[submodule "Launchers/esplay-retro-emulation"]
+	path = Launchers/esplay-retro-emulation
+	url = git@github.com:gaboze-express/esplay-retro-emulation.git
