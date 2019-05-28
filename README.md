@@ -42,6 +42,22 @@ cd Scripts
 ./replace
 ```
 
+### ESP32 Environment Installer
+> Install all thing necessary (NIX/OS X)
+
+```
+./installer
+```
+
+### Environmanet Variables
+> Set all your paths
+Be sure to run installer first
+
+```
+source paths
+```
+
+
 ### Build Firmware
 
 ##### Follow Onscreen Prompts

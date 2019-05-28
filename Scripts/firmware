@@ -5,7 +5,10 @@ SRC_PATH=`pwd`
 #---------------------------------
 # EDIT PATHS FOR ESP AND IDF
 #---------------------------------
+
 #export PATH="$PATH:$HOME/esp/xtensa-esp32-elf/bin"
+#export IDF_PATH=$REPO/Tools/esp-idf
+
 export PATH="$HOME/Arduino/hardware/espressif/esp32/tools/xtensa-esp32-elf/bin":$PATH
 export IDF_PATH=$HOME/esp/esp-idf
 
@@ -17,7 +20,6 @@ FIRMWARE_PATH="$REPO/Firmware"
 GOGO_PATH="$REPO/Launchers/gogo/"
 GOPLAY_PATH="$REPO/Launchers/go-play/"
 MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
-#export IDF_PATH=$REPO/Tools/esp-idf
 
 #---------------------------------
 # FANCY STUFF
