@@ -5,7 +5,7 @@ This branch contains the specific modification for the Odroid Go hardware to use
 
 - [x] Odroid Go - [Firmware](https://github.com/OtherCrashOverride/odroid-go-firmware)
 - [x] Odroid Go - [Go Play Emulators](https://github.com/OtherCrashOverride/go-play)
-- [x] Launcher based on [GoGo](https://bitbucket.org/odroid_go_stuff/gogo/src/master/) Launcher 
+- [x] Launcher based on [GoGo](https://bitbucket.org/odroid_go_stuff/gogo/src/master/) Launcher
 
 ## Usage
 > How To
@@ -13,7 +13,8 @@ This branch contains the specific modification for the Odroid Go hardware to use
 Clone the Software Branch of the [Official Gaboze Express](https://github.com/gaboze-express/GabozeExpress)
 
 ```shell
-$ git clone -b Software --single-branch git@github.com:gaboze-express/GabozeExpress.git --recursive
+git clone -b Software --single-branch git@github.com:gaboze-express/GabozeExpress.git --recursive
+git submodule foreach git pull origin master
 ```
 It will take a while since we run a few ```git submodule``` inside the repository
 
@@ -41,11 +42,6 @@ cd Scripts
 ```
 
 ### Build Firmware
-> Copy relevant files for ILI9342 TFT LCD
-
-```
-./replace
-```
 
 ##### Follow Onscreen Prompts
 > if this is your first time running the executable, answer **Y** to the options
@@ -54,7 +50,7 @@ cd Scripts
 ./firmware
 ```
 
-You will now have a file called **GabozeExpress.fw** in the Firmware/Release folder. 
+You will now have a file called **GabozeExpress.fw** in the Firmware/Release folder.
 
 You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 
@@ -87,6 +83,6 @@ You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 ./arduino
 ```
 
-You will now have a ```.fw``` file in Arduino/firmware folder. 
+You will now have a ```.fw``` file in Arduino/firmware folder.
 
 You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
