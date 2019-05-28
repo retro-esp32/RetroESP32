@@ -54,7 +54,7 @@ OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
 echo "\n--------------------------------------------------------------------------"
 echo "\n${OPTION}"
 echo "\n--------------------------------------------------------------------------"
-select launcher in "GoGo" "Generic" "Exit"; do
+select launcher in "GoGo" "Generic"; do
   case $launcher in 
     GoGo ) 
       LAUNCHER="GoGo"
@@ -66,7 +66,6 @@ select launcher in "GoGo" "Generic" "Exit"; do
       LAUNCHER_PATH=${GENERIC_PATH}
       BIN="emulator-launcher-odroid-go"
     break;;
-    Exit ) break;;
     * ) echo "${OPTION}";;
   esac
 done
