@@ -49,16 +49,23 @@ if [[ "$response" = "y" ]]
 then
   clear
   echo "\n--------------------------------------------------------------------------"
-  echo "\n${squid}  ${green}Replaceing ${cyan}odroid-go-firmware${nc} files"
-  echo "\n--------------------------------------------------------------------------"  
+  echo "\n${squid}  ${green}Replacing ${cyan}odroid-go-firmware${nc} files"
+  echo "\n--------------------------------------------------------------------------"
   cp -R $GABOZE/odroid-go-firmware/main/* $ODROID/odroid-go-firmware/main
   sleep 1
 
   clear
   echo "\n--------------------------------------------------------------------------"
-  echo "\n${squid}  ${green}Replaceing ${cyan}go-play${nc} files"
-  echo "\n--------------------------------------------------------------------------"  
+  echo "\n${squid}  ${green}Replacing ${cyan}go-play${nc} files"
+  echo "\n--------------------------------------------------------------------------"
   cp -R $GABOZE/go-play/* $LAUNCHERS/go-play
+  sleep 1
+
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${squid}  ${green}Replacing ${cyan}emulator-launcher-odroid-go${nc} files"
+  echo "\n--------------------------------------------------------------------------"
+  cp -R $GABOZE/emulator-launcher-odroid-go/* $LAUNCHERS/emulator-launcher-odroid-go
   sleep 1
 fi
 clear

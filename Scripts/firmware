@@ -5,7 +5,9 @@ SRC_PATH=`pwd`
 #---------------------------------
 # EDIT PATHS FOR ESP AND IDF
 #---------------------------------
-export PATH="$PATH:$HOME/esp/xtensa-esp32-elf/bin"
+#export PATH="$PATH:$HOME/esp/xtensa-esp32-elf/bin"
+export PATH="$HOME/Arduino/hardware/espressif/esp32/tools/xtensa-esp32-elf/bin":$PATH
+export IDF_PATH=$HOME/esp/esp-idf
 
 #---------------------------------
 # DON'T TOUCH START
@@ -15,7 +17,7 @@ FIRMWARE_PATH="$REPO/Firmware"
 GOGO_PATH="$REPO/Launchers/gogo/"
 GOPLAY_PATH="$REPO/Launchers/go-play/"
 MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
-export IDF_PATH=$REPO/Tools/esp-idf
+#export IDF_PATH=$REPO/Tools/esp-idf
 
 #---------------------------------
 # FANCY STUFF
@@ -52,7 +54,7 @@ then
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${squid}  ${green}Compiling ${cyan}Launcher${nc}"
-  echo "\n--------------------------------------------------------------------------"  
+  echo "\n--------------------------------------------------------------------------"
   echo "Compiling Launcher"
   cd $GOGO_PATH
   make -j8
@@ -79,7 +81,7 @@ then
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${fox}  ${green}Compiling ${cyan}nesemu${nc}"
-  echo "\n--------------------------------------------------------------------------"  
+  echo "\n--------------------------------------------------------------------------"
   cd ../nesemu-go
   make -j8
   cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
@@ -87,7 +89,7 @@ then
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${panda}  ${green}Compiling ${cyan}smsplusgx${nc}"
-  echo "\n--------------------------------------------------------------------------"    
+  echo "\n--------------------------------------------------------------------------"
   cd ../smsplusgx-go
   make -j8
   cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
@@ -101,7 +103,7 @@ cd $SRC_PATH
 
 echo "Building mkfw"
 cd $MKFW_PATH
-make 
+make
 
 cd $SRC_PATH
 ffmpeg -i $FIRMWARE_PATH/Assets/gaboze.png -f rawvideo -pix_fmt rgb565 $FIRMWARE_PATH/Assets/gaboze.raw -y
@@ -126,7 +128,7 @@ then
     rm $FIRMWARE_PATH/Bins/gogo.bin
     rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
     rm $FIRMWARE_PATH/Bins/nesemu-go.bin
-    rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin  
+    rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin
 fi
 clear
 echo "\n--------------------------------------------------------------------------"
