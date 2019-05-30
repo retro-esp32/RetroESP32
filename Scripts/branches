@@ -39,15 +39,7 @@ required="release/v3.2-odroid"
 echo "\n--------------------------------------------------------------------------"
 echo "\n${monkey}  ${yellow}Checking ${magenta}'esp-idf'${nc} for ${red}${required}${nc} branch"
 echo "\n--------------------------------------------------------------------------"
-if [ $(git rev-parse --abbrev-ref HEAD) != $required ];
-then
-    if git checkout --track origin/${required} &> /dev/null;
-    then
-        git checkout --track origin/${required}
-    else
-        git checkout ${required}
-    fi
-fi 
+#git checkout -b ${required} origin/${required}
 sleep 1
 clear
 echo "\n--------------------------------------------------------------------------"
@@ -60,15 +52,7 @@ required="esp-idf-v3.2"
 echo "\n--------------------------------------------------------------------------"
 echo "\n${monkey}  ${yellow}Checking ${magenta}'odroid-go-firmware'${nc} for ${red}${required}${nc} branch"
 echo "\n--------------------------------------------------------------------------"
-if [ $(git rev-parse --abbrev-ref HEAD) != $required ];
-then
-    if git checkout --track origin/${required} &> /dev/null;
-    then
-        git checkout --track origin/${required}
-    else
-        git checkout ${required}
-    fi
-fi 
+#git checkout -b ${required} origin/${required}
 sleep 1
 clear
 echo "\n--------------------------------------------------------------------------"
@@ -81,15 +65,7 @@ required="master"
 echo "\n--------------------------------------------------------------------------"
 echo "\n${monkey}  ${yellow}Checking ${magenta}'go-play'${nc} for ${red}${required}${nc} branch"
 echo "\n--------------------------------------------------------------------------"
-if [ $(git rev-parse --abbrev-ref HEAD) != $required ];
-then
-    if git checkout --track origin/${required} &> /dev/null;
-    then
-        git checkout --track origin/${required}
-    else
-        git checkout ${required}
-    fi
-fi 
+#git checkout -b ${required} origin/${required}
 sleep 1
 clear
 echo "\n--------------------------------------------------------------------------"

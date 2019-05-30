@@ -27,14 +27,14 @@ echo "\n------------------------------------------------------------------------
 echo "\n${monkey}  ${green}Adding${nc} --> PATH"
 echo "\n--------------------------------------------------------------------------"
 #export PATH=$HOME/esp/xtensa-esp32-elf/bin:$PATH
-export PATH="$HOME/Arduino/hardware/espressif/esp32/tools/xtensa-esp32-elf/bin":$PATH
+#export PATH="$HOME/Arduino/hardware/espressif/esp32/tools/xtensa-esp32-elf/bin":$PATH
 sleep 1
 clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${monkey}  ${green}Adding${nc} --> IDF_PATH"
 echo "\n--------------------------------------------------------------------------"
-#export IDF_PATH=$REPO/Tools/esp-idf
-export IDF_PATH=$HOME/esp/esp-idf
+export IDF_PATH=$REPO/Tools/esp-idf
+#export IDF_PATH=$HOME/esp/esp-idf
 sleep 1
 clear
 echo "\n--------------------------------------------------------------------------"
