@@ -7,7 +7,7 @@ This branch contains the specific modification for the Odroid Go hardware to use
 - [x] Odroid Go - [Go Play Emulators](https://github.com/OtherCrashOverride/go-play)
 - [x] Launcher based on [GoGo](https://bitbucket.org/odroid_go_stuff/gogo/src/master/) Launcher
 
-## Usage
+# Usage
 > How To
 
 Clone the Software Branch of the [Official Gaboze Express](https://github.com/gaboze-express/GabozeExpress)
@@ -19,7 +19,19 @@ git submodule foreach git pull origin master
 ```
 It will take a while since we run a few ```git submodule``` inside the repository
 
-## Bash Scripts
+# Setup Toolchain
+> You will need the xtensa esp32 toolchain
+
+### Guides
+
+***Note:*** You only need to install the xtensa toolchain. The esp-idf is included in this repository.
+
+- [Linux](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/linux-setup.html)
+- [Mac OS](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/macos-setup.html)
+- [Windows](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/windows-setup-scratch.html)
+
+
+# Bash Scripts
 > Some tools to help you along your way
 
 Navigate to you newly cloned repository and execute the following
@@ -27,6 +39,9 @@ Navigate to you newly cloned repository and execute the following
 chmod -R 777 Scripts
 cd Scripts
 ```
+
+***Note:*** All bash scripts **MUST** be executed from the Scripts folder.
+
 
 ### Submodule Branches
 > Make sure all the submodules are on the right branches
@@ -57,8 +72,10 @@ Be sure to run installer first
 source paths
 ```
 
-
 ### Build Firmware
+
+> Execute ```source paths``` before proceeding
+
 
 ##### Follow Onscreen Prompts
 > if this is your first time running the executable, answer **Y** to the options
