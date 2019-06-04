@@ -14,7 +14,7 @@ export IDF_PATH=$HOME/esp/esp-idf
 #---------------------------------
 # EDIT PORT ESP32
 #---------------------------------
-export PORT='/dev/cu.SLAB_USBtoUART'
+export PORT='/dev/cu.usbserial-AC00UQ47'
 
 #---------------------------------
 # DON'T TOUCH START
