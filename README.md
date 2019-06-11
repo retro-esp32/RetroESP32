@@ -13,6 +13,7 @@ Based on the popularity of:
 
 We have assemebled a team to pursue the development of:
 
+* [**Software Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Sofware)
 * [**Hardware Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Hardware)
 
 ### Hardware
@@ -27,8 +28,6 @@ Here is a teaser of what we are testing
 | Top Layout | Bottom Layout |
 | ------------------ | ---------------- |
 | ![Gaboze Express](Assets/GabozeExpressFTDITop.png) | ![Gaboze Express](Assets/GabozeExpressFTDIBottom.png) |
-
-* [**Software Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Sofware)
 
   
 
