@@ -15,6 +15,19 @@ We have assemebled a team to pursue the development of:
 
 * [**Hardware Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Hardware)
 
+### Hardware
+> Testing FTDI Solution
+
+Thanks to a recent contribution, we will be testing out the replacement of the CP2104 USB to UART bridge IC with an FTDI FT232RL IC
+
+The FTDI IC is more hand solder friendly than the CP210x QFN series
+
+Here is a teaser of what we are testing
+
+| Top Layout | Bottom Layout |
+| ------------------ | ---------------- |
+| ![Gaboze Express](Assets/GabozeExpressFTDITop.png) | ![Gaboze Express](Assets/GabozeExpressFTDIBottom.png) |
+
 * [**Software Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Sofware)
 
   
