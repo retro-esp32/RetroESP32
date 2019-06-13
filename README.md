@@ -2,8 +2,33 @@
 > An ESP32 Wrover based Game Boy Pocket
 
 
+# Go Vote!!!
+> Have your say!
 
-## Welcome
+We are moving into production soon and want to see what color you choose!
+**[Vote Here](https://forms.gle/fLzieRAKF758Bge16)**
+
+| White | Black |
+| ------------------ | ---------------- |
+| ![White Top](Assets/white-top.png) | ![Black Top](Assets/black-top.png) |
+| ![White Bottom](Assets/white-bottom.png) | ![Black Bottom](Assets/black-bottom.png) |
+
+## UPDATES!!!
+
+### Hardware
+> Testing FTDI Solution
+
+Thanks to a recent contribution, we will be testing out the replacement of the CP2104 USB to UART bridge IC with an FTDI FT232RL IC
+
+The FTDI IC is more hand solder friendly than the CP210x QFN series
+
+Here is a teaser of what we are testing
+
+| Top Layout | Bottom Layout |
+| ------------------ | ---------------- |
+| ![Gaboze Express](Assets/GabozeExpressFTDITop.png) | ![Gaboze Express](Assets/GabozeExpressFTDIBottom.png) |
+
+# Welcome
 
 Based on the popularity of: 
 - [Gaboze Pocaio](https://github.com/32teeth/GabozePocaio-Round1)
