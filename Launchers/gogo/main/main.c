@@ -21,6 +21,18 @@
 #include "font.h"
 #include "icons.h"
 
+// console icons
+#include "icons/a26.h"
+#include "icons/a78.h"
+#include "icons/c64.h"
+#include "icons/col.h"
+#include "icons/gb.h"
+#include "icons/gbc.h"
+#include "icons/gg.h"
+#include "icons/nes.h"
+#include "icons/sms.h"
+#include "icons/zx.h"
+
 #include <string.h>
 #include <dirent.h>
 
@@ -109,6 +121,7 @@ int print_emulator(int e, int y)
   char path[256]="/sd/roms/";
   char s[40];
   
+  /*
   if (e!=last_e) {
     for (i=0; i<320*56; i++) buffer[i]=65535;
     ili9341_write_frame_rectangleLE(0,50,320,56,buffer);
@@ -117,6 +130,41 @@ int print_emulator(int e, int y)
        
     last_e=e;
   }
+  */
+
+  if (e != last_e)
+  {
+      for (i=0; i<320*56; i++) buffer[i]=65535;
+      ili9341_write_frame_rectangleLE(0,50,320,56,buffer);
+
+      switch (e)
+      {
+        case 0:
+          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_nes.pixel_data);
+          break;
+        case 1:
+          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_gb.pixel_data);
+          break;
+        case 2:
+          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_gbc.pixel_data);
+          break;
+        case 3:
+          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_sms.pixel_data);
+          break;
+        case 4:
+          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_sms.pixel_data);
+          break;
+        case 5:
+          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_col.pixel_data);
+          break;
+        case 6:
+          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_zx.pixel_data);
+          break;
+      }
+
+      last_e = e;
+  }
+
   for (i=0; i<40; i++) s[i]=' '; s[i]=0;
   len=strlen(emulator[e]);
   for (i=0; i<len; i++) s[i+19-len/2]=emulator[e][i];
