@@ -22,16 +22,16 @@
 #include "icons.h"
 
 // console icons
-#include "icons/a26.h"
-#include "icons/a78.h"
-#include "icons/c64.h"
-#include "icons/col.h"
-#include "icons/gb.h"
-#include "icons/gbc.h"
-#include "icons/gg.h"
-#include "icons/nes.h"
-#include "icons/sms.h"
-#include "icons/zx.h"
+#include "icons/a26.c"
+#include "icons/a78.c"
+#include "icons/c64.c"
+#include "icons/col.c"
+#include "icons/gb.c"
+#include "icons/gbc.c"
+#include "icons/gg.c"
+#include "icons/nes.c"
+#include "icons/sms.c"
+#include "icons/zx.c"
 
 #include <string.h>
 #include <dirent.h>
@@ -46,12 +46,46 @@ int BatteryPercent = 100;
 unsigned short buffer[40000];
 int colour=65535; // white text mostly.
 
+#define ANIMATE true
+#define STEPS 235
+#define W 150
+#define H 56
+#define X ((320/2) - (W/2))
+#define Y ((240/2) - (H/2))
+#define MAX 9
+
+uint16_t * ICONS[10] = {
+  (uint16_t *)icon_a26.pixel_data,
+  (uint16_t *)icon_a78.pixel_data,
+  (uint16_t *)icon_c64.pixel_data,
+  (uint16_t *)icon_col.pixel_data,
+  (uint16_t *)icon_gb.pixel_data,
+  (uint16_t *)icon_gbc.pixel_data,
+  (uint16_t *)icon_gg.pixel_data,
+  (uint16_t *)icon_nes.pixel_data,
+  (uint16_t *)icon_sms.pixel_data,
+  (uint16_t *)icon_zx.pixel_data
+};
+
 int num_emulators=7;
 char emulator[10][32]={
-    "Nintendo","GAMEBOY","GAMEBOY COLOR","SEGA Master System",
-    "GAME GEAR","Colecovision","ZX Spectrum 48K"
-    };
-char emu_dir[10][20]={"nes","gb","gbc","sms","gg","col","spectrum"};
+  "Nintendo",
+  "GAMEBOY",
+  "GAMEBOY COLOR",
+  "SEGA Master System",
+  "GAME GEAR",
+  "Colecovision",
+  "ZX Spectrum 48K"
+};
+char emu_dir[10][20]={
+  "nes",
+  "gb",
+  "gbc",
+  "sms",
+  "gg",
+  "col",
+  "spectrum"
+};
 int emu_slot[10]={1,2,2,3,3,3,4};
 
 char target[256]="";
@@ -121,49 +155,24 @@ int print_emulator(int e, int y)
   char path[256]="/sd/roms/";
   char s[40];
   
-  /*
-  if (e!=last_e) {
-    for (i=0; i<320*56; i++) buffer[i]=65535;
-    ili9341_write_frame_rectangleLE(0,50,320,56,buffer);
-    if (e<7) for (i=0; i<150*56; i++) buffer[i]=icons[e*150*56+i];
-    ili9341_write_frame_rectangleLE(85,50,150,56,buffer);
-       
-    last_e=e;
-  }
-  */
-
-  if (e != last_e)
-  {
+  #ifdef ANIMATE
+    if (e != last_e)
+    {
+        for (i=0; i<320*56; i++) buffer[i]=65535;
+        ili9341_write_frame_rectangleLE(0,50,320,56,buffer);
+        ili9341_write_frame_rectangleLE(85, 50, 150, 56, ICONS[e]);
+        last_e = e;
+    } 
+  #else
+    if (e!=last_e) {
       for (i=0; i<320*56; i++) buffer[i]=65535;
       ili9341_write_frame_rectangleLE(0,50,320,56,buffer);
-
-      switch (e)
-      {
-        case 0:
-          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_nes.pixel_data);
-          break;
-        case 1:
-          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_gb.pixel_data);
-          break;
-        case 2:
-          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_gbc.pixel_data);
-          break;
-        case 3:
-          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_sms.pixel_data);
-          break;
-        case 4:
-          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_sms.pixel_data);
-          break;
-        case 5:
-          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_col.pixel_data);
-          break;
-        case 6:
-          ili9341_write_frame_rectangleLE(85, 50, 150, 56, icon_zx.pixel_data);
-          break;
-      }
-
-      last_e = e;
-  }
+      if (e<7) for (i=0; i<150*56; i++) buffer[i]=icons[e*150*56+i];
+      ili9341_write_frame_rectangleLE(85,50,150,56,buffer);
+         
+      last_e=e;
+    }
+  #endif
 
   for (i=0; i<40; i++) s[i]=' '; s[i]=0;
   len=strlen(emulator[e]);
