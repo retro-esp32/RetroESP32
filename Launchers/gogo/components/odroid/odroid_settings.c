@@ -163,7 +163,7 @@ void odroid_settings_VRef_set(int32_t value)
 
 int32_t odroid_settings_Volume_get()
 {
-    int result = ODROID_VOLUME_LEVEL3;
+    int result = ODROID_VOLUME_LEVEL4;
 
     // Open
     nvs_handle my_handle;
