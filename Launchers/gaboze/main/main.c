@@ -54,8 +54,7 @@ odroid_battery_state battery_state;
 #define COUNT 12
 #define NEXT 208
 #define GAP 48
-int STEP = 0;
-int BACKGROUND = 0;
+int STEP = 1;
 int USER;
 
 /*
@@ -306,23 +305,33 @@ bool has_save_file(char *name) {
   struct dirent *file;                  
   char path[256] = "/sd/odroid/data/";
   strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
-  directory = opendir(path);
-
+  directory = opendir(path); 
   gets(name);
-
   while ((file = readdir(directory)) != NULL) {
-    gets(file->d_name);
-    printf("MATCH:%d ROM NAME:%s SAVE FILE:%s\n", strcmp(name, file->d_name), name, file->d_name);
+    char tmp[256] = "";
+    strcat(tmp, file->d_name);
+    tmp[strlen(tmp)-4] = '\0';
+    gets(tmp);
+    /*
+    printf("\nROM NAME:%s\nSAV FILE:%s\nROM:%d SAV:%d MATCH:%d\n", 
+           name, 
+           tmp, 
+           strlen(name), 
+           strlen(tmp), 
+           strcmp(name, tmp)
+    );
+    */
+    if(strcmp(name, tmp) == 0){
+      return true;
+    }
   }
-
-  return true;
+  return false;
 }
 
 /*
   draw_launcher
 */
 void draw_launcher() {
-  printf("ROM NAME:%s ROM PATH:%s\n",ROM.name,ROM.path);
   draw_background();
   draw_text(16,16,EMULATORS[STEP], false, true);
   int i = 0;                            
@@ -343,6 +352,7 @@ void draw_launcher() {
   draw_text(x+24,y,ROM.name,true,true);
 
   bool saved = has_save_file(ROM.name);
+  printf("\nROM NAME:%s\nROM PATH:%s\n%s\n",ROM.name,ROM.path,saved ? "Has Save File" : "No Save File");
 }
 
 /*
@@ -634,10 +644,11 @@ void app_main(void)
     if (joystick.values[ODROID_INPUT_A]) {
       if(STEP == 0) {                                            
         update_theme();
-      }
-      if (ROM.ready) {
-        LAUNCHER = true;
-        draw_launcher();
+      } else {
+        if (ROM.ready && !LAUNCHER) {
+          LAUNCHER = true;
+          draw_launcher();
+        }                
       }
       debounce(ODROID_INPUT_A);
     }
