@@ -10,6 +10,7 @@
 
 #include <string.h>
 #include <dirent.h>
+#include <math.h>
 #include "esp_wifi.h"
 #include "esp_event.h"
 #include "esp_event_loop.h"
@@ -39,6 +40,11 @@
 #include "sprites/media.c"
 
 /*
+  icons
+*/
+#include "sprites/icons.c"
+
+/*
 
 */
 odroid_gamepad_state joystick;
@@ -55,6 +61,8 @@ odroid_battery_state battery_state;
 #define NEXT 208
 #define GAP 48
 int STEP = 1;
+int OPTION = 0;
+bool SAVED = false;
 int USER;
 
 /*
@@ -94,6 +102,9 @@ typedef struct{
   bool ready;
 } LOAD;
 LOAD ROM;
+
+// PROGRAMS
+int PROGRAMS[10] = {1, 2, 2, 3, 3, 3, 4};
 
 // SYSTEM
 typedef struct{
@@ -300,7 +311,8 @@ void draw_media(int x, int y, bool current) {
 /*
   has_save_file
 */
-bool has_save_file(char *name) {
+void has_save_file(char *name) {
+  SAVED = false;                                  
   DIR *directory;   
   struct dirent *file;                  
   char path[256] = "/sd/odroid/data/";
@@ -312,20 +324,63 @@ bool has_save_file(char *name) {
     strcat(tmp, file->d_name);
     tmp[strlen(tmp)-4] = '\0';
     gets(tmp);
-    /*
-    printf("\nROM NAME:%s\nSAV FILE:%s\nROM:%d SAV:%d MATCH:%d\n", 
-           name, 
-           tmp, 
-           strlen(name), 
-           strlen(tmp), 
-           strcmp(name, tmp)
-    );
-    */
     if(strcmp(name, tmp) == 0){
-      return true;
+      SAVED = true;
     }
   }
-  return false;
+  closedir(directory);
+}
+
+/*
+  draw_options
+*/
+void draw_options() {
+  has_save_file(ROM.name);
+  //printf("\nROM NAME:%s\nROM PATH:%s\n%s\n",ROM.name,ROM.path,SAVED ? "Has Save File" : "No Save File");
+
+  int x = GAP/3 + 32;
+  int y = POS.y + 48;  
+  int w = 5;
+  int h = 5;
+  int i = 0;
+  int offset = 0;
+  if(SAVED) {
+    // resume               
+    i = 0;  
+    offset = 5;
+    for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
+      buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 0 ? WHITE : GUI.fg : GUI.bg;i++;
+    }}
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+    draw_text(x+10,y,"Resume",false,OPTION == 0?true:false);
+    // restart
+    i = 0;  
+    y+=20;
+    offset = 10;
+    for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
+      buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 1 ? WHITE : GUI.fg : GUI.bg;i++;
+    }}
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+    draw_text(x+10,y,"Restart",false,OPTION == 1?true:false);
+    // restart
+    i = 0;  
+    y+=20;
+    offset = 20;
+    for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
+      buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 2 ? WHITE : GUI.fg : GUI.bg;i++;
+    }}
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+    draw_text(x+10,y,"Delete Save",false,OPTION == 2?true:false);       
+  } else {
+    // run
+    i = 0;  
+    offset = 0;
+    for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
+      buffer[i] = icons[r+offset][c] == WHITE ? WHITE : GUI.bg;i++;
+    }}
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+    draw_text(x+10,y,"Run",false,true);
+  } 
 }
 
 /*
@@ -349,10 +404,7 @@ void draw_launcher() {
 
   y += 48;
   draw_media(x,y-6,true);
-  draw_text(x+24,y,ROM.name,true,true);
-
-  bool saved = has_save_file(ROM.name);
-  printf("\nROM NAME:%s\nROM PATH:%s\n%s\n",ROM.name,ROM.path,saved ? "Has Save File" : "No Save File");
+  draw_options();
 }
 
 /*
@@ -414,6 +466,9 @@ void get_theme() {
   //printf("***** USER %d *****\n", USER);  
 }
 
+/*
+  set_theme
+*/
 void set_theme(int i) {
   //printf("***** set_theme(%d) *****\n", i);
   esp_err_t err = nvs_flash_init();
@@ -442,6 +497,22 @@ void update_theme() {
 }
 
 /*
+  draw_numbers
+*/
+void draw_numbers() {
+  int x = 296;
+  int y = POS.y + 48;
+  int h = 5;
+  int w = 0;
+  char count[10];
+  sprintf(count, "(%d/%d)", (ROMS.offset+1), ROMS.total);
+  w = strlen(count)*5;
+  x -= w;
+  draw_mask(x-5,y,w+5,h);
+  draw_text(x,y,count,false,false);  
+}
+
+/*
   draw_files
 */
 void draw_files() {
@@ -452,7 +523,8 @@ void draw_files() {
   struct dirent *file;                  
   char path[256] = "/sd/roms/";
   strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
-  directory = opendir(path);
+  bool files = true;
+  if (!(directory = opendir(path))) {files = false;}
   
   int game = ROMS.offset ;
   int n = 0;
@@ -460,38 +532,44 @@ void draw_files() {
   ROM.ready = false;
   ROMS.total = 0;
   
-  for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
-  while ((file = readdir(directory)) != NULL) {
-    bool rom = false;
-    int rom_length = strlen(file->d_name);
-    int ext_lext = strlen(DIRECTORIES[STEP]);
-    bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], DIRECTORIES[STEP]) == 0 && file->d_name[0] != '.';
-    if(extenstion) {
-      ROMS.total++;
-      if(game < (ROMS.limit+ROMS.offset) && n >= game && game < ROMS.total) {
-        draw_media(x,y-6,game == ROMS.offset ? true : false);
-        draw_text(x+24,y,file->d_name,true,game == ROMS.offset ? true : false);  
-        if(game == ROMS.offset) {
-          strcpy(ROM.name, file->d_name);
-          strcpy(ROM.path, path);
-          int i = strlen(ROM.path); ROM.path[i] = '/'; 
-          ROM.path[i + 1] = 0;
-          strcat(ROM.path, ROM.name);
-          ROM.ready = true;
+  if(files) {
+    for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
+    while ((file = readdir(directory)) != NULL) {
+      bool rom = false;
+      int rom_length = strlen(file->d_name);
+      int ext_lext = strlen(DIRECTORIES[STEP]);
+      bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], DIRECTORIES[STEP]) == 0 && file->d_name[0] != '.';
+      if(extenstion) {
+        ROMS.total++;
+        if(game < (ROMS.limit+ROMS.offset) && n >= game && game < ROMS.total) {
+          draw_media(x,y-6,game == ROMS.offset ? true : false);
+          draw_text(x+24,y,file->d_name,true,game == ROMS.offset ? true : false);  
+          if(game == ROMS.offset) {
+            strcpy(ROM.name, file->d_name);
+            strcpy(ROM.path, path);
+            int i = strlen(ROM.path); ROM.path[i] = '/'; 
+            ROM.path[i + 1] = 0;
+            strcat(ROM.path, ROM.name);
+            ROM.ready = true;
+          }
+          y+=20; 
+          game++;
         }
-        y+=20; 
-        game++;
+
+        n++;
+        games = true;                     
       }
-
-      n++;
-      games = true;                     
-    }
-  };
-
-  if(games == false) {
-    draw_text(x,y,"no games available",false,false);
+    };
+    closedir(directory);
   }
-  closedir(directory);
+
+  if(ROM.ready) {
+    draw_numbers();
+  } else {
+    char message[100] = "no games available";
+    int center = ceil((320/2)-((strlen(message)*5)/2));
+    draw_text(center,134,message,false,false);
+  }
 }
 
 /*
@@ -520,6 +598,74 @@ void animate(int dir) {
   }
   draw_text(16,16,EMULATORS[STEP], false, true);  
   STEP == 0 ? draw_themes() : draw_files();
+}
+
+/*
+  rom
+*/
+void rom_run() {
+  draw_background();
+  char message[100] = "loading...";
+  int center = ceil((320/2)-((strlen(message)*5)/2));
+  draw_text(center,126,message,false,false);  
+  printf("\n***********\nRUN:%s\n***********\n", odroid_settings_RomFilePath_get());
+}
+
+void rom_resume() {
+  draw_background();                 
+  char message[100] = "resuming...";
+  int center = ceil((320/2)-((strlen(message)*5)/2));
+  draw_text(center,126,message,false,false);  
+  printf("\n***********\nRESUMING:%s\n***********\n", odroid_settings_RomFilePath_get());
+}
+
+void rom_delete_save() {
+  draw_background();                  
+  char message[100] = "deleting...";
+  int center = ceil((320/2)-((strlen(message)*5)/2));
+  draw_text(center,126,message,false,false);
+
+  printf("\n***********\nSEARHING FOR:%s.sav\n***********\n", ROM.name);
+
+  DIR *directory;   
+  struct dirent *file;                  
+  char path[256] = "/sd/odroid/data/";
+  strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
+  directory = opendir(path); 
+  gets(ROM.name);
+  while ((file = readdir(directory)) != NULL) {
+    char tmp[256] = "";
+    char file_to_delete[256] = "";
+    strcat(tmp, file->d_name);
+    sprintf(file_to_delete, "%s/%s", path, file->d_name);
+    tmp[strlen(tmp)-4] = '\0';
+    gets(tmp);
+    if(strcmp(ROM.name, tmp) == 0){
+      printf("\n***********\nFOUND: %s\n***********\n", file_to_delete);
+
+      struct stat st;
+      if (stat(file_to_delete, &st) == 0) {
+        sleep(1);                                             
+        printf("\n***********\nDELETING: %s\n***********\n", file_to_delete);
+        unlink(file_to_delete);
+
+        draw_background();
+        char message[100] = "save file deleted";
+        int center = ceil((320/2)-((strlen(message)*5)/2));
+        draw_text(center,126,message,false,false);  
+
+        sleep(1);      
+        printf("\n***********\nFILE DELETED: %s\n***********\n", file_to_delete);
+
+        LAUNCHER = false;
+        draw_background();
+        draw_systems();
+        draw_text(16,16,EMULATORS[STEP],false,true); 
+        STEP == 0 ? draw_themes() : draw_files();
+      }      
+    }
+  }  
+  //closedir(path);
 }
 
 
@@ -600,7 +746,7 @@ void app_main(void)
     if(joystick.values[ODROID_INPUT_RIGHT]) {
       if(!LAUNCHER) {
         STEP++;
-        if( STEP > COUNT-1 ) { STEP = COUNT; } else { 
+        if( STEP > COUNT-1 ) { STEP = COUNT-1; } else { 
           ROMS.offset = 0; 
           ROMS.total = 0; 
           animate(1); 
@@ -618,8 +764,13 @@ void app_main(void)
         }
         if(STEP != 0) {
           ROMS.offset--;
-          if( ROMS.offset < 0 ) { ROMS.offset = 0; }
-          draw_files();
+          if( ROMS.offset < 0 ) { ROMS.offset = 0; } else { draw_files(); }
+        }
+      } else {
+        if(SAVED) {
+          OPTION--;
+          if( OPTION < 0 ) { OPTION = 2; }
+          draw_options();
         }
       }
       debounce(ODROID_INPUT_UP);
@@ -634,21 +785,40 @@ void app_main(void)
         }
         if(STEP != 0) {
           ROMS.offset++;
-          if( ROMS.offset > ROMS.total - 1 ) { ROMS.offset = ROMS.total - 1; }
-          draw_files();
+          if( ROMS.offset > ROMS.total - 1 ) { ROMS.offset = ROMS.total - 1; }  else { draw_files(); }
         }            
-      }                                               
-      debounce(ODROID_INPUT_DOWN);
-    }   
+      } else {
+        if(SAVED) {
+          OPTION++;
+          if( OPTION > 2 ) { OPTION = 0; }
+          draw_options();
+        } 
+      }
+      debounce(ODROID_INPUT_DOWN);       
+    }  
     // A  
     if (joystick.values[ODROID_INPUT_A]) {
       if(STEP == 0) {                                            
         update_theme();
       } else {
         if (ROM.ready && !LAUNCHER) {
+          OPTION = 0;
           LAUNCHER = true;
           draw_launcher();
-        }                
+        } else {
+          odroid_settings_RomFilePath_set(ROM.path);
+          switch(OPTION) {
+            case 0:
+              SAVED ? rom_resume() : rom_run();
+            break;
+            case 1:
+              rom_run();
+            break;
+            case 2:
+              rom_delete_save();
+            break;
+          }
+        }     
       }
       debounce(ODROID_INPUT_A);
     }
