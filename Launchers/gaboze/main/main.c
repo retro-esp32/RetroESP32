@@ -2,22 +2,25 @@
   General
 */
 #include <stdio.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "esp_system.h"
-#include "nvs_flash.h"
-#include "nvs.h"
-
 #include <string.h>
 #include <dirent.h>
 #include <math.h>
-#include "esp_wifi.h"
+
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "nvs_flash.h"
+//#include "nvs.h"
+
+#include "esp_heap_caps.h"
+#include "esp_system.h"
 #include "esp_event.h"
-#include "esp_event_loop.h"
-#include "driver/gpio.h"
 #include "esp_partition.h"
 #include "esp_ota_ops.h"
-#include "esp_heap_caps.h"
+
+#include "driver/gpio.h"
+
+//#include "esp_event_loop.h"
+//#include "esp_wifi.h"
 
 /*
   Odroid Components
@@ -44,6 +47,8 @@
 */
 #include "sprites/icons.c"
 
+static void launcher_task();
+
 /*
 
 */
@@ -63,7 +68,7 @@ odroid_battery_state battery_state;
 int STEP = 1;
 int OPTION = 0;
 bool SAVED = false;
-int USER;
+int8_t USER;
 
 /*
   Structs
@@ -239,8 +244,6 @@ void draw_background() {
 void draw_text(short x, short y, char *string, bool ext, bool current) {
   int length = !ext ? strlen(string) : strlen(string)-(strlen(DIRECTORIES[STEP])+1);
   int size = 5;
-  int w = length*size;
-  int h = size;
   for(int n = 0; n < length; n++) {                                     
     int dx = get_letter(string[n]);
     int i = 0;       
@@ -396,7 +399,7 @@ void draw_launcher() {
   int h = 32;  
   for(int r = 0; r < 32; r++) {
     for(int c = 0; c < 32; c++) { 
-      buffer[i] = SYSTEMS[STEP].system[r][c] == WHITE ? WHITE : GUI.bg;                                  
+      buffer[i] = SYSTEMS[STEP].system[r][c] == WHITE ? WHITE : GUI.bg;
       i++;
     }      
   }
@@ -460,7 +463,7 @@ void get_theme() {
       USER = 0;
       break;
     default :
-      printf("Error (%s) reading!\n", esp_err_to_name(err));
+      USER = 0;
   }   
   nvs_close(handle);
   //printf("***** USER %d *****\n", USER);  
@@ -469,16 +472,16 @@ void get_theme() {
 /*
   set_theme
 */
-void set_theme(int i) {
+void set_theme(int8_t i) {
   //printf("***** set_theme(%d) *****\n", i);
-  esp_err_t err = nvs_flash_init();
+  //esp_err_t err = nvs_flash_init();
   nvs_handle handle;
-  err = nvs_open("storage", NVS_READWRITE, &handle);
-  err = nvs_set_i8(handle, "USER", i);
-  printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
-  //printf("Committing updates in NVS ... ");
-  err = nvs_commit(handle);
-  printf((err != ESP_OK) ? "Failed!\n" : "Done\n");  
+  //err = nvs_open("storage", NVS_READWRITE, &handle);
+  //err = nvs_set_i8(handle, "USER", i);
+  //err = nvs_commit(handle);
+  nvs_open("storage", NVS_READWRITE, &handle);
+  nvs_set_i8(handle, "USER", i);
+  nvs_commit(handle);  
   nvs_close(handle);
   get_theme(); 
 }
@@ -528,14 +531,12 @@ void draw_files() {
   
   int game = ROMS.offset ;
   int n = 0;
-  bool games = false;
   ROM.ready = false;
   ROMS.total = 0;
   
   if(files) {
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
     while ((file = readdir(directory)) != NULL) {
-      bool rom = false;
       int rom_length = strlen(file->d_name);
       int ext_lext = strlen(DIRECTORIES[STEP]);
       bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], DIRECTORIES[STEP]) == 0 && file->d_name[0] != '.';
@@ -556,8 +557,7 @@ void draw_files() {
           game++;
         }
 
-        n++;
-        games = true;                     
+        n++;                 
       }
     };
     closedir(directory);
@@ -601,14 +601,35 @@ void animate(int dir) {
 }
 
 /*
+  boot
+*/
+void boot() {
+  draw_background();
+  char message[100] = "gaboze express";
+  int width = strlen(message)*5;
+  int center = ceil((320/2)-(width/2));
+  int y = 118;
+  draw_text(center,y,message,false,false);
+
+  y+=10;
+  for(int n = 0; n < (width+10); n++) {
+    for(int i = 0; i < 5; i++) {
+      buffer[i] = GUI.fg;
+    }
+    ili9341_write_frame_rectangleLE(center+n, y, 1, 5, buffer);
+    usleep(10000);
+  }
+}
+
+/*
   rom
 */
 void rom_run() {
   draw_background();
   char message[100] = "loading...";
   int center = ceil((320/2)-((strlen(message)*5)/2));
-  draw_text(center,126,message,false,false);  
-  printf("\n***********\nRUN:%s\n***********\n", odroid_settings_RomFilePath_get());
+  draw_text(center,118,message,false,false);  
+  //printf("\n***********\nRUN:%s\n***********\n", odroid_settings_RomFilePath_get());
   odroid_system_application_set(PROGRAMS[STEP-1]);
   usleep(500000);
   esp_restart();
@@ -618,17 +639,31 @@ void rom_resume() {
   draw_background();                 
   char message[100] = "resuming...";
   int center = ceil((320/2)-((strlen(message)*5)/2));
-  draw_text(center,126,message,false,false);  
-  printf("\n***********\nRESUMING:%s\n***********\n", odroid_settings_RomFilePath_get());
+  draw_text(center,118,message,false,false);  
+  //printf("\n***********\nRESUMING:%s\n***********\n", odroid_settings_RomFilePath_get());
+  odroid_system_application_set(PROGRAMS[STEP-1]);
+  usleep(500000);
+  esp_restart();  
 }
 
 void rom_delete_save() {
   draw_background();                  
   char message[100] = "deleting...";
-  int center = ceil((320/2)-((strlen(message)*5)/2));
-  draw_text(center,126,message,false,false);
+  int width = strlen(message)*5;
+  int center = ceil((320/2)-(width/2));
+  int y = 118;
+  draw_text(center,y,message,false,false);
 
-  printf("\n***********\nSEARHING FOR:%s.sav\n***********\n", ROM.name);
+  y+=10;
+  for(int n = 0; n < (width+10); n++) {
+    for(int i = 0; i < 5; i++) {
+      buffer[i] = GUI.fg;
+    }
+    ili9341_write_frame_rectangleLE(center+n, y, 1, 5, buffer);
+    usleep(15000);
+  }  
+
+  //printf("\n***********\nSEARHING FOR:%s.sav\n***********\n", ROM.name);
 
   DIR *directory;   
   struct dirent *file;                  
@@ -644,22 +679,12 @@ void rom_delete_save() {
     tmp[strlen(tmp)-4] = '\0';
     gets(tmp);
     if(strcmp(ROM.name, tmp) == 0){
-      printf("\n***********\nFOUND: %s\n***********\n", file_to_delete);
+      //printf("\n***********\nFOUND: %s\n***********\n", file_to_delete);
 
       struct stat st;
-      if (stat(file_to_delete, &st) == 0) {
-        sleep(1);                                             
-        printf("\n***********\nDELETING: %s\n***********\n", file_to_delete);
+      if (stat(file_to_delete, &st) == 0) {                               
+        //printf("\n***********\nDELETING: %s\n***********\n", file_to_delete);
         unlink(file_to_delete);
-
-        draw_background();
-        char message[100] = "save file deleted";
-        int center = ceil((320/2)-((strlen(message)*5)/2));
-        draw_text(center,126,message,false,false);  
-
-        sleep(1);      
-        printf("\n***********\nFILE DELETED: %s\n***********\n", file_to_delete);
-
         LAUNCHER = false;
         draw_background();
         draw_systems();
@@ -682,8 +707,9 @@ void app_main(void)
 {
   nvs_flash_init();
   odroid_system_init();
-  odroid_input_gamepad_init();   
+  odroid_input_gamepad_init();
 
+  /*
   switch (esp_sleep_get_wakeup_cause())
   {
     case ESP_SLEEP_WAKEUP_EXT0:
@@ -697,12 +723,32 @@ void app_main(void)
     case ESP_SLEEP_WAKEUP_ULP:
     case ESP_SLEEP_WAKEUP_UNDEFINED:
     {
+      odroid_gamepad_state bootState = odroid_input_read_raw(); 
+
+      if (bootState.values[ODROID_INPUT_MENU])
+      {
+        // Set factory app
+        const esp_partition_t* partition = esp_partition_find_first(ESP_PARTITION_TYPE_APP, ESP_PARTITION_SUBTYPE_APP_FACTORY, NULL);
+        if (partition == NULL){abort();}
+
+        esp_err_t err = esp_ota_set_boot_partition(partition);
+        if (err != ESP_OK)
+        {abort();}
+
+        // Reset
+        usleep(500000);
+        esp_restart();         
+      }
       break;
     }
     default:
       break;
   } 
+  */
 
+  //printf("==========================\n");
+  //printf("Welcome to Gaboze Express Launcher\n");
+  //printf("==========================\n");   
   odroid_settings_Volume_set(4);
 
   get_theme();
@@ -719,22 +765,30 @@ void app_main(void)
   };  
 
   // Display
+  ili9341_init();  
   ili9341_prepare();
-  ili9341_init();
   ili9341_clear(0);
 
+  boot();
+
   // SD Card
+  // odroid_sdcard_close();
   odroid_sdcard_open("/sd");
+
+  // Audio
   odroid_audio_init(16000);
 
-  //
   draw_background();
   draw_systems();
   draw_text(16,16,EMULATORS[STEP],false,true); 
   STEP == 0 ? draw_themes() : draw_files();
   if(STEP != 0) {animate(1);}
 
-  while (1) {
+  xTaskCreate(launcher_task, "launcher", 8192, NULL, 5, NULL);
+}
+
+static void launcher_task() {
+  while (true) {
     odroid_input_gamepad_read(&joystick);
     // LEFT
     if(joystick.values[ODROID_INPUT_LEFT]) {
@@ -839,5 +893,5 @@ void app_main(void)
       }
       debounce(ODROID_INPUT_B);
     }        
-  }
+  }                               
 }

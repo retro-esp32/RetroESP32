@@ -25,6 +25,7 @@ GOPLAY_PATH="$REPO/Launchers/go-play/"
 LAUNCHER_PATH=""
 LAUNCHER=""
 BIN=""
+BAUDRATE=""
 
 #---------------------------------
 # FANCY STUFF
@@ -52,6 +53,7 @@ export game=🕹️
 
 OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
 
+clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${OPTION}"
 echo "\n--------------------------------------------------------------------------"
@@ -170,6 +172,29 @@ fi
 
 cd $SRC_PATH
 
+OPTION="${monkey}  ${red}Please Select a ${cyan}Buad Rate? ${nc}"
+echo "\n--------------------------------------------------------------------------"
+echo "\n${OPTION}"
+echo "\n--------------------------------------------------------------------------"
+select baudrate in "115200" "230400" "921600" "2000000" "Exit"; do
+  case $baudrate in
+    115200 )
+      BAUDRATE=115200
+    break;;
+    230400 )
+      BAUDRATE=230400
+    break;;
+    921600 )
+      BAUDRATE=921600
+    break;;
+    2000000 )
+      BAUDRATE=2000000
+    break;;            
+    Exit ) break;;
+    * ) echo "${OPTION}";;
+  esac
+done
+
 clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${monkey}  ${red}Erasing Flash and Storage ${nc}[y/${white}N${nc}]"
@@ -181,33 +206,33 @@ then
   echo "\n--------------------------------------------------------------------------"
   echo "\n${monkey}  ${red}Erasing${nc} --> Flash"
   echo "\n--------------------------------------------------------------------------"
-  esptool.py --chip esp32 --port ${PORT} --baud 921600 --before default_reset --after hard_reset erase_flash
+  esptool.py --chip esp32 --port ${PORT} --baud ${BAUDRATE} --before default_reset --after hard_reset erase_flash
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${monkey}  ${red}Erasing${nc} --> Storage"
   echo "\n--------------------------------------------------------------------------"
-  esptool.py --chip esp32 --port ${PORT} --baud 921600 erase_region 0xf00000 0x100000
+  esptool.py --chip esp32 --port ${PORT} --baud ${BAUDRATE} erase_region 0xf00000 0x100000
 fi
 
 clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${game}  ${green}Flashing Device ${nc} - Hang Tight"
 echo "\n--------------------------------------------------------------------------"
-esptool.py \
---chip esp32 \
---port ${PORT} \
---baud 921600 \
---before default_reset \
---after hard_reset write_flash -z \
---flash_mode dio \
---flash_freq 40m \
---flash_size detect \
-0x1000 $FIRMWARE_PATH/Bins/bootloader.bin \
-0x8000 $FIRMWARE_PATH/Bins/partitions.bin \
-0x10000 $FIRMWARE_PATH/Bins/${BIN}.bin \
-0x200000 $FIRMWARE_PATH/Bins/${BIN}.bin \
-0x300000 $FIRMWARE_PATH/Bins/nesemu-go.bin \
-0x400000 $FIRMWARE_PATH/Bins/gnuboy-go.bin \
+esptool.py                                          \
+--chip esp32                                        \
+--port ${PORT}                                      \
+--baud ${BAUDRATE}                                  \
+--before default_reset                              \
+--after hard_reset write_flash -z                   \
+--flash_mode dio                                    \
+--flash_freq 40m                                    \
+--flash_size detect                                 \
+0x1000 $FIRMWARE_PATH/Bins/bootloader.bin           \
+0x8000 $FIRMWARE_PATH/Bins/partitions.bin           \
+0x10000 $FIRMWARE_PATH/Bins/${BIN}.bin              \
+0x200000 $FIRMWARE_PATH/Bins/${BIN}.bin             \
+0x300000 $FIRMWARE_PATH/Bins/nesemu-go.bin          \
+0x400000 $FIRMWARE_PATH/Bins/gnuboy-go.bin          \
 0x500000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin
 
 echo "\n--------------------------------------------------------------------------"

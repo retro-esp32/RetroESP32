@@ -27,13 +27,13 @@ echo "\n------------------------------------------------------------------------
 echo "\n${monkey}  ${green}Adding${nc} --> PATH"
 echo "\n--------------------------------------------------------------------------"
 export PATH=$HOME/esp/xtensa-esp32-elf/bin:$PATH
-sleep 1
+sleep 0.1
 clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${monkey}  ${green}Adding${nc} --> IDF_PATH"
 echo "\n--------------------------------------------------------------------------"
 export IDF_PATH=$REPO/Tools/esp-idf
-sleep 1
+sleep 0.1
 clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${unicorn}  ${green}GOODBYE${nc}"
