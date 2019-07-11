@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := gogo
+PROJECT_NAME := gaboze
 
 include $(IDF_PATH)/make/project.mk
 

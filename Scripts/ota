@@ -64,7 +64,7 @@ select launcher in "GoGo" "Gaboze" "Generic" "Exit"; do
     break;;
     Gaboze )
       LAUNCHER="Gaboze"
-      LAUNCHER_PATH=${gaboze_PATH}
+      LAUNCHER_PATH=${GABOZE_PATH}
       BIN="gaboze"
     break;;    
     Generic )
@@ -96,6 +96,11 @@ then
     rm $FIRMWARE_PATH/Bins/gogo.bin
   fi
 
+  if [[ "$LAUNCHER" = "Gaboze" ]]
+  then
+    rm $FIRMWARE_PATH/Bins/gaboze.bin
+  fi  
+
   if [[ "$LAUNCHER" = "Generic" ]]
   then
     rm $FIRMWARE_PATH/Bins/emulator-launcher-odroid-go.bin
@@ -110,6 +115,11 @@ then
   then
     cp ./build/gogo.bin $FIRMWARE_PATH/Bins/
   fi
+
+  if [[ "$LAUNCHER" = "Gaboze" ]]
+  then
+    cp ./build/gaboze.bin $FIRMWARE_PATH/Bins/
+  fi  
 
   if [[ "$LAUNCHER" = "Generic" ]]
   then

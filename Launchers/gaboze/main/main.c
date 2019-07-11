@@ -609,6 +609,9 @@ void rom_run() {
   int center = ceil((320/2)-((strlen(message)*5)/2));
   draw_text(center,126,message,false,false);  
   printf("\n***********\nRUN:%s\n***********\n", odroid_settings_RomFilePath_get());
+  odroid_system_application_set(PROGRAMS[STEP-1]);
+  usleep(500000);
+  esp_restart();
 }
 
 void rom_resume() {
