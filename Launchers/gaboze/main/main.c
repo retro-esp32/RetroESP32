@@ -700,6 +700,8 @@ void app_main(void)
       break;
   } 
 
+  odroid_settings_Volume_set(4);
+
   get_theme();
   GUI = THEMES[USER];
   SYSTEMS[0].x = GAP/3;
@@ -720,6 +722,7 @@ void app_main(void)
 
   // SD Card
   odroid_sdcard_open("/sd");
+  odroid_audio_init(16000);
 
   //
   draw_background();

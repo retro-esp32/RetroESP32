@@ -19,6 +19,7 @@ export PORT='/dev/cu.usbserial-AE01AFBX'
 REPO=$(dirname $PWD)
 FIRMWARE_PATH="$REPO/Firmware"
 GOGO_PATH="$REPO/Launchers/gogo/"
+GABOZE_PATH="$REPO/Launchers/gaboze/"
 GENERIC_PATH="$REPO/Launchers/emulator-launcher-odroid-go/"
 GOPLAY_PATH="$REPO/Launchers/go-play/"
 LAUNCHER_PATH=""
@@ -54,13 +55,18 @@ OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
 echo "\n--------------------------------------------------------------------------"
 echo "\n${OPTION}"
 echo "\n--------------------------------------------------------------------------"
-select launcher in "GoGo" "Generic" "Exit"; do
+select launcher in "GoGo" "Gaboze" "Generic" "Exit"; do
   case $launcher in
     GoGo )
       LAUNCHER="GoGo"
       LAUNCHER_PATH=${GOGO_PATH}
       BIN="gogo"
     break;;
+    Gaboze )
+      LAUNCHER="Gaboze"
+      LAUNCHER_PATH=${gaboze_PATH}
+      BIN="gaboze"
+    break;;    
     Generic )
       LAUNCHER="Generic"
       LAUNCHER_PATH=${GENERIC_PATH}
