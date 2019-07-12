@@ -611,27 +611,28 @@ void animate(int dir) {
 */
 void restart() {
   draw_background();
-  char message[100] = "  restarting  ";
-  int width = strlen(message)*5;
-  int center = ceil((320/2)-(width/2));
-  int y = 118;
-  draw_text(center,y,message,false,false);
+  char message[100] = "restarting";
+  int h = 5;
+  int w = strlen(message)*h;  
+  int x = (SCREEN.w/2)-(w/2);
+  int y = (SCREEN.h/2)-(h/2);  
+  draw_text(x,y,message,false,false);
 
   y+=10;
-  for(int n = 0; n < (width+10); n++) {
+  for(int n = 0; n < (w+10); n++) {
     for(int i = 0; i < 5; i++) {
       buffer[i] = GUI.fg;
     }
-    ili9341_write_frame_rectangleLE(center+n, y, 1, 5, buffer);
+    ili9341_write_frame_rectangleLE(x+n, y, 1, 5, buffer);
   }  
-  for(int n = 0; n < (width+10); n++) {
+  for(int n = 0; n < (w+10); n++) {
     for(int i = 0; i < 5; i++) {
       buffer[i] = GUI.bg;
     }
-    ili9341_write_frame_rectangleLE((center+width+9)-n, y, 1, 5, buffer);
-    usleep(25000);
+    ili9341_write_frame_rectangleLE((x+w+9)-n, y, 1, 5, buffer);
+    usleep(10000);
   }
-
+  sleep(1);
   esp_restart();
 }
 
@@ -640,7 +641,7 @@ void restart() {
 */
 void boot() {
   draw_background();
-  char message[100] = "gaboze express";
+  char message[100] = "retro esp32";
   int width = strlen(message)*5;
   int center = ceil((320/2)-(width/2));
   int y = 118;
@@ -808,7 +809,7 @@ void app_main(void)
         if (err != ESP_OK)
         {abort();}
 
-        RESTART = true;      
+        RESTART = true;    
       }
       break;
     }
@@ -834,8 +835,12 @@ void app_main(void)
   ili9341_prepare();
   ili9341_clear(0);
 
-
+  printf("==============\n%s\n==============\n", "RETRO ESP32");
   RESTART ? restart() : splash();
+
+  draw_background();
+  draw_systems();
+  draw_text(16,16,EMULATORS[STEP],false,true); 
 
   // SD Card
   // odroid_sdcard_close();
@@ -845,12 +850,8 @@ void app_main(void)
   odroid_audio_init(16000);
   odroid_settings_Volume_set(4);
 
-  draw_background();
-  printf("==============\n%s\n==============\n", "HERE");
-  draw_systems();
-  draw_text(16,16,EMULATORS[STEP],false,true); 
   STEP == 0 ? draw_themes() : draw_files();
-  //if(STEP != 0) {animate(1);}
+  if(STEP != 0) {animate(1);}
 
   xTaskCreate(launcher_task, "launcher", 8192, NULL, 5, NULL);
 }
@@ -960,6 +961,12 @@ static void launcher_task() {
         STEP == 0 ? draw_themes() : draw_files();
       }
       debounce(ODROID_INPUT_B);
-    }        
+    }  
+
+    // START + SELECT  
+    if (joystick.values[ODROID_INPUT_MENU]) {
+      restart();
+      debounce(ODROID_INPUT_MENU);
+    }      
   }                               
 }

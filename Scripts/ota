@@ -10,8 +10,8 @@ source paths
 #---------------------------------
 # EDIT PORT ESP32
 #---------------------------------
-export PORT='/dev/cu.usbserial-AE01AFBX'
-#export PORT='/dev/cu.SLAB_USBtoUART'
+#export PORT='/dev/cu.usbserial-AE01AFBX'
+export PORT='/dev/cu.SLAB_USBtoUART'
 
 #---------------------------------
 # DON'T TOUCH START
@@ -234,6 +234,7 @@ esptool.py                                          \
 0x300000 $FIRMWARE_PATH/Bins/nesemu-go.bin          \
 0x400000 $FIRMWARE_PATH/Bins/gnuboy-go.bin          \
 0x500000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin
+
 
 echo "\n--------------------------------------------------------------------------"
 echo "\n${unicorn}  ${green}Copmleted ${cyan}RetroESP32 Express${nc}"
