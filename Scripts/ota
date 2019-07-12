@@ -11,7 +11,7 @@ source paths
 # EDIT PORT ESP32
 #---------------------------------
 export PORT='/dev/cu.usbserial-AE01AFBX'
-# export PORT='/dev/cu.SLAB_USBtoUART'
+#export PORT='/dev/cu.SLAB_USBtoUART'
 
 #---------------------------------
 # DON'T TOUCH START
@@ -19,7 +19,7 @@ export PORT='/dev/cu.usbserial-AE01AFBX'
 REPO=$(dirname $PWD)
 FIRMWARE_PATH="$REPO/Firmware"
 GOGO_PATH="$REPO/Launchers/gogo/"
-GABOZE_PATH="$REPO/Launchers/gaboze/"
+RETRO_PATH="$REPO/Launchers/retro-esp32/"
 GENERIC_PATH="$REPO/Launchers/emulator-launcher-odroid-go/"
 GOPLAY_PATH="$REPO/Launchers/go-play/"
 LAUNCHER_PATH=""
@@ -57,17 +57,17 @@ clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${OPTION}"
 echo "\n--------------------------------------------------------------------------"
-select launcher in "GoGo" "Gaboze" "Generic" "Exit"; do
+select launcher in "GoGo" "RetroESP32" "Generic" "Exit"; do
   case $launcher in
     GoGo )
       LAUNCHER="GoGo"
       LAUNCHER_PATH=${GOGO_PATH}
       BIN="gogo"
     break;;
-    Gaboze )
-      LAUNCHER="Gaboze"
-      LAUNCHER_PATH=${GABOZE_PATH}
-      BIN="gaboze"
+    RetroESP32 )
+      LAUNCHER="RetroESP32"
+      LAUNCHER_PATH=${RETRO_PATH}
+      BIN="retro-esp32"
     break;;    
     Generic )
       LAUNCHER="Generic"
@@ -98,9 +98,9 @@ then
     rm $FIRMWARE_PATH/Bins/gogo.bin
   fi
 
-  if [[ "$LAUNCHER" = "Gaboze" ]]
+  if [[ "$LAUNCHER" = "RetroESP32" ]]
   then
-    rm $FIRMWARE_PATH/Bins/gaboze.bin
+    rm $FIRMWARE_PATH/Bins/retro-esp32.bin
   fi  
 
   if [[ "$LAUNCHER" = "Generic" ]]
@@ -118,9 +118,9 @@ then
     cp ./build/gogo.bin $FIRMWARE_PATH/Bins/
   fi
 
-  if [[ "$LAUNCHER" = "Gaboze" ]]
+  if [[ "$LAUNCHER" = "RetroESP32" ]]
   then
-    cp ./build/gaboze.bin $FIRMWARE_PATH/Bins/
+    cp ./build/retro-esp32.bin $FIRMWARE_PATH/Bins/
   fi  
 
   if [[ "$LAUNCHER" = "Generic" ]]
@@ -236,7 +236,7 @@ esptool.py                                          \
 0x500000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin
 
 echo "\n--------------------------------------------------------------------------"
-echo "\n${unicorn}  ${green}Copmleted ${cyan}Gaboze Express${nc}"
+echo "\n${unicorn}  ${green}Copmleted ${cyan}RetroESP32 Express${nc}"
 echo "\n--------------------------------------------------------------------------"
 exit
 #---------------------------------

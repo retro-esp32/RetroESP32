@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := gaboze
+PROJECT_NAME := retro-esp32
 
 include $(IDF_PATH)/make/project.mk
 

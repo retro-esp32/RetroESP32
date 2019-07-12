@@ -32,6 +32,12 @@
 #include "../components/odroid/odroid_system.h"
 #include "../components/odroid/odroid_sdcard.h"
 
+
+/*
+  Logo
+*/
+#include "sprites/logo.c"
+
 /*
   Characters
 */
@@ -69,6 +75,7 @@ int STEP = 1;
 int OPTION = 0;
 bool SAVED = false;
 int8_t USER;
+bool RESTART = false;
 
 /*
   Structs
@@ -146,17 +153,29 @@ typedef struct{
   int fg;
   char name[10];
 } THEME;
-THEME THEMES[10] = {
-  {51622,58741,"Red"},
-  {52006,58869,"Orange"},
-  {52806,59189,"Yellow"},
-  {26182,48949,"Green"},
-  {13913,44860,"Cyan"},
-  {13113,44540,"Blue"},
-  {51641,58748,"Purple"},
-  {0,42260,"Black"},
-  {12710,44405,"Dark"},
-  {25388,48631,"Light"} 
+THEME THEMES[22] = {
+  {32768,54580,"maroon"},
+  {57545,62839,"red"},
+  {64143,65049,"pink"},
+  {39684,56918,"brown"},
+  {62470,65174,"orange"},
+  {50604,61240,"apricot"},
+  {33792,54932,"olive"},
+  {65283,65461,"yellow"},
+  {60845,63289,"beige"},
+  {49000,59351,"lime"},
+  {15753,48951,"green"},
+  {45048,57340,"mint"},
+  {17617,48858,"teal"},
+  {18078,49023,"cyan"},
+  {14,42297,"navy"},
+  {17178,48733,"blue"},
+  {37110,54652,"purple"},
+  {52318,61119,"lavender"},
+  {59804,62910,"magenta"},
+  {0,42292,"black"},
+  {16936,48631,"dark"},
+  {29614,52857,"light"}
 };
 THEME GUI;
 
@@ -417,20 +436,17 @@ void draw_themes() {
   int x = ORIGIN.x;                     
   int y = POS.y + 48;
   int filled = 0;
-  //printf("\n**********\nTHEME %d \n**********\n", USER);
-  for(int n = USER; n < 10; n++){
+  int count = 22;
+  for(int n = USER; n < count; n++){
     if(filled < ROMS.limit) {
-      //printf("slot:%d n:%d theme:%s\n", n, n, THEMES[n].name);
       draw_mask(x,y,100,16);
       draw_text(x,y,THEMES[n].name,false, n == USER ? true : false);    
       y+=20;
-      filled++;                               
+      filled++;            
     }
   }
   int slots = (ROMS.limit - filled);
-  //printf("\n**********\n%d slots remaining\n**********\n", slots);
   for(int n = 0; n < slots; n++) {
-    //printf("n:%d\n", n);
     draw_mask(x,y,100,16);
     draw_text(x,y,THEMES[n].name,false,false);    
     y+=20;    
@@ -441,7 +457,6 @@ void draw_themes() {
   get_theme
 */
 void get_theme() {
-  //printf("***** get_theme() *****\n");
   esp_err_t err = nvs_flash_init();
   if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
       ESP_ERROR_CHECK(nvs_flash_erase());
@@ -455,30 +470,21 @@ void get_theme() {
   err = nvs_get_i8(handle, "USER", &USER);
   switch (err) {
     case ESP_OK:
-      //printf("Done\n");
-      //printf("USER = %d\n", USER);
       break;
     case ESP_ERR_NVS_NOT_FOUND:
-      //printf("The value is not initialized yet!\n");
       USER = 0;
       break;
     default :
       USER = 0;
   }   
   nvs_close(handle);
-  //printf("***** USER %d *****\n", USER);  
 }
 
 /*
   set_theme
 */
 void set_theme(int8_t i) {
-  //printf("***** set_theme(%d) *****\n", i);
-  //esp_err_t err = nvs_flash_init();
   nvs_handle handle;
-  //err = nvs_open("storage", NVS_READWRITE, &handle);
-  //err = nvs_set_i8(handle, "USER", i);
-  //err = nvs_commit(handle);
   nvs_open("storage", NVS_READWRITE, &handle);
   nvs_set_i8(handle, "USER", i);
   nvs_commit(handle);  
@@ -603,6 +609,35 @@ void animate(int dir) {
 /*
   boot
 */
+void restart() {
+  draw_background();
+  char message[100] = "  restarting  ";
+  int width = strlen(message)*5;
+  int center = ceil((320/2)-(width/2));
+  int y = 118;
+  draw_text(center,y,message,false,false);
+
+  y+=10;
+  for(int n = 0; n < (width+10); n++) {
+    for(int i = 0; i < 5; i++) {
+      buffer[i] = GUI.fg;
+    }
+    ili9341_write_frame_rectangleLE(center+n, y, 1, 5, buffer);
+  }  
+  for(int n = 0; n < (width+10); n++) {
+    for(int i = 0; i < 5; i++) {
+      buffer[i] = GUI.bg;
+    }
+    ili9341_write_frame_rectangleLE((center+width+9)-n, y, 1, 5, buffer);
+    usleep(25000);
+  }
+
+  esp_restart();
+}
+
+/*
+  boot
+*/
 void boot() {
   draw_background();
   char message[100] = "gaboze express";
@@ -622,13 +657,51 @@ void boot() {
 }
 
 /*
+  splash
+*/
+void splash() {
+  draw_background();
+  sleep(1);
+  int w = 128;
+  int h = 18;
+  int x = (SCREEN.w/2)-(w/2);
+  int y = (SCREEN.h/2)-(h/2);
+  int i = 0;
+  for(int r = 0; r < h; r++) {
+    i = 0;
+    for(int c = 0; c < w; c++) {
+      buffer[i] = logo[r][c] == 0 ? GUI.bg : GUI.fg;
+      i++;
+    }
+    ili9341_write_frame_rectangleLE(x, y+r, w, 1, buffer);
+    usleep(10000);    
+  }
+
+  sleep(2);
+
+  for(int r = 0; r < h; r++) {
+    i = 0;
+    for(int c = 0; c < w; c++) {
+      buffer[i] = GUI.bg;
+      i++;
+    }
+    ili9341_write_frame_rectangleLE(x, y+r, w, 1, buffer);
+    usleep(10000);    
+  }  
+
+  sleep(1);
+}
+
+/*
   rom
 */
-void rom_run() {
-  draw_background();
-  char message[100] = "loading...";
+void rom_run(bool resume) {
+  draw_background();;
+  char *message = !resume ? "loading..." : "hold start";
   int center = ceil((320/2)-((strlen(message)*5)/2));
-  draw_text(center,118,message,false,false);  
+  int y = 118;  
+  draw_text(center,y,message,false,false);  
+
   //printf("\n***********\nRUN:%s\n***********\n", odroid_settings_RomFilePath_get());
   odroid_system_application_set(PROGRAMS[STEP-1]);
   usleep(500000);
@@ -709,7 +782,7 @@ void app_main(void)
   odroid_system_init();
   odroid_input_gamepad_init();
 
-  /*
+
   switch (esp_sleep_get_wakeup_cause())
   {
     case ESP_SLEEP_WAKEUP_EXT0:
@@ -735,21 +808,13 @@ void app_main(void)
         if (err != ESP_OK)
         {abort();}
 
-        // Reset
-        usleep(500000);
-        esp_restart();         
+        RESTART = true;      
       }
       break;
     }
     default:
       break;
-  } 
-  */
-
-  //printf("==========================\n");
-  //printf("Welcome to Gaboze Express Launcher\n");
-  //printf("==========================\n");   
-  odroid_settings_Volume_set(4);
+  }  
 
   get_theme();
   GUI = THEMES[USER];
@@ -769,7 +834,8 @@ void app_main(void)
   ili9341_prepare();
   ili9341_clear(0);
 
-  boot();
+
+  RESTART ? restart() : splash();
 
   // SD Card
   // odroid_sdcard_close();
@@ -777,12 +843,14 @@ void app_main(void)
 
   // Audio
   odroid_audio_init(16000);
+  odroid_settings_Volume_set(4);
 
   draw_background();
+  printf("==============\n%s\n==============\n", "HERE");
   draw_systems();
   draw_text(16,16,EMULATORS[STEP],false,true); 
   STEP == 0 ? draw_themes() : draw_files();
-  if(STEP != 0) {animate(1);}
+  //if(STEP != 0) {animate(1);}
 
   xTaskCreate(launcher_task, "launcher", 8192, NULL, 5, NULL);
 }
@@ -819,7 +887,7 @@ static void launcher_task() {
       if(!LAUNCHER) {
         if(STEP == 0) {
           USER--;
-          if( USER < 0 ) { USER = 9; }
+          if( USER < 0 ) { USER = 21; }
           draw_themes();
         }
         if(STEP != 0) {
@@ -840,7 +908,7 @@ static void launcher_task() {
       if(!LAUNCHER) {
         if(STEP == 0) {
           USER++;
-          if( USER > 9 ) { USER = 0; }
+          if( USER > 21 ) { USER = 0; }
           draw_themes();
         }
         if(STEP != 0) {
@@ -869,10 +937,10 @@ static void launcher_task() {
           odroid_settings_RomFilePath_set(ROM.path);
           switch(OPTION) {
             case 0:
-              SAVED ? rom_resume() : rom_run();
+              SAVED ? rom_resume() : rom_run(false);
             break;
             case 1:
-              rom_run();
+              rom_run(true);
             break;
             case 2:
               rom_delete_save();
