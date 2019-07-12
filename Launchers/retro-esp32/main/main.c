@@ -783,7 +783,23 @@ void app_main(void)
   odroid_system_init();
   odroid_input_gamepad_init();
 
-
+  switch (esp_reset_reason()) {
+    case ESP_RST_POWERON:
+        /*
+          rst:0x1 (POWERON_RESET),boot:0x33 (SPI_FAST_FLASH_BOOT)
+        */    
+        printf("\nesp_reset_reason():%s\n", "ESP_RST_POWERON");
+      break;
+    case ESP_RST_SW:
+        /*
+          rst:0xc (SW_CPU_RESET),boot:0x33 (SPI_FAST_FLASH_BOOT)      
+        */    
+        printf("\nesp_reset_reason():%s\n", "ESP_RST_SW");
+      break;
+    default:
+        printf("\nesp_reset_reason():%s\n", "DEFAULT");
+      break;
+  }
   switch (esp_sleep_get_wakeup_cause())
   {
     case ESP_SLEEP_WAKEUP_EXT0:
