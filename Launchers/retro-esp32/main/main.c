@@ -497,6 +497,7 @@ void draw_themes() {
   int count = 22;
   for(int n = USER; n < count; n++){
     if(filled < ROMS.limit) {
+      draw_mask(x,y,100,16);
       draw_text(x,y,THEMES[n].name,false, n == USER ? true : false);    
       y+=20;
       filled++;            
