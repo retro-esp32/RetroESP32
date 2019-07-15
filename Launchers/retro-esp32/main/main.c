@@ -19,6 +19,17 @@
 
 #include "driver/gpio.h"
 
+#include "esp_partition.h"
+#include "esp_spiffs.h"
+
+#include "esp_err.h"
+#include "esp_log.h"
+#include "esp_vfs_fat.h"
+#include "driver/sdmmc_host.h"
+#include "driver/sdspi_host.h"
+#include "sdmmc_cmd.h"
+#include <dirent.h>
+
 //#include "esp_event_loop.h"
 //#include "esp_wifi.h"
 
@@ -26,11 +37,11 @@
   Odroid Components
 */
 #include "../components/odroid/odroid_settings.h"
-#include "../components/odroid/odroid_input.h"
-#include "../components/odroid/odroid_display.h"
-#include "../components/odroid/odroid_audio.h"
 #include "../components/odroid/odroid_system.h"
 #include "../components/odroid/odroid_sdcard.h"
+#include "../components/odroid/odroid_display.h"
+#include "../components/odroid/odroid_input.h"
+#include "../components/odroid/odroid_audio.h"
 
 
 /*
@@ -525,6 +536,10 @@ void draw_numbers() {
   draw_files
 */
 void draw_files() {
+
+  // SD Card
+  odroid_sdcard_open("/sd");
+
   int x = ORIGIN.x;                     
   int y = POS.y + 48;
 
@@ -624,15 +639,9 @@ void restart() {
       buffer[i] = GUI.fg;
     }
     ili9341_write_frame_rectangleLE(x+n, y, 1, 5, buffer);
+    usleep(15000);
   }  
-  for(int n = 0; n < (w+10); n++) {
-    for(int i = 0; i < 5; i++) {
-      buffer[i] = GUI.bg;
-    }
-    ili9341_write_frame_rectangleLE((x+w+9)-n, y, 1, 5, buffer);
-    usleep(10000);
-  }
-  sleep(1);
+  draw_background();
   esp_restart();
 }
 
@@ -689,7 +698,6 @@ void splash() {
     ili9341_write_frame_rectangleLE(x, y+r, w, 1, buffer);
     usleep(10000);    
   }  
-
   sleep(1);
 }
 
@@ -699,24 +707,46 @@ void splash() {
 void rom_run(bool resume) {
   draw_background();;
   char *message = !resume ? "loading..." : "hold start";
-  int center = ceil((320/2)-((strlen(message)*5)/2));
-  int y = 118;  
-  draw_text(center,y,message,false,false);  
 
-  //printf("\n***********\nRUN:%s\n***********\n", odroid_settings_RomFilePath_get());
+  int h = 5;
+  int w = strlen(message)*h;  
+  int x = (SCREEN.w/2)-(w/2);
+  int y = (SCREEN.h/2)-(h/2);  
+  draw_text(x,y,message,false,false);
   odroid_system_application_set(PROGRAMS[STEP-1]);
-  usleep(500000);
+  y+=10;
+  for(int n = 0; n < (w+10); n++) {
+    for(int i = 0; i < 5; i++) {
+      buffer[i] = GUI.fg;
+    }
+    ili9341_write_frame_rectangleLE(x+n, y, 1, 5, buffer);
+    usleep(15000);
+  } 
+  odroid_system_application_set(PROGRAMS[STEP-1]);
+  usleep(10000);
   esp_restart();
 }
 
 void rom_resume() {
   draw_background();                 
   char message[100] = "resuming...";
-  int center = ceil((320/2)-((strlen(message)*5)/2));
-  draw_text(center,118,message,false,false);  
-  //printf("\n***********\nRESUMING:%s\n***********\n", odroid_settings_RomFilePath_get());
+  int h = 5;
+  int w = strlen(message)*h;  
+  int x = (SCREEN.w/2)-(w/2);
+  int y = (SCREEN.h/2)-(h/2);  
+  draw_text(x,y,message,false,false);
   odroid_system_application_set(PROGRAMS[STEP-1]);
-  usleep(500000);
+  y+=10;
+  for(int n = 0; n < (w+10); n++) {
+    for(int i = 0; i < 5; i++) {
+      buffer[i] = GUI.fg;
+    }
+    ili9341_write_frame_rectangleLE(x+n, y, 1, 5, buffer);
+    usleep(15000);
+  }
+
+  odroid_system_application_set(PROGRAMS[STEP-1]);
+  usleep(10000);
   esp_restart();  
 }
 
@@ -781,58 +811,17 @@ void app_main(void)
 {
   nvs_flash_init();
   odroid_system_init();
+
+  int startHeap = esp_get_free_heap_size();
+  printf("A HEAP:0x%x\n", startHeap);  
+
+  // Display
+  ili9341_init();  
+
+  // Joystick
   odroid_input_gamepad_init();
 
-  switch (esp_reset_reason()) {
-    case ESP_RST_POWERON:
-        /*
-          rst:0x1 (POWERON_RESET),boot:0x33 (SPI_FAST_FLASH_BOOT)
-        */    
-        printf("\nesp_reset_reason():%s\n", "ESP_RST_POWERON");
-      break;
-    case ESP_RST_SW:
-        /*
-          rst:0xc (SW_CPU_RESET),boot:0x33 (SPI_FAST_FLASH_BOOT)      
-        */    
-        printf("\nesp_reset_reason():%s\n", "ESP_RST_SW");
-      break;
-    default:
-        printf("\nesp_reset_reason():%s\n", "DEFAULT");
-      break;
-  }
-  switch (esp_sleep_get_wakeup_cause())
-  {
-    case ESP_SLEEP_WAKEUP_EXT0:
-    {
-      break;
-    }
-
-    case ESP_SLEEP_WAKEUP_EXT1:
-    case ESP_SLEEP_WAKEUP_TIMER:
-    case ESP_SLEEP_WAKEUP_TOUCHPAD:
-    case ESP_SLEEP_WAKEUP_ULP:
-    case ESP_SLEEP_WAKEUP_UNDEFINED:
-    {
-      odroid_gamepad_state bootState = odroid_input_read_raw(); 
-
-      if (bootState.values[ODROID_INPUT_MENU])
-      {
-        // Set factory app
-        const esp_partition_t* partition = esp_partition_find_first(ESP_PARTITION_TYPE_APP, ESP_PARTITION_SUBTYPE_APP_FACTORY, NULL);
-        if (partition == NULL){abort();}
-
-        esp_err_t err = esp_ota_set_boot_partition(partition);
-        if (err != ESP_OK)
-        {abort();}
-
-        RESTART = true;    
-      }
-      break;
-    }
-    default:
-      break;
-  }  
-
+  // Theme
   get_theme();
   GUI = THEMES[USER];
   SYSTEMS[0].x = GAP/3;
@@ -846,8 +835,6 @@ void app_main(void)
     }
   };  
 
-  // Display
-  ili9341_init();  
   ili9341_prepare();
   ili9341_clear(0);
 
@@ -856,11 +843,7 @@ void app_main(void)
 
   draw_background();
   draw_systems();
-  draw_text(16,16,EMULATORS[STEP],false,true); 
-
-  // SD Card
-  // odroid_sdcard_close();
-  odroid_sdcard_open("/sd");
+  draw_text(16,16,EMULATORS[STEP],false,true);
 
   // Audio
   odroid_audio_init(16000);

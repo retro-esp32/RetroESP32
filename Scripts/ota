@@ -11,6 +11,7 @@ source paths
 # EDIT PORT ESP32
 #---------------------------------
 #export PORT='/dev/cu.usbserial-AE01AFBX'
+#export PORT='/dev/cu.usbserial-A1015RV4'
 export PORT='/dev/cu.SLAB_USBtoUART'
 
 #---------------------------------
