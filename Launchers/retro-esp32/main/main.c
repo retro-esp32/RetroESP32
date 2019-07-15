@@ -641,8 +641,6 @@ void restart() {
     ili9341_write_frame_rectangleLE(x+n, y, 1, 5, buffer);
     usleep(15000);
   }  
-  draw_background();
-  esp_restart();
 }
 
 /*
@@ -839,6 +837,17 @@ void app_main(void)
   ili9341_clear(0);
 
   printf("==============\n%s\n==============\n", "RETRO ESP32");
+  switch(esp_reset_reason()) {
+    case ESP_RST_POWERON:
+      RESTART = false;
+    break;
+    case ESP_RST_SW:
+      RESTART = true;
+    break;
+    default:
+      RESTART = false;
+    break;
+  }
   RESTART ? restart() : splash();
 
   draw_background();
@@ -964,7 +973,8 @@ static void launcher_task() {
 
     // START + SELECT  
     if (joystick.values[ODROID_INPUT_MENU]) {
-      restart();
+      usleep(10000);
+      esp_restart();
       debounce(ODROID_INPUT_MENU);
     }      
   }                               

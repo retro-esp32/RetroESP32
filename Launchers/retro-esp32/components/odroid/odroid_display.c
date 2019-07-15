@@ -286,30 +286,29 @@ static void ili_cmd(const uint8_t cmd)
 //Send data to the ILI9341. Uses spi_device_transmit, which waits until the transfer is complete.
 static void ili_data(const uint8_t *data, int len)
 {
-    if (len)
+    if (!len) abort();
+
+    spi_transaction_t* t = spi_get_transaction();
+
+    if (len < 5)
     {
-        spi_transaction_t* t = spi_get_transaction();
-
-        if (len < 5)
+        for (int i = 0; i < len; ++i)
         {
-            for (int i = 0; i < len; ++i)
-            {
-                t->tx_data[i] = data[i];
-            }
-            t->length = len * 8;                 //Len is in bytes, transaction length is in bits.
-            t->user = (void*)1;                //D/C needs to be set to 1
-            t->flags = SPI_TRANS_USE_TXDATA;
+            t->tx_data[i] = data[i];
         }
-        else
-        {
-            t->length = len * 8;                 //Len is in bytes, transaction length is in bits.
-            t->tx_buffer = data;               //Data
-            t->user = (void*)1;                //D/C needs to be set to 1
-            t->flags = 0; //SPI_TRANS_USE_TXDATA;
-        }
-
-        spi_put_transaction(t);
+        t->length = len * 8;                 //Len is in bytes, transaction length is in bits.
+        t->user = (void*)1;                //D/C needs to be set to 1
+        t->flags = SPI_TRANS_USE_TXDATA;
     }
+    else
+    {
+        t->length = len * 8;                 //Len is in bytes, transaction length is in bits.
+        t->tx_buffer = data;               //Data
+        t->user = (void*)1;                //D/C needs to be set to 1
+        t->flags = 0; //SPI_TRANS_USE_TXDATA;
+    }
+
+    spi_put_transaction(t);
 }
 
 //This function is called (in irq context!) just before a transmission starts. It will
@@ -701,13 +700,15 @@ void ili9341_init()
     devcfg.spics_io_num = LCD_PIN_NUM_CS;               //CS pin
     devcfg.queue_size = 7;                          //We want to be able to queue 7 transactions at a time
     devcfg.pre_cb = ili_spi_pre_transfer_callback;  //Specify pre-transfer callback to handle D/C line
-    devcfg.flags = SPI_DEVICE_NO_DUMMY; //SPI_DEVICE_HALFDUPLEX;
+    devcfg.flags = SPI_DEVICE_NO_DUMMY;//0; //SPI_DEVICE_HALFDUPLEX;
 
     //Initialize the SPI bus
+    //ret=spi_bus_initialize(VSPI_HOST, &buscfg, 1);
     ret=spi_bus_initialize(HSPI_HOST, &buscfg, 1);
     assert(ret==ESP_OK);
 
     //Attach the LCD to the SPI bus
+    //ret=spi_bus_add_device(VSPI_HOST, &devcfg, &spi);
     ret=spi_bus_add_device(HSPI_HOST, &devcfg, &spi);
     assert(ret==ESP_OK);
 

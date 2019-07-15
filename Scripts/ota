@@ -12,7 +12,7 @@ source paths
 #---------------------------------
 #export PORT='/dev/cu.usbserial-AE01AFBX'
 #export PORT='/dev/cu.usbserial-A1015RV4'
-export PORT='/dev/cu.SLAB_USBtoUART'
+#export PORT='/dev/cu.SLAB_USBtoUART'
 
 #---------------------------------
 # DON'T TOUCH START
@@ -51,6 +51,7 @@ export panda=🐼
 export whale=🐳
 export game=🕹️
 
+
 OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
 
 echo "\n--------------------------------------------------------------------------"
@@ -77,6 +78,7 @@ select launcher in "GoGo" "RetroESP32" "Generic" "Exit"; do
     * ) echo "${OPTION}";;
   esac
 done
+clear
 
 echo "\n--------------------------------------------------------------------------"
 echo "\n${squid}  ${red}Recompile ${cyan}Launcher? ${nc}[y/${white}N${nc}]"
@@ -170,6 +172,37 @@ then
 fi
 
 cd $SRC_PATH
+
+
+# port
+port() {
+  clear
+  PORTS=(/dev/cu*)
+  OPTION="${monkey}  ${red}Please Select a ${cyan}COM Port? ${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${OPTION}"
+  echo "\n--------------------------------------------------------------------------"  
+  select PORT in "${PORTS[@]}"
+  do
+    case $PORT in
+      * ) 
+        if [[ $PORT[0,1] ]]
+        then
+          clear
+          echo "\n--------------------------------------------------------------------------"
+          echo "\n${squid}  ${green}Selected ${cyan}${PORT#*.} ${nc}"
+          echo "\n--------------------------------------------------------------------------"
+          sleep 1
+          break
+        else
+          port
+        fi
+    esac
+  done  
+}
+
+port
+
 
 clear
 echo "\n--------------------------------------------------------------------------"
