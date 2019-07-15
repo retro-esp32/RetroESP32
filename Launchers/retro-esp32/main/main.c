@@ -537,9 +537,6 @@ void draw_numbers() {
 */
 void draw_files() {
 
-  // SD Card
-  odroid_sdcard_open("/sd");
-
   int x = ORIGIN.x;                     
   int y = POS.y + 48;
 
@@ -848,6 +845,9 @@ void app_main(void)
   // Audio
   odroid_audio_init(16000);
   odroid_settings_Volume_set(4);
+
+  // SD Card
+  odroid_sdcard_open("/sd");
 
   STEP == 0 ? draw_themes() : draw_files();
   if(STEP != 0) {animate(1);}
