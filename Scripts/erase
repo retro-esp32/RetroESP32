@@ -34,7 +34,7 @@ then
     echo "\n--------------------------------------------------------------------------"
     echo "\n${monkey}  ${red}Erasing${nc} --> Flash"
     echo "\n--------------------------------------------------------------------------"
-    esptool.py --chip esp32 --port ${PORT} --baud 115200 --before default_reset --after hard_reset erase_flash
+    esptool.py --chip esp32 --port ${PORT} --baud 921600 --before default_reset --after hard_reset erase_flash
 fi
 
 echo "\n--------------------------------------------------------------------------"
@@ -47,7 +47,7 @@ clear
     echo "\n--------------------------------------------------------------------------"
     echo "\n${monkey}  ${red}Erasing${nc} --> Storage"
     echo "\n--------------------------------------------------------------------------"
-    esptool.py --chip esp32 --port ${PORT} --baud 115200 erase_region 0xf00000 0x100000
+    esptool.py --chip esp32 --port ${PORT} --baud 921600 erase_region 0xf00000 0x100000
 fi
 
 clear

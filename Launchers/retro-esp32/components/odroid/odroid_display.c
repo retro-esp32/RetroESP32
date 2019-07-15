@@ -701,14 +701,14 @@ void ili9341_init()
     devcfg.spics_io_num = LCD_PIN_NUM_CS;               //CS pin
     devcfg.queue_size = 7;                          //We want to be able to queue 7 transactions at a time
     devcfg.pre_cb = ili_spi_pre_transfer_callback;  //Specify pre-transfer callback to handle D/C line
-    devcfg.flags = 0;//SPI_DEVICE_NO_DUMMY; //SPI_DEVICE_HALFDUPLEX;
+    devcfg.flags = SPI_DEVICE_NO_DUMMY; //SPI_DEVICE_HALFDUPLEX;
 
     //Initialize the SPI bus
-    ret=spi_bus_initialize(VSPI_HOST, &buscfg, 1);
+    ret=spi_bus_initialize(HSPI_HOST, &buscfg, 1);
     assert(ret==ESP_OK);
 
     //Attach the LCD to the SPI bus
-    ret=spi_bus_add_device(VSPI_HOST, &devcfg, &spi);
+    ret=spi_bus_add_device(HSPI_HOST, &devcfg, &spi);
     assert(ret==ESP_OK);
 
 
