@@ -25,6 +25,154 @@
 static bool isOpen = false;
 
 
+
+inline static void swap(char** a, char** b)
+{
+    char* t = *a;
+    *a = *b;
+    *b = t;
+}
+
+static int strcicmp(char const *a, char const *b)
+{
+    for (;; a++, b++)
+    {
+        int d = tolower((int)*a) - tolower((int)*b);
+        if (d != 0 || !*a) return d;
+    }
+}
+
+static int partition (char* arr[], int low, int high)
+{
+    char* pivot = arr[high];
+    int i = (low - 1);
+
+    for (int j = low; j <= high- 1; j++)
+    {
+        if (strcicmp(arr[j], pivot) < 0)
+        {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+static void quick_sort(char* arr[], int low, int high)
+{
+    if (low < high)
+    {
+        int pi = partition(arr, low, high);
+
+        quick_sort(arr, low, pi - 1);
+        quick_sort(arr, pi + 1, high);
+    }
+}
+
+static void sort_files(char** files, int count)
+{
+    int n = count;
+    bool swapped = true;
+
+    if (count > 1)
+    {
+        quick_sort(files, 0, count - 1);
+    }
+}
+
+
+
+int odroid_sdcard_files_get(const char* path, const char* extension, char*** filesOut)
+{
+    const int MAX_FILES = 1024;
+    const uint32_t MALLOC_CAPS = MALLOC_CAP_DEFAULT; //MALLOC_CAP_SPIRAM
+
+
+    int count = 0;
+    char** result = (char**)malloc(MAX_FILES * sizeof(void*));
+    if (!result) abort();
+
+
+    DIR *dir = opendir(path);
+    if( dir == NULL )
+    {
+        printf("opendir failed.\n");
+        //abort();
+        return 0;
+    }
+
+    int extensionLength = strlen(extension);
+    if (extensionLength < 1) abort();
+
+
+    char* temp = (char*)malloc(extensionLength + 1);
+    if (!temp) abort();
+
+    memset(temp, 0, extensionLength + 1);
+
+
+    struct dirent *entry;
+    while((entry=readdir(dir)) != NULL)
+    {
+        size_t len = strlen(entry->d_name);
+
+
+        // ignore 'hidden' files (MAC)
+        bool skip = false;
+        if (entry->d_name[0] == '.') skip = true;
+
+
+        memset(temp, 0, extensionLength + 1);
+        if (!skip)
+        {
+            for (int i = 0; i < extensionLength; ++i)
+            {
+                temp[i] = tolower((int)entry->d_name[len - extensionLength + i]);
+            }
+
+            if (len > extensionLength)
+            {
+                if (strcmp(temp, extension) == 0)
+                {
+                    result[count] = (char*)malloc(len + 1);
+                    //printf("%s: allocated %p\n", __func__, result[count]);
+
+                    if (!result[count])
+                    {
+                        abort();
+                    }
+
+                    strcpy(result[count], entry->d_name);
+                    ++count;
+
+                    if (count >= MAX_FILES) break;
+                }
+            }
+        }
+    }
+
+    closedir(dir);
+    free(temp);
+
+    sort_files(result, count);
+
+    *filesOut = result;
+    return count;
+}
+
+void odroid_sdcard_files_free(char** files, int count)
+{
+    for (int i = 0; i < count; ++i)
+    {
+        //printf("%s: freeing item %p\n", __func__, files[i]);
+        free(files[i]);
+    }
+
+    //printf("%s: freeing array %p\n", __func__, files);
+    free(files);
+}
+
 esp_err_t odroid_sdcard_open(const char* base_path)
 {
     esp_err_t ret;

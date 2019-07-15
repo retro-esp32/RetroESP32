@@ -468,6 +468,7 @@ void draw_options() {
 */
 void draw_launcher() {
   draw_background();
+  draw_battery();
   draw_text(16,16,EMULATORS[STEP], false, true);
   int i = 0;                            
   int x = GAP/3;
@@ -491,6 +492,7 @@ void draw_launcher() {
   draw_themes
 */
 void draw_themes() {
+  draw_battery();
   int x = ORIGIN.x;                     
   int y = POS.y + 46;
   int filled = 0;
@@ -596,7 +598,7 @@ void draw_files() {
   strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
   bool files = true;
   if (!(directory = opendir(path))) {files = false;}
-  
+
   int game = ROMS.offset ;
   int n = 0;
   ROM.ready = false;
@@ -666,6 +668,7 @@ void animate(int dir) {
     draw_systems();
   }
   draw_mask(0,0,296,32);
+  draw_battery();
   draw_text(16,16,EMULATORS[STEP], false, true);  
   STEP == 0 ? draw_themes() : draw_files();
 }
@@ -860,7 +863,11 @@ void app_main(void)
   odroid_system_init();
 
   int startHeap = esp_get_free_heap_size();
-  printf("A HEAP:0x%x\n", startHeap);  
+  printf("A HEAP:0x%x\n", startHeap); 
+
+  // Audio
+  odroid_audio_init(16000);
+  odroid_settings_Volume_set(4);   
 
   // Display
   ili9341_init();  
@@ -899,9 +906,6 @@ void app_main(void)
   }
   RESTART ? restart() : splash();
 
-  // Audio
-  odroid_audio_init(16000);
-  odroid_settings_Volume_set(4);
 
   // Battery
   odroid_input_battery_level_init();
@@ -1019,6 +1023,7 @@ static void launcher_task() {
         draw_background();
         draw_systems();
         draw_text(16,16,EMULATORS[STEP],false,true); 
+        draw_battery();
         STEP == 0 ? draw_themes() : draw_files();
       }
       debounce(ODROID_INPUT_B);
