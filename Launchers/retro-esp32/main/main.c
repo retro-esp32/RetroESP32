@@ -64,6 +64,14 @@
 */
 #include "sprites/icons.c"
 
+/*
+  Battery
+*/
+#include "sprites/battery.c"
+
+/*
+  
+*/
 static void launcher_task();
 
 /*
@@ -341,6 +349,45 @@ void draw_media(int x, int y, bool current) {
   ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
 }
 
+void draw_battery() {
+  odroid_input_battery_level_read(&battery_state);
+
+  int i = 0;
+  int x = 296;
+  int y = 8;
+  int h = 0;
+  int w = 0;
+
+  draw_mask(x,y,16,16);
+  for(h = 0; h < 16; h++) {  
+    for(w = 0; w < 16; w++) {                                 
+      buffer[i] = battery[h][w] == WHITE ? WHITE : GUI.bg;
+      i++;    
+    }
+  }            
+  ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
+
+  //if(battery_state.percentage > 0) {
+
+    x += 2;
+    y += 6;
+    w = 8;
+    h = 4;
+    i = 0;
+
+    int color[10] = {24576,24576,64288,64288,65504,65504,65504,26592,26592,26592};
+
+
+    for(int c = 0; c < h; c++) {
+      for(int n = 0; n < w; n++) {
+        buffer[i] = color[w];
+        i++;
+      }                                  
+    }
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+  //}
+}
+
 /*
   has_save_file
 */
@@ -445,12 +492,11 @@ void draw_launcher() {
 */
 void draw_themes() {
   int x = ORIGIN.x;                     
-  int y = POS.y + 48;
+  int y = POS.y + 46;
   int filled = 0;
   int count = 22;
   for(int n = USER; n < count; n++){
     if(filled < ROMS.limit) {
-      draw_mask(x,y,100,16);
       draw_text(x,y,THEMES[n].name,false, n == USER ? true : false);    
       y+=20;
       filled++;            
@@ -596,8 +642,9 @@ void draw_files() {
 /*
   animate
 */
-void animate(int dir) {
-  draw_background();                         
+void animate(int dir) {     
+  int y = POS.y + 46;                        
+  for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);                 
   int sx[4][13] = {
     {8,8,4,4,4,3,3,3,3,2,2,2,2}, // 48
     {30,26,20,20,18,18,16,16,12,12,8,8,4} // 208 30+26+20+20+18+18+16+16+12+12+8+8+4
@@ -614,9 +661,10 @@ void animate(int dir) {
         SYSTEMS[e].x -= STEP == e ? sx[1][i] : sx[0][i];
       }      
     }
-    draw_mask(0,0,320,64);
+    draw_mask(0,32,320,32);
     draw_systems();
   }
+  draw_mask(0,0,296,32);
   draw_text(16,16,EMULATORS[STEP], false, true);  
   STEP == 0 ? draw_themes() : draw_files();
 }
@@ -850,13 +898,16 @@ void app_main(void)
   }
   RESTART ? restart() : splash();
 
-  draw_background();
-  draw_systems();
-  draw_text(16,16,EMULATORS[STEP],false,true);
-
   // Audio
   odroid_audio_init(16000);
   odroid_settings_Volume_set(4);
+
+  // Battery
+  odroid_input_battery_level_init();
+
+  draw_background();
+  draw_systems();
+  draw_text(16,16,EMULATORS[STEP],false,true);
 
   STEP == 0 ? draw_themes() : draw_files();
   if(STEP != 0) {animate(1);}
@@ -865,6 +916,7 @@ void app_main(void)
 }
 
 static void launcher_task() {
+  draw_battery();
   while (true) {
     odroid_input_gamepad_read(&joystick);
     // LEFT
