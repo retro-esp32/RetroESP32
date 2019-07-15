@@ -1,11 +1,13 @@
 # ![Gaboze Express](Assets/GabozeExpress.png)
 > Software Branch
 
-This branch contains the specific modification for the Odroid Go hardware to use the 320x240 ILI9342 2.6" display
+This branch contains the specific modification for the Odroid Go hardware to use the 320x240 ILI9342 2.6" and 240x320 ILI9341 display
 
 - [x] Odroid Go - [Firmware](https://github.com/OtherCrashOverride/odroid-go-firmware)
 - [x] Odroid Go - [Go Play Emulators](https://github.com/OtherCrashOverride/go-play)
 - [x] Launcher based on [GoGo](https://bitbucket.org/odroid_go_stuff/gogo/src/master/) Launcher
+- [x] ROM Management
+- [x] Config for both ILI9341/2 
 
 # Usage
 > How To
@@ -30,6 +32,18 @@ It will take a while since we run a few ```git submodule``` inside the repositor
 - [Mac OS](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/macos-setup.html)
 - [Windows](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/windows-setup-scratch.html)
 
+
+
+### Config
+```
+make menuconfig inside Launchers/retro-esp32
+```
+
+1. Select ```LCD Screen Driver``` ![LCD Screen Driver](Assets/menuconfig.png)
+2. Select your display type ![LCD Driver Chip](Assets/driver.png)
+  - [x] Odroid Go Default (ILI9341) [2.4"] ***default***
+  - [ ] Retro ESP32 (ILI9342) [2.6"]
+3. Run ```./ota`` (see below)
 
 # Bash Scripts
 > Some tools to help you along your way
@@ -98,6 +112,8 @@ You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 
 ### OTA
 > Flash directly to ESP32
+
+This is the easiest option, simple follow the onscreen prompts!
 
 ```
 ./ota
