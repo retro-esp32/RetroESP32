@@ -33,18 +33,6 @@ It will take a while since we run a few ```git submodule``` inside the repositor
 - [Windows](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/windows-setup-scratch.html)
 
 
-
-### Config
-```
-make menuconfig inside Launchers/retro-esp32
-```
-
-1. Select ```LCD Screen Driver``` ![LCD Screen Driver](Assets/menuconfig.png)
-2. Select your display type ![LCD Driver Chip](Assets/driver.png)
-  - [x] Odroid Go Default (ILI9341) [2.4"] ***default***
-  - [ ] Retro ESP32 (ILI9342) [2.6"]
-3. Run ```./ota`` (see below)
-
 # Bash Scripts
 > Some tools to help you along your way
 
@@ -136,3 +124,26 @@ This is the easiest option, simple follow the onscreen prompts!
 You will now have a ```.fw``` file in Arduino/firmware folder.
 
 You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
+
+
+### ![Retro ESP32](Assets/retro-esp32/logo.jpg)
+# Retro ESP32
+> Software Branch
+
+Finally a new launcher for your Odroid-Go
+
+```
+make menuconfig inside Launchers/retro-esp32
+```
+
+1. Select ```LCD Screen Driver``` ![LCD Screen Driver](Assets/menuconfig.png)
+
+2. Select your display type ![LCD Driver Chip](Assets/driver.png)
+  - [x] Odroid Go Default (ILI9341) [2.4"] ***default***
+  - [ ] Retro ESP32 (ILI9342) [2.6"]
+  
+3. Run ```./ota`` (see above)
+
+|   Splash   |   Navigation   |   ROM State Management   |   Run   |
+| ---- | ---- | ---- | ---- |
+|  ![](Assets/launcher/splash.jpg)    | ![](Assets/launcher/games.jpg)    | ![](Assets/launcher/manager.jpg)    | ![](Assets/launcher/run.jpg)    |
