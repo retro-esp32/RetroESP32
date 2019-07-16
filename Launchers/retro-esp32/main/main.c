@@ -499,8 +499,8 @@
     sort_files(result);   
 
     if(ROMS.total > 0) {
-      draw_numbers();
       draw_files(result);
+      draw_numbers();      
     } else {
       char message[100] = "no games available";
       int center = ceil((320/2)-((strlen(message)*5)/2));
