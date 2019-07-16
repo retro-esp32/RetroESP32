@@ -310,25 +310,22 @@
       }            
       ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
 
-      //if(battery_state.percentage > 0) {
+      x += 2;
+      y += 6;
+      w = (int)battery_state.percentage/10 > 0 ? ((int)battery_state.percentage/10) : 10;
+      h = 4;
+      i = 0;
 
-        x += 2;
-        y += 6;
-        w = 5;
-        h = 4;
-        i = 0;
-
-        int color[10] = {24576,24576,64288,64288,65504,65504,65504,26592,26592,26592};
+      int color[11] = {24576,24576,64288,64288,65504,65504,65504,26592,26592,26592,26592,26592};
 
 
-        for(int c = 0; c < h; c++) {
-          for(int n = 0; n < w; n++) {
-            buffer[i] = color[w];
-            i++;
-          }                                  
-        }
-        ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
-      //}
+      for(int c = 0; c < h; c++) {
+        for(int n = 0; n <= w; n++) {
+          buffer[i] = color[w];
+          i++;
+        }                                  
+      }
+      ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
     #endif
   }
 
