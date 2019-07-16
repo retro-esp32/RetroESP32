@@ -6,9 +6,18 @@
 	path = Odroid/odroid-go-firmware
 	url = git@github.com:OtherCrashOverride/odroid-go-firmware.git
 	branch = esp-idf-v3.2   
-[submodule "Launchers/go-play"]
-	path = Launchers/go-play
-	url = git@github.com:OtherCrashOverride/go-play.git
 [submodule "Launchers/emulator-launcher-odroid-go"]
 	path = Launchers/emulator-launcher-odroid-go
 	url = git@github.com:IlyaMZP/emulator-launcher-odroid-go.git
+[submodule "Emulators/prosystem-odroid-go"]
+	path = Emulators/prosystem-odroid-go
+	url = git@github.com:OtherCrashOverride/prosystem-odroid-go.git
+[submodule "Emulators/stella-odroid-go"]
+	path = Emulators/stella-odroid-go
+	url = git@github.com:OtherCrashOverride/stella-odroid-go.git
+[submodule "Emulators/frodo-go"]
+	path = Emulators/frodo-go
+	url = git@github.com:OtherCrashOverride/frodo-go.git
+[submodule "Emulators/go-play"]
+	path = Emulators/go-play
+	url = git@github.com:OtherCrashOverride/go-play.git
