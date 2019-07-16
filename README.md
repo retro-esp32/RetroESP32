@@ -142,7 +142,7 @@ make menuconfig inside Launchers/retro-esp32
   - [x] Odroid Go Default (ILI9341) [2.4"] ***default***
   - [ ] Retro ESP32 (ILI9342) [2.6"]
   
-3. Run ```./ota`` (see above)
+3. Run ```./ota```  (see above)
 
 |   Splash   |   Navigation   |   ROM State Management   |   Run   |
 | ---- | ---- | ---- | ---- |
