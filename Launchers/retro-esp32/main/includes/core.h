@@ -6,6 +6,8 @@
 #include <dirent.h>
 #include <math.h>
 #include <dirent.h>
+#include <unistd.h>
+#include <ctype.h>
 
 /*
   General

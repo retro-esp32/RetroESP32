@@ -108,13 +108,13 @@
         RESTART = false;
       break;
     }
-    RESTART ? restart() : splash();
+    //RESTART ? restart() : splash();
 
     draw_background();
     draw_systems();
     draw_text(16,16,EMULATORS[STEP],false,true);
 
-    STEP == 0 ? draw_themes() : draw_files();
+    STEP == 0 ? draw_themes() : get_files();
     if(STEP != 0) {animate(1);}
 
     xTaskCreate(launcher, "launcher", 8192, NULL, 5, NULL);
@@ -316,7 +316,7 @@
       h = 4;
       i = 0;
 
-      int color[11] = {24576,24576,64288,64288,65504,65504,65504,26592,26592,26592,26592,26592};
+      int color[11] = {24576,24576,64288,64288,65504,65504,65504,26592,26592,26592,26592};
 
 
       for(int c = 0; c < h; c++) {
@@ -414,61 +414,123 @@
 //}#pragma endregion GUI  
 
 //{#pragma region Files
-  void draw_files() {
+  inline static void swap(char** a, char** b)
+  {
+      char* t = *a;
+      *a = *b;
+      *b = t;
+  }
 
-    // SD Card
+  static int strcicmp(char const *a, char const *b)
+  {
+      for (;; a++, b++)
+      {
+          int d = tolower((int)*a) - tolower((int)*b);
+          if (d != 0 || !*a) return d;
+      }
+  }
+
+  static int partition (char* arr[], int low, int high)
+  {
+      char* pivot = arr[high];
+      int i = (low - 1);
+
+      for (int j = low; j <= high- 1; j++)
+      {
+          if (strcicmp(arr[j], pivot) < 0)
+          {
+              i++;
+              swap(&arr[i], &arr[j]);
+          }
+      }
+      swap(&arr[i + 1], &arr[high]);
+      return (i + 1);
+  }     
+  void quick_sort(char* arr[], int low, int high)
+  {
+      if (low < high)
+      {
+          int pi = partition(arr, low, high);
+
+          quick_sort(arr, low, pi - 1);
+          quick_sort(arr, pi + 1, high);
+      }
+  }
+
+  void sort_files(char** files)
+  {
+      bool swapped = true;
+
+      if (ROMS.total > 1)
+      {
+          quick_sort(files, 0, ROMS.total - 1);
+      }
+  }
+  void get_files() {
     odroid_sdcard_open("/sd");
-
-    int x = ORIGIN.x;                     
-    int y = POS.y + 48;
+    const int MAX_FILES = 1024;
+    char** result = (char**)malloc(MAX_FILES * sizeof(void*));
 
     DIR *directory;   
     struct dirent *file;                  
     char path[256] = "/sd/roms/";
     strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
-    bool files = true;
-    if (!(directory = opendir(path))) {files = false;}
+    strcpy(ROM.path, path);    
+    bool files = !(directory = opendir(path)) ? false : true;
 
-    int game = ROMS.offset ;
-    int n = 0;
-    ROM.ready = false;
     ROMS.total = 0;
-    
+
     if(files) {
-      for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
       while ((file = readdir(directory)) != NULL) {
+
         int rom_length = strlen(file->d_name);
         int ext_lext = strlen(DIRECTORIES[STEP]);
         bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], DIRECTORIES[STEP]) == 0 && file->d_name[0] != '.';
         if(extenstion) {
+          size_t len = strlen(file->d_name);
+          result[ROMS.total] = (char*)malloc(len + 1);
+          strcpy(result[ROMS.total], file->d_name);
           ROMS.total++;
-          if(game < (ROMS.limit+ROMS.offset) && n >= game && game < ROMS.total) {
-            draw_media(x,y-6,game == ROMS.offset ? true : false);
-            draw_text(x+24,y,file->d_name,true,game == ROMS.offset ? true : false);  
-            if(game == ROMS.offset) {
-              strcpy(ROM.name, file->d_name);
-              strcpy(ROM.path, path);
-              int i = strlen(ROM.path); ROM.path[i] = '/'; 
-              ROM.path[i + 1] = 0;
-              strcat(ROM.path, ROM.name);
-              ROM.ready = true;
-            }
-            y+=20; 
-            game++;
-          }
+        } 
 
-          n++;                 
-        }
-      };
-      closedir(directory);
+      }
     }
+    closedir(directory);
+    sort_files(result);   
 
-    if(ROM.ready) {
+    if(ROMS.total > 0) {
       draw_numbers();
+      draw_files(result);
     } else {
       char message[100] = "no games available";
       int center = ceil((320/2)-((strlen(message)*5)/2));
       draw_text(center,134,message,false,false);
+    }
+  }
+
+  void draw_files(char** files) {
+    
+    int x = ORIGIN.x;                     
+    int y = POS.y + 48;
+    int game = ROMS.offset ;
+
+    for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
+    printf("\nROMS.offset:%d ROMS.limit:%d ROMS.total:%d\n", ROMS.offset, ROMS.limit, ROMS.total);
+    for(int n = 0; n < ROMS.total; n++) {
+      if(game < (ROMS.limit+ROMS.offset) && n >= game && game < ROMS.total) {                                      
+        //printf("%d: %s\n", game, files[n]);
+        draw_media(x,y-6,game == ROMS.offset ? true : false);
+        draw_text(x+24,y,files[n],true,game == ROMS.offset ? true : false);  
+        if(game == ROMS.offset) {
+          strcpy(ROM.name, files[n]);
+          int i = strlen(ROM.path); ROM.path[i] = '/'; 
+          ROM.path[i + 1] = 0;
+          strcat(ROM.path, ROM.name);
+          ROM.ready = true;
+        }
+        y+=20;         
+        game++;
+      }
     }
   }
 
@@ -518,7 +580,7 @@
     }
     draw_mask(0,0,SCREEN.w - 32,32);
     draw_text(16,16,EMULATORS[STEP], false, true);  
-    STEP == 0 ? draw_themes() : draw_files();
+    STEP == 0 ? draw_themes() : get_files();
   }
 //}#pragma endregion Animations  
 
@@ -683,7 +745,7 @@
           draw_background();
           draw_systems();
           draw_text(16,16,EMULATORS[STEP],false,true); 
-          STEP == 0 ? draw_themes() : draw_files();
+          STEP == 0 ? draw_themes() : get_files();
         }      
       }
     }  
@@ -740,7 +802,8 @@
           }
           if(STEP != 0) {
             ROMS.offset--;
-            if( ROMS.offset < 0 ) { ROMS.offset = 0; } else { draw_files(); }
+            if( ROMS.offset < 0 ) { ROMS.offset = ROMS.total - 1; }
+            get_files();
           }
         } else {
           if(SAVED) {
@@ -763,7 +826,8 @@
           }
           if(STEP != 0) {
             ROMS.offset++;
-            if( ROMS.offset > ROMS.total - 1 ) { ROMS.offset = ROMS.total - 1; }  else { draw_files(); }
+            if( ROMS.offset > ROMS.total - 1 ) { ROMS.offset = 0; }
+            get_files();
           }            
         } else {
           if(SAVED) {
@@ -811,7 +875,7 @@
           draw_background();
           draw_systems();
           draw_text(16,16,EMULATORS[STEP],false,true); 
-          STEP == 0 ? draw_themes() : draw_files();
+          STEP == 0 ? draw_themes() : get_files();
         }
         debounce(ODROID_INPUT_B);
       }  

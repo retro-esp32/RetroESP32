@@ -36,7 +36,9 @@ void draw_options();
 /*
   Files
 */
-void draw_files();
+void get_files();
+void sort_files(char** files);
+void draw_files(char** files);
 void has_save_file(char *name);
 
 /*
