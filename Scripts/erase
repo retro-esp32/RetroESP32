@@ -20,8 +20,34 @@ export chicken=🐔
 export panda=🐼
 export whale=🐳
 
-export PORT='/dev/cu.usbserial-AE01AFBX'
-# export PORT='/dev/cu.SLAB_USBtoUART'
+# port
+port() {
+  clear
+  PORTS=(/dev/cu*)
+  OPTION="${monkey}  ${red}Please Select a ${cyan}COM Port? ${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${OPTION}"
+  echo "\n--------------------------------------------------------------------------"  
+  select PORT in "${PORTS[@]}"
+  do
+    case $PORT in
+      * ) 
+        if [[ $PORT[0,1] ]]
+        then
+          clear
+          echo "\n--------------------------------------------------------------------------"
+          echo "\n${squid}  ${green}Selected ${cyan}${PORT#*.} ${nc}"
+          echo "\n--------------------------------------------------------------------------"
+          sleep 1
+          break
+        else
+          port
+        fi
+    esac
+  done  
+}
+
+port
 
 clear
 echo "\n--------------------------------------------------------------------------"

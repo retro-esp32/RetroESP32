@@ -11,8 +11,9 @@ export PATH="$PATH:$HOME/esp/xtensa-esp32-elf/bin"
 # DON'T TOUCH START
 #---------------------------------
 REPO=$(dirname $PWD)
-GABOZE="$REPO/Gaboze"
+COMPONENTS="$REPO/Components"
 LAUNCHERS="$REPO/Launchers"
+EMULATORS="$REPO/Emulators"
 ODROID="$REPO/Odroid"
 
 #---------------------------------
@@ -51,21 +52,38 @@ then
   echo "\n--------------------------------------------------------------------------"
   echo "\n${squid}  ${green}Replacing ${cyan}odroid-go-firmware${nc} files"
   echo "\n--------------------------------------------------------------------------"
-  cp -R $GABOZE/odroid-go-firmware/main/* $ODROID/odroid-go-firmware/main
+  cp -R $COMPONENTS/odroid-go-firmware/main/* $ODROID/odroid-go-firmware/main
   sleep 1
 
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${squid}  ${green}Replacing ${cyan}go-play${nc} files"
   echo "\n--------------------------------------------------------------------------"
-  cp -R $GABOZE/go-play/* $LAUNCHERS/go-play
+  cp -R $COMPONENTS/go-play/* $EMULATORS/go-play
+  sleep 1  
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${squid}  ${green}Replacing ${cyan}frodo-go${nc} files"
+  echo "\n--------------------------------------------------------------------------"  
+  cp -R $COMPONENTS/frodo-go/* $EMULATORS/frodo-go
   sleep 1
-
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${squid}  ${green}Replacing ${cyan}prosystem-odroid-go${nc} files"
+  echo "\n--------------------------------------------------------------------------"  
+  cp -R $COMPONENTS/prosystem-odroid-go/* $EMULATORS/prosystem-odroid-go
+  sleep 1
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${squid}  ${green}Replacing ${cyan}stella-odroid-go${nc} files"
+  echo "\n--------------------------------------------------------------------------"  
+  cp -R $COMPONENTS/stella-odroid-go/* $EMULATORS/stella-odroid-go
+  sleep 1
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${squid}  ${green}Replacing ${cyan}emulator-launcher-odroid-go${nc} files"
   echo "\n--------------------------------------------------------------------------"
-  cp -R $GABOZE/emulator-launcher-odroid-go/* $LAUNCHERS/emulator-launcher-odroid-go
+  cp -R $COMPONENTS/emulator-launcher-odroid-go/* $LAUNCHERS/emulator-launcher-odroid-go
   sleep 1
 fi
 clear

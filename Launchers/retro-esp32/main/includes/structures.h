@@ -32,9 +32,6 @@ typedef struct{
 } LOAD;
 LOAD ROM;
 
-// PROGRAMS
-int PROGRAMS[10] = {1, 2, 2, 3, 3, 3, 4};
-
 // SYSTEM
 typedef struct{
   int x;

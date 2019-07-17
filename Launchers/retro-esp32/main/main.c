@@ -36,18 +36,20 @@
 
   char DIRECTORIES[COUNT][10] = {
     "",
-    "nes",
-    "gb",
-    "gbc",
-    "sms",
-    "gg",
-    "col",
-    "spectrum",
-    "a26",
-    "a78",
-    "c64",
-    "nec"
+    "nes",      // 1
+    "gb",       // 2
+    "gbc",      // 2
+    "sms",      // 3
+    "gg",       // 3
+    "col",      // 3
+    "spectrum", // 4
+    "a26",      // 5
+    "a78",      // 6
+    "c64",      // 7
+    "nec"       // 8
   };
+
+  int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 4, 5, 6, 7, 8};
 //}#pragma endregion Emulator and Directories
 
 //{#pragma region Buffer
@@ -466,6 +468,7 @@
           quick_sort(files, 0, ROMS.total - 1);
       }
   }
+
   void get_files() {
     odroid_sdcard_open("/sd");
     const int MAX_FILES = 1024;
@@ -482,7 +485,6 @@
 
     if(files) {
       while ((file = readdir(directory)) != NULL) {
-
         int rom_length = strlen(file->d_name);
         int ext_lext = strlen(DIRECTORIES[STEP]);
         bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], DIRECTORIES[STEP]) == 0 && file->d_name[0] != '.';
@@ -492,13 +494,12 @@
           strcpy(result[ROMS.total], file->d_name);
           ROMS.total++;
         } 
-
       }
+      closedir(directory);
     }
-    closedir(directory);
-    sort_files(result);   
 
     if(ROMS.total > 0) {
+      sort_files(result);                             
       draw_files(result);
       draw_numbers();      
     } else {
@@ -515,7 +516,6 @@
     int game = ROMS.offset ;
 
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
-    printf("\nROMS.offset:%d ROMS.limit:%d ROMS.total:%d\n", ROMS.offset, ROMS.limit, ROMS.total);
     for(int n = 0; n < ROMS.total; n++) {
       if(game < (ROMS.limit+ROMS.offset) && n >= game && game < ROMS.total) {                                      
         //printf("%d: %s\n", game, files[n]);
@@ -665,7 +665,8 @@
     int x = (SCREEN.w/2)-(w/2);
     int y = (SCREEN.h/2)-(h/2);  
     draw_text(x,y,message,false,false);
-    odroid_system_application_set(PROGRAMS[STEP-1]);
+    printf("\n*****\nSystem: %s\nROM: %s\nProgram Slot:%d\nodroid_settings_RomFilePathGet():%s\n*****\n", EMULATORS[STEP], ROM.name, PROGRAMS[STEP-1], odroid_settings_RomFilePath_get());
+
     y+=10;
     for(int n = 0; n < (w+10); n++) {
       for(int i = 0; i < 5; i++) {
@@ -674,7 +675,7 @@
       ili9341_write_frame_rectangleLE(x+n, y, 1, 5, buffer);
       usleep(15000);
     } 
-    odroid_system_application_set(PROGRAMS[STEP-1]);
+      odroid_system_application_set(PROGRAMS[STEP-1]);
     usleep(10000);
     esp_restart();
   }

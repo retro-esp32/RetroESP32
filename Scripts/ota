@@ -22,7 +22,7 @@ FIRMWARE_PATH="$REPO/Firmware"
 GOGO_PATH="$REPO/Launchers/gogo/"
 RETRO_PATH="$REPO/Launchers/retro-esp32/"
 GENERIC_PATH="$REPO/Launchers/emulator-launcher-odroid-go/"
-GOPLAY_PATH="$REPO/Launchers/go-play/"
+GOPLAY_PATH="$REPO/Emulators/go-play/"
 LAUNCHER_PATH=""
 LAUNCHER=""
 BIN=""
@@ -110,6 +110,7 @@ then
   fi
 
   cd $LAUNCHER_PATH
+  #make menuconfig
   make -j8
   cp ./build/bootloader/bootloader.bin $FIRMWARE_PATH/Bins/
   cp ./build/partitions.bin $FIRMWARE_PATH/Bins/
@@ -142,33 +143,65 @@ then
   rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
   rm $FIRMWARE_PATH/Bins/nesemu-go.bin
   rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin
+  rm $FIRMWARE_PATH/Bins/frodo-go.bin
+  rm $FIRMWARE_PATH/Bins/prosystem-go.bin
+  rm $FIRMWARE_PATH/Bins/stella-go.bin
 
   cd $GOPLAY_PATH
 
-
   clear
   echo "\n--------------------------------------------------------------------------"
-  echo "\n${lion}  ${green}Compiling ${cyan}gnuboy${nc}"
+  echo "\n${lion}  ${green}Compiling ${cyan}gnuboy-go${nc}"
   echo "\n--------------------------------------------------------------------------"
   cd gnuboy-go
+  #make menuconfig
   make -j8
   cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
 
   clear
   echo "\n--------------------------------------------------------------------------"
-  echo "\n${fox}  ${green}Compiling ${cyan}nesemu${nc}"
+  echo "\n${fox}  ${green}Compiling ${cyan}nesemu-go${nc}"
   echo "\n--------------------------------------------------------------------------"
   cd ../nesemu-go
+  #make menuconfig
   make -j8
   cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
 
   clear
   echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}smsplusgx${nc}"
+  echo "\n${panda}  ${green}Compiling ${cyan}smsplusgx-go${nc}"
   echo "\n--------------------------------------------------------------------------"
   cd ../smsplusgx-go
+  #make menuconfig
   make -j8
   cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
+
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${panda}  ${green}Compiling ${cyan}frodo-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ../../frodo-go
+  #make menuconfig
+  make -j8
+  cp ./build/frodo-go.bin $FIRMWARE_PATH/Bins/
+
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${panda}  ${green}Compiling ${cyan}prosystem-odroid-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ../prosystem-odroid-go
+  #make menuconfig
+  make -j8
+  cp ./build/prosystem-go.bin $FIRMWARE_PATH/Bins/
+
+      clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${panda}  ${green}Compiling ${cyan}stella-odroid-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ../stella-odroid-go
+  #make menuconfig
+  make -j8
+  cp ./build/stella-go.bin $FIRMWARE_PATH/Bins/
 fi
 
 cd $SRC_PATH
@@ -227,6 +260,23 @@ clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${game}  ${green}Flashing Device ${nc} - Hang Tight"
 echo "\n--------------------------------------------------------------------------"
+# esptool.py \
+# --chip esp32 \
+# --port ${PORT} \
+# --baud 921600 \
+# --before default_reset \
+# --after hard_reset write_flash -z \
+# --flash_mode dio \
+# --flash_freq 80m \
+# --flash_size detect \
+# 0x1000 $FIRMWARE_PATH/Bins/bootloader.bin \
+# 0x8000 $FIRMWARE_PATH/Bins/partitions.bin \
+# 0x10000 $FIRMWARE_PATH/Bins/${BIN}.bin \
+# 0x200000 $FIRMWARE_PATH/Bins/${BIN}.bin \
+# 0x300000 $FIRMWARE_PATH/Bins/nesemu-go.bin \
+# 0x400000 $FIRMWARE_PATH/Bins/gnuboy-go.bin \
+# 0x500000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin
+
 esptool.py \
 --chip esp32 \
 --port ${PORT} \
@@ -234,15 +284,18 @@ esptool.py \
 --before default_reset \
 --after hard_reset write_flash -z \
 --flash_mode dio \
---flash_freq 40m \
+--flash_freq 80m \
 --flash_size detect \
 0x1000 $FIRMWARE_PATH/Bins/bootloader.bin \
 0x8000 $FIRMWARE_PATH/Bins/partitions.bin \
 0x10000 $FIRMWARE_PATH/Bins/${BIN}.bin \
 0x200000 $FIRMWARE_PATH/Bins/${BIN}.bin \
-0x300000 $FIRMWARE_PATH/Bins/nesemu-go.bin \
-0x400000 $FIRMWARE_PATH/Bins/gnuboy-go.bin \
-0x500000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin
+0x280000 $FIRMWARE_PATH/Bins/nesemu-go.bin \
+0x340000 $FIRMWARE_PATH/Bins/gnuboy-go.bin \
+0x3F0000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin \
+0x550000 $FIRMWARE_PATH/Bins/stella-go.bin \
+0x6F0000 $FIRMWARE_PATH/Bins/prosystem-go.bin \
+0x7B0000 $FIRMWARE_PATH/Bins/frodo-go.bin
 
 
 echo "\n--------------------------------------------------------------------------"
