@@ -42,14 +42,15 @@
     "sms",      // 3
     "gg",       // 3
     "col",      // 3
-    "spectrum", // 4
+    "spectrum", // 3
     "a26",      // 5
     "a78",      // 6
     "c64",      // 7
     "nec"       // 8
   };
 
-  int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 4, 5, 6, 7, 8};
+  int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 3, 4, 5, 6, 7, 8};
+  int LIMIT = 6;
 //}#pragma endregion Emulator and Directories
 
 //{#pragma region Buffer
