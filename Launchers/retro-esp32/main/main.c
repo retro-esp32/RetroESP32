@@ -82,7 +82,6 @@
     odroid_system_init();
 
     int startHeap = esp_get_free_heap_size();
-    printf("A HEAP:0x%x\n", startHeap); 
 
     // Audio
     odroid_audio_init(16000);
@@ -99,17 +98,9 @@
 
     // Theme
     get_theme();
+    get_restore_states();
+
     GUI = THEMES[USER];
-    SYSTEMS[0].x = GAP/3;
-    for(int n = 1; n < COUNT; n++) {
-      if(n == 1) {
-        SYSTEMS[n].x = GAP/3+NEXT;
-      } else if(n == 2) {
-        SYSTEMS[n].x = GAP/3+NEXT+(GAP);
-      } else {
-        SYSTEMS[n].x = GAP/3+NEXT+(GAP*(n-1));
-      }
-    };  
 
     ili9341_prepare();
     ili9341_clear(0);
@@ -118,6 +109,8 @@
     switch(esp_reset_reason()) {
       case ESP_RST_POWERON:
         RESTART = false;
+        STEP = 1;
+        ROMS.offset = 0;
       break;
       case ESP_RST_SW:
         RESTART = true;
@@ -126,15 +119,9 @@
         RESTART = false;
       break;
     }
-    //RESTART ? restart() : splash();
-
+    RESTART ? restart() : splash();
     draw_background();
-    draw_systems();
-    draw_text(16,16,EMULATORS[STEP],false,true);
-
-    STEP == 0 ? draw_themes() : get_files();
-    if(STEP != 0) {animate(1);}
-
+    restore_layout();
     xTaskCreate(launcher, "launcher", 8192, NULL, 5, NULL);
   }
 //}#pragma endregion Main
@@ -148,6 +135,80 @@
     while (gamepad.values[key]) odroid_input_gamepad_read(&gamepad);    
   }
 //}#pragma endregion Debounce
+
+//{#pragma region States
+  void get_step_state() {
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK( err );                    
+
+    nvs_handle handle;
+    err = nvs_open("storage", NVS_READWRITE, &handle);
+
+    err = nvs_get_i8(handle, "STEP", &STEP);
+    switch (err) {
+      case ESP_OK:
+        break;
+      case ESP_ERR_NVS_NOT_FOUND:
+        STEP = 0;
+        break;
+      default :
+        STEP = 0;
+    }   
+    nvs_close(handle);
+  }
+  void set_step_state() {
+    nvs_handle handle;
+    nvs_open("storage", NVS_READWRITE, &handle);
+    nvs_set_i8(handle, "STEP", STEP);
+    nvs_commit(handle);  
+    nvs_close(handle);
+  }
+
+  void get_list_state() {
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK( err );                    
+
+    nvs_handle handle;
+    err = nvs_open("storage", NVS_READWRITE, &handle);
+
+    err = nvs_get_i8(handle, "OFFSET", &ROMS.offset);
+    switch (err) {
+      case ESP_OK:
+        break;
+      case ESP_ERR_NVS_NOT_FOUND:
+        ROMS.offset = 0;
+        break;
+      default :
+        ROMS.offset = 0;
+    }   
+    nvs_close(handle);
+  }
+  void set_list_state() {
+    nvs_handle handle;
+    nvs_open("storage", NVS_READWRITE, &handle);
+    nvs_set_i8(handle, "OFFSET", ROMS.offset);
+    nvs_commit(handle);  
+    nvs_close(handle);
+  }
+
+  void set_restore_states() {
+    set_step_state();
+    set_list_state();
+  }
+
+  void get_restore_states() {
+    get_step_state();
+    get_list_state();
+  }
+//}#pragma endregion States
 
 //{#pragma region Text
   int get_letter(char letter) {
@@ -383,7 +444,6 @@
 
   void draw_options() {
     has_save_file(ROM.name);
-    //printf("\nROM NAME:%s\nROM PATH:%s\n%s\n",ROM.name,ROM.path,SAVED ? "Has Save File" : "No Save File");
 
     int x = GAP/3 + 32;
     int y = POS.y + 48;  
@@ -534,7 +594,6 @@
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
     for(int n = 0; n < ROMS.total; n++) {
       if(game < (ROMS.limit+ROMS.offset) && n >= game && game < ROMS.total) {                                      
-        //printf("%d: %s\n", game, files[n]);
         draw_media(x,y-6,game == ROMS.offset ? true : false);
         draw_text(x+24,y,files[n],true,game == ROMS.offset ? true : false);  
         if(game == ROMS.offset) {
@@ -597,6 +656,40 @@
     draw_mask(0,0,SCREEN.w - 32,32);
     draw_text(16,16,EMULATORS[STEP], false, true);  
     STEP == 0 ? draw_themes() : get_files();
+  }
+
+  void restore_layout() {
+
+    SYSTEMS[0].x = GAP/3;
+    for(int n = 1; n < COUNT; n++) {
+      if(n == 1) {
+        SYSTEMS[n].x = GAP/3+NEXT;
+      } else if(n == 2) {
+        SYSTEMS[n].x = GAP/3+NEXT+(GAP);
+      } else {
+        SYSTEMS[n].x = GAP/3+NEXT+(GAP*(n-1));
+      }
+    };  
+
+    draw_background();
+    for(int n = 0; n < COUNT; n++) {
+      int delta = (n-STEP);
+      if(delta < 0) {
+        SYSTEMS[n].x = (GAP/3) + (GAP * delta);
+      } else if(delta == 0) {
+        SYSTEMS[n].x = (GAP/3); 
+      } else if(delta == 1) {
+        SYSTEMS[n].x = GAP/3+NEXT;
+      } else if(delta == 2) {
+        SYSTEMS[n].x = GAP/3+NEXT+(GAP);
+      } else {
+        SYSTEMS[n].x = GAP/3+NEXT+(GAP*(delta-1));
+      }
+    }
+
+    draw_systems();
+    draw_text(16,16,EMULATORS[STEP],false,true); 
+    STEP == 0 ? draw_themes() : get_files();                          
   }
 //}#pragma endregion Animations  
 
@@ -668,12 +761,17 @@
       ili9341_write_frame_rectangleLE(x+n, y, 1, 5, buffer);
       usleep(15000);
     }  
+
+    restore_layout();
   }
 //}#pragma endregion Boot Screens  
 
 //{#pragma region ROM Options
   void rom_run(bool resume) {
-    draw_background();;
+
+    set_restore_states();
+
+    draw_background();
     char *message = !resume ? "loading..." : "hold start";
 
     int h = 5;
@@ -681,8 +779,6 @@
     int x = (SCREEN.w/2)-(w/2);
     int y = (SCREEN.h/2)-(h/2);  
     draw_text(x,y,message,false,false);
-    printf("\n*****\nSystem: %s\nROM: %s\nProgram Slot:%d\nodroid_settings_RomFilePathGet():%s\n*****\n", EMULATORS[STEP], ROM.name, PROGRAMS[STEP-1], odroid_settings_RomFilePath_get());
-
     y+=10;
     for(int n = 0; n < (w+10); n++) {
       for(int i = 0; i < 5; i++) {
@@ -690,13 +786,17 @@
       }
       ili9341_write_frame_rectangleLE(x+n, y, 1, 5, buffer);
       usleep(15000);
-    } 
-      odroid_system_application_set(PROGRAMS[STEP-1]);
+    }
+    
+    odroid_system_application_set(PROGRAMS[STEP-1]);
     usleep(10000);
     esp_restart();
   }
 
   void rom_resume() {
+    
+    set_restore_states();
+
     draw_background();                 
     char message[100] = "resuming...";
     int h = 5;
@@ -704,7 +804,6 @@
     int x = (SCREEN.w/2)-(w/2);
     int y = (SCREEN.h/2)-(h/2);  
     draw_text(x,y,message,false,false);
-    odroid_system_application_set(PROGRAMS[STEP-1]);
     y+=10;
     for(int n = 0; n < (w+10); n++) {
       for(int i = 0; i < 5; i++) {
@@ -736,8 +835,6 @@
       usleep(15000);
     }  
 
-    //printf("\n***********\nSEARHING FOR:%s.sav\n***********\n", ROM.name);
-
     DIR *directory;   
     struct dirent *file;                  
     char path[256] = "/sd/odroid/data/";
@@ -751,12 +848,9 @@
       sprintf(file_to_delete, "%s/%s", path, file->d_name);
       tmp[strlen(tmp)-4] = '\0';
       gets(tmp);
-      if(strcmp(ROM.name, tmp) == 0){
-        //printf("\n***********\nFOUND: %s\n***********\n", file_to_delete);
-
+      if(strcmp(ROM.name, tmp) == 0) {
         struct stat st;
         if (stat(file_to_delete, &st) == 0) {                               
-          //printf("\n***********\nDELETING: %s\n***********\n", file_to_delete);
           unlink(file_to_delete);
           LAUNCHER = false;
           draw_background();

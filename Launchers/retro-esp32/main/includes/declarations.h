@@ -24,6 +24,19 @@ void set_theme(int8_t i);
 void update_theme();
 
 /*
+ States
+*/
+void get_step_state();
+void set_step_state();
+
+void get_list_state();
+void set_list_state();
+
+void set_restore_states();
+void get_restore_states();
+
+
+/*
  GUI
 */
 void draw_systems();
@@ -45,6 +58,7 @@ void has_save_file(char *name);
   Animations
 */
 void animate(int dir);
+void restore_layout();
 
 /*
   Boot Screens
