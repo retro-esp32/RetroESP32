@@ -1,0 +1,201 @@
+#!/bin/zsh
+
+FIRMWARE_PATH="$REPO/Firmware"
+
+GOGO_PATH="$REPO/Launchers/gogo/"
+RETRO_PATH="$REPO/Launchers/retro-esp32/"
+GENERIC_PATH="$REPO/Launchers/emulator-launcher-odroid-go/"
+GOPLAY_PATH="$REPO/Emulators/go-play/"
+
+MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
+LAUNCHER_PATH=""
+LAUNCHER=""
+BIN=""
+TILE=""
+NAME=""
+
+# set_config_option
+set_config_option() {
+  clear
+  CONFIG="n"
+  OPTION="${monkey}  Would you like to run ${magenta}'make menuconfig'? ${nc}[y/${white}N${nc}]"
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${OPTION}"
+  echo "\n--------------------------------------------------------------------------"
+  read -rs -k 1 response
+  if [[ "$response" = "y" ]]
+  then  
+    CONFIG="y"
+  fi
+  clear
+}
+
+# get_config_option
+get_config_option() {
+  if [[ "$CONFIG" = "y" ]]
+  then 
+    make menuconfig
+  fi            
+}
+
+OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
+echo "\n--------------------------------------------------------------------------"
+echo "\n${OPTION}"
+echo "\n--------------------------------------------------------------------------"
+select launcher in "GoGo" "RetroESP32" "Generic" "Exit"; do
+  case $launcher in
+    GoGo )
+      LAUNCHER="GoGo"
+      LAUNCHER_PATH=${GOGO_PATH}
+      BIN="gogo"
+      TILE="gogo"
+      NAME="GoGo"
+    break;;
+    RetroESP32 )
+      LAUNCHER="RetroESP32"
+      LAUNCHER_PATH=${RETRO_PATH}
+      BIN="retro-esp32"
+      TILE="retro-esp32"
+      NAME="Retro ESP32"
+    break;;    
+    Generic )
+      LAUNCHER="Generic"
+      LAUNCHER_PATH=${GENERIC_PATH}
+      BIN="emulator-launcher-odroid-go"
+      TILE="generic"
+      NAME="Emulator"
+    break;;
+    Exit ) break;;
+    * ) echo "${OPTION}";;
+  esac
+done
+clear
+
+echo "\n--------------------------------------------------------------------------"
+echo "\n${squid}  ${red}Recompile ${cyan}Launcher? ${nc}[y/${white}N${nc}]"
+echo "\n--------------------------------------------------------------------------"
+read -rs -k 1 response
+if [[ "$response" = "y" ]]
+then
+
+  set_config_option
+
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${squid}  ${green}Compiling ${cyan}Launcher${nc}"
+  echo "\n--------------------------------------------------------------------------"
+
+  rm $FIRMWARE_PATH/Bins/bootloader.bin
+  rm $FIRMWARE_PATH/Bins/partitions.bin
+
+  if [[ "$LAUNCHER" = "GoGo" ]]
+  then
+    rm $FIRMWARE_PATH/Bins/gogo.bin
+  fi
+
+  if [[ "$LAUNCHER" = "RetroESP32" ]]
+  then
+    rm $FIRMWARE_PATH/Bins/retro-esp32.bin
+  fi  
+
+  if [[ "$LAUNCHER" = "Generic" ]]
+  then
+    rm $FIRMWARE_PATH/Bins/emulator-launcher-odroid-go.bin
+  fi
+
+  cd $LAUNCHER_PATH
+  get_config_option
+  make -j8
+  cp ./build/bootloader/bootloader.bin $FIRMWARE_PATH/Bins/
+  cp ./build/partitions.bin $FIRMWARE_PATH/Bins/
+
+  if [[ "$LAUNCHER" = "GoGo" ]]
+  then
+    cp ./build/gogo.bin $FIRMWARE_PATH/Bins/
+  fi
+
+  if [[ "$LAUNCHER" = "RetroESP32" ]]
+  then
+    cp ./build/retro-esp32.bin $FIRMWARE_PATH/Bins/
+  fi  
+
+  if [[ "$LAUNCHER" = "Generic" ]]
+  then
+    cp ./build/emulator-launcher-odroid-go.bin $FIRMWARE_PATH/Bins/
+  fi
+fi
+clear
+
+echo "\n--------------------------------------------------------------------------"
+echo "\n${squid}  ${red}Recompile ${cyan}Emulators? ${nc}[y/${white}N${nc}]"
+echo "\n--------------------------------------------------------------------------"
+read -rs -k 1 response
+if [[ "$response" = "y" ]]
+then
+
+  set_config_option
+
+  rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
+  rm $FIRMWARE_PATH/Bins/nesemu-go.bin
+  rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin
+  rm $FIRMWARE_PATH/Bins/frodo-go.bin
+  rm $FIRMWARE_PATH/Bins/prosystem-go.bin
+  rm $FIRMWARE_PATH/Bins/stella-go.bin
+
+  cd $GOPLAY_PATH  
+
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${lion}  ${green}Compiling ${cyan}gnuboy-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd gnuboy-go
+  get_config_option
+  make -j8
+  cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
+
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${fox}  ${green}Compiling ${cyan}nesemu-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ../nesemu-go
+  get_config_option
+  make -j8
+  cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
+
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${panda}  ${green}Compiling ${cyan}smsplusgx-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ../smsplusgx-go
+  get_config_option
+  make -j8
+  cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
+
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${panda}  ${green}Compiling ${cyan}frodo-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ../../frodo-go
+  get_config_option
+  make -j8
+  cp ./build/frodo-go.bin $FIRMWARE_PATH/Bins/
+
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${panda}  ${green}Compiling ${cyan}prosystem-odroid-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ../prosystem-odroid-go
+  get_config_option
+  make -j8
+  cp ./build/prosystem-go.bin $FIRMWARE_PATH/Bins/
+
+      clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${panda}  ${green}Compiling ${cyan}stella-odroid-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ../stella-odroid-go
+  get_config_option
+  make -j8
+  cp ./build/stella-go.bin $FIRMWARE_PATH/Bins/
+fi
+
+cd $SRC_PATH

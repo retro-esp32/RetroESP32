@@ -1,0 +1,6 @@
+#!/bin/zsh
+
+clear
+REPO=$(dirname $PWD)
+export PATH=$HOME/esp/xtensa-esp32-elf/bin:$PATH
+export IDF_PATH=$REPO/Tools/esp-idf

@@ -108,7 +108,57 @@ static void odroid_input_task(void *arg)
 
 
         // Read hardware
+#if 1
+
         odroid_gamepad_state state = odroid_input_read_raw();
+
+#else
+        odroid_gamepad_state state = {0};
+
+        int joyX = adc1_get_raw(ODROID_GAMEPAD_IO_X);
+    	int joyY = adc1_get_raw(ODROID_GAMEPAD_IO_Y);
+
+    	if (joyX > 2048 + 1024)
+    	{
+    		state.values[ODROID_INPUT_LEFT] = 1;
+    		state.values[ODROID_INPUT_RIGHT] = 0;
+    	}
+    	else if (joyX > 1024)
+    	{
+    		state.values[ODROID_INPUT_LEFT] = 0;
+    		state.values[ODROID_INPUT_RIGHT] = 1;
+    	}
+    	else
+    	{
+    		state.values[ODROID_INPUT_LEFT] = 0;
+    		state.values[ODROID_INPUT_RIGHT] = 0;
+    	}
+
+    	if (joyY > 2048 + 1024)
+    	{
+    		state.values[ODROID_INPUT_UP] = 1;
+    		state.values[ODROID_INPUT_DOWN] = 0;
+    	}
+    	else if (joyY > 1024)
+    	{
+    		state.values[ODROID_INPUT_UP] = 0;
+    		state.values[ODROID_INPUT_DOWN] = 1;
+    	}
+    	else
+    	{
+    		state.values[ODROID_INPUT_UP] = 0;
+    		state.values[ODROID_INPUT_DOWN] = 0;
+    	}
+
+    	state.values[ODROID_INPUT_SELECT] = !(gpio_get_level(ODROID_GAMEPAD_IO_SELECT));
+    	state.values[ODROID_INPUT_START] = !(gpio_get_level(ODROID_GAMEPAD_IO_START));
+
+        state.values[ODROID_INPUT_A] = !(gpio_get_level(ODROID_GAMEPAD_IO_A));
+        state.values[ODROID_INPUT_B] = !(gpio_get_level(ODROID_GAMEPAD_IO_B));
+
+    	state.values[ODROID_INPUT_MENU] = !(gpio_get_level(ODROID_GAMEPAD_IO_MENU));
+    	state.values[ODROID_INPUT_VOLUME] = !(gpio_get_level(ODROID_GAMEPAD_IO_VOLUME));
+#endif
 
         // Debounce
         xSemaphoreTake(xSemaphore, portMAX_DELAY);
@@ -130,6 +180,9 @@ static void odroid_input_task(void *arg)
                     // ignore
                     break;
             }
+
+            //gamepad_state.values[i] = (debounce[i] == 0xff);
+            //printf("odroid_input_task: %d=%d (raw=%d)\n", i, gamepad_state.values[i], state.values[i]);
 		}
 
         if (gamepad_state.values[ODROID_INPUT_START])

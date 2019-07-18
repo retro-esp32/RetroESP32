@@ -3,258 +3,35 @@
 SRC_PATH=`pwd`
 
 #---------------------------------
-# EDIT PATHS FOR ESP AND IDF
+# Styles
 #---------------------------------
-source paths
-
-#---------------------------------
-# EDIT PORT ESP32
-#---------------------------------
-#export PORT='/dev/cu.usbserial-AE01AFBX'
-#export PORT='/dev/cu.usbserial-A1015RV4'
-#export PORT='/dev/cu.SLAB_USBtoUART'
+source helpers/styles
 
 #---------------------------------
-# DON'T TOUCH START
+# Paths
 #---------------------------------
-REPO=$(dirname $PWD)
-FIRMWARE_PATH="$REPO/Firmware"
-GOGO_PATH="$REPO/Launchers/gogo/"
-RETRO_PATH="$REPO/Launchers/retro-esp32/"
-GENERIC_PATH="$REPO/Launchers/emulator-launcher-odroid-go/"
-GOPLAY_PATH="$REPO/Emulators/go-play/"
-LAUNCHER_PATH=""
-LAUNCHER=""
-BIN=""
+source helpers/paths
 
 #---------------------------------
-# FANCY STUFF
+# PROCESS
 #---------------------------------
-export nc='\e[0m' # No Color
-export red='\e[1;31m'
-export green='\e[1;32m'
-export yellow='\e[1;33m'
-export blue='\e[1;34m'
-export magenta='\e[1;35m'
-export cyan='\e[1;36m'
-export white='\e[1;37m'
-export today=`date +%A\ %B\ %d\ %Y\ %T`
+source helpers/process
 
-export squid=🐙
-export robot=🤖
-export unicorn=🦄
-export fox=🦊
-export lion=🦁
-export monkey=🐵
-export chicken=🐔
-export panda=🐼
-export whale=🐳
-export game=🕹️
+#---------------------------------
+# PORT
+#---------------------------------
+source helpers/ports
 
+#---------------------------------
+# BAUD
+#---------------------------------
+source helpers/bauds
 
-OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
+#---------------------------------
+# Eraser
+#---------------------------------
+source helpers/eraser
 
-echo "\n--------------------------------------------------------------------------"
-echo "\n${OPTION}"
-echo "\n--------------------------------------------------------------------------"
-select launcher in "GoGo" "RetroESP32" "Generic" "Exit"; do
-  case $launcher in
-    GoGo )
-      LAUNCHER="GoGo"
-      LAUNCHER_PATH=${GOGO_PATH}
-      BIN="gogo"
-    break;;
-    RetroESP32 )
-      LAUNCHER="RetroESP32"
-      LAUNCHER_PATH=${RETRO_PATH}
-      BIN="retro-esp32"
-    break;;    
-    Generic )
-      LAUNCHER="Generic"
-      LAUNCHER_PATH=${GENERIC_PATH}
-      BIN="emulator-launcher-odroid-go"
-    break;;
-    Exit ) break;;
-    * ) echo "${OPTION}";;
-  esac
-done
-clear
-
-echo "\n--------------------------------------------------------------------------"
-echo "\n${squid}  ${red}Recompile ${cyan}Launcher? ${nc}[y/${white}N${nc}]"
-echo "\n--------------------------------------------------------------------------"
-read -rs -k 1 response
-if [[ "$response" = "y" ]]
-then
-  clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${squid}  ${green}Compiling ${cyan}Launcher${nc}"
-  echo "\n--------------------------------------------------------------------------"
-
-  rm $FIRMWARE_PATH/Bins/bootloader.bin
-  rm $FIRMWARE_PATH/Bins/partitions.bin
-
-  if [[ "$LAUNCHER" = "GoGo" ]]
-  then
-    rm $FIRMWARE_PATH/Bins/gogo.bin
-  fi
-
-  if [[ "$LAUNCHER" = "RetroESP32" ]]
-  then
-    rm $FIRMWARE_PATH/Bins/retro-esp32.bin
-  fi  
-
-  if [[ "$LAUNCHER" = "Generic" ]]
-  then
-    rm $FIRMWARE_PATH/Bins/emulator-launcher-odroid-go.bin
-  fi
-
-  cd $LAUNCHER_PATH
-  #make menuconfig
-  make -j8
-  cp ./build/bootloader/bootloader.bin $FIRMWARE_PATH/Bins/
-  cp ./build/partitions.bin $FIRMWARE_PATH/Bins/
-
-  if [[ "$LAUNCHER" = "GoGo" ]]
-  then
-    cp ./build/gogo.bin $FIRMWARE_PATH/Bins/
-  fi
-
-  if [[ "$LAUNCHER" = "RetroESP32" ]]
-  then
-    cp ./build/retro-esp32.bin $FIRMWARE_PATH/Bins/
-  fi  
-
-  if [[ "$LAUNCHER" = "Generic" ]]
-  then
-    cp ./build/emulator-launcher-odroid-go.bin $FIRMWARE_PATH/Bins/
-  fi
-fi
-clear
-
-
-
-echo "\n--------------------------------------------------------------------------"
-echo "\n${squid}  ${red}Recompile ${cyan}Emulators? ${nc}[y/${white}N${nc}]"
-echo "\n--------------------------------------------------------------------------"
-read -rs -k 1 response
-if [[ "$response" = "y" ]]
-then
-  rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
-  rm $FIRMWARE_PATH/Bins/nesemu-go.bin
-  rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin
-  rm $FIRMWARE_PATH/Bins/frodo-go.bin
-  rm $FIRMWARE_PATH/Bins/prosystem-go.bin
-  rm $FIRMWARE_PATH/Bins/stella-go.bin
-
-  cd $GOPLAY_PATH
-
-  clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${lion}  ${green}Compiling ${cyan}gnuboy-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
-  cd gnuboy-go
-  #make menuconfig
-  make -j8
-  cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
-
-  clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${fox}  ${green}Compiling ${cyan}nesemu-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
-  cd ../nesemu-go
-  #make menuconfig
-  make -j8
-  cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
-
-  clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}smsplusgx-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
-  cd ../smsplusgx-go
-  #make menuconfig
-  make -j8
-  cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
-
-  clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}frodo-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
-  cd ../../frodo-go
-  #make menuconfig
-  make -j8
-  cp ./build/frodo-go.bin $FIRMWARE_PATH/Bins/
-
-  clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}prosystem-odroid-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
-  cd ../prosystem-odroid-go
-  #make menuconfig
-  make -j8
-  cp ./build/prosystem-go.bin $FIRMWARE_PATH/Bins/
-
-      clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}stella-odroid-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
-  cd ../stella-odroid-go
-  #make menuconfig
-  make -j8
-  cp ./build/stella-go.bin $FIRMWARE_PATH/Bins/
-fi
-
-cd $SRC_PATH
-
-
-# port
-port() {
-  clear
-  PORTS=(/dev/cu*)
-  OPTION="${monkey}  ${red}Please Select a ${cyan}COM Port? ${nc}"
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${OPTION}"
-  echo "\n--------------------------------------------------------------------------"  
-  select PORT in "${PORTS[@]}"
-  do
-    case $PORT in
-      * ) 
-        if [[ $PORT[0,1] ]]
-        then
-          clear
-          echo "\n--------------------------------------------------------------------------"
-          echo "\n${squid}  ${green}Selected ${cyan}${PORT#*.} ${nc}"
-          echo "\n--------------------------------------------------------------------------"
-          sleep 1
-          break
-        else
-          port
-        fi
-    esac
-  done  
-}
-
-port
-
-
-clear
-echo "\n--------------------------------------------------------------------------"
-echo "\n${monkey}  ${red}Erasing Flash and Storage ${nc}[y/${white}N${nc}]"
-echo "\n--------------------------------------------------------------------------"
-read -rs -k 1 response
-if [[ "$response" = "y" ]]
-then
-  clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${monkey}  ${red}Erasing${nc} --> Flash"
-  echo "\n--------------------------------------------------------------------------"
-  esptool.py --chip esp32 --port ${PORT} --baud 921600 --before default_reset --after hard_reset erase_flash
-  clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${monkey}  ${red}Erasing${nc} --> Storage"
-  echo "\n--------------------------------------------------------------------------"
-  esptool.py --chip esp32 --port ${PORT} --baud 921600 erase_region 0xf00000 0x100000
-fi
 
 clear
 echo "\n--------------------------------------------------------------------------"
@@ -263,7 +40,7 @@ echo "\n------------------------------------------------------------------------
 # esptool.py \
 # --chip esp32 \
 # --port ${PORT} \
-# --baud 921600 \
+# --baud ${BAUD} \
 # --before default_reset \
 # --after hard_reset write_flash -z \
 # --flash_mode dio \
@@ -280,7 +57,7 @@ echo "\n------------------------------------------------------------------------
 esptool.py \
 --chip esp32 \
 --port ${PORT} \
---baud 921600 \
+--baud ${BAUD} \
 --before default_reset \
 --after hard_reset write_flash -z \
 --flash_mode dio \
@@ -297,11 +74,7 @@ esptool.py \
 0x6F0000 $FIRMWARE_PATH/Bins/prosystem-go.bin \
 0x7B0000 $FIRMWARE_PATH/Bins/frodo-go.bin
 
-
-echo "\n--------------------------------------------------------------------------"
-echo "\n${unicorn}  ${green}Copmleted ${cyan}RetroESP32 Express${nc}"
-echo "\n--------------------------------------------------------------------------"
-exit
 #---------------------------------
-# DON'T TOUCH END
+# Goodbye
 #---------------------------------
+source helpers/goodbye

@@ -49,6 +49,21 @@
     "nec"       // 8
   };
 
+  char EXTENSIONS[COUNT][10] = {
+    "",
+    "nes",      // 1
+    "gb",       // 2
+    "gbc",      // 2
+    "sms",      // 3
+    "gg",       // 3
+    "col",      // 3
+    "z80", // 3
+    "a26",      // 5
+    "a78",      // 6
+    "d64",      // 7
+    "nec"       // 8
+  };  
+
   int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 3, 4, 5, 6, 7, 8};
   int LIMIT = 6;
 //}#pragma endregion Emulator and Directories
@@ -149,7 +164,7 @@
   }
 
   void draw_text(short x, short y, char *string, bool ext, bool current) {
-    int length = !ext ? strlen(string) : strlen(string)-(strlen(DIRECTORIES[STEP])+1);
+    int length = !ext ? strlen(string) : strlen(string)-(strlen(EXTENSIONS[STEP])+1);
     int size = 5;
     for(int n = 0; n < length; n++) {                                     
       int dx = get_letter(string[n]);
@@ -487,8 +502,8 @@
     if(files) {
       while ((file = readdir(directory)) != NULL) {
         int rom_length = strlen(file->d_name);
-        int ext_lext = strlen(DIRECTORIES[STEP]);
-        bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], DIRECTORIES[STEP]) == 0 && file->d_name[0] != '.';
+        int ext_lext = strlen(EXTENSIONS[STEP]);
+        bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], EXTENSIONS[STEP]) == 0 && file->d_name[0] != '.';
         if(extenstion) {
           size_t len = strlen(file->d_name);
           result[ROMS.total] = (char*)malloc(len + 1);
