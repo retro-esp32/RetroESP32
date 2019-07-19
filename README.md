@@ -1,4 +1,4 @@
-# ![Gaboze Express](Assets/GabozeExpress.png)
+# ![Retro ESP32](Assets/logo.jpg)
 > Software Branch
 
 This branch contains the specific modification for the Odroid Go hardware to use the 320x240 ILI9342 2.6" and 240x320 ILI9341 display
@@ -12,7 +12,7 @@ This branch contains the specific modification for the Odroid Go hardware to use
 # Usage
 > How To
 
-Clone the Software Branch of the [Official Gaboze Express](https://github.com/gaboze-express/GabozeExpress)
+Clone the Software Branch of the [Official Retro ESP32](https://github.com/retro-esp32/RetroESP32/)
 
 ```shell
 git clone -b Software --single-branch git@github.com:gaboze-express/GabozeExpress.git --recursive
@@ -60,7 +60,7 @@ cd Scripts
 ```
 
 ### ESP32 Environment Installer
-> Install all thing necessary (NIX/OS X)
+> Install all thing necessary (NIX/OS X)  *Windows Coming Soon*
 
 ```
 ./installer
@@ -86,12 +86,12 @@ source paths
 ./firmware
 ```
 
-You will now have a file called **GabozeExpress.fw** in the Firmware/Release folder.
+You will now have a file called **Retro ESP32.fw** in the Firmware/Release folder.
 
 You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 
 ##### Enabling new firmware
-> Insert the sd card into your Gaboze Express (Odroid Go) and follow the prompts
+> Insert the sd card into your Retro ESP32 /  (Odroid Go) and follow the prompts
 
 | Power On | List                    | Selection     |    Verification  |   Write   |   Reboot   |
 | ----------------------------------------- | -------------------------------- | ---- | ---- | ---- | ---- |

@@ -34,6 +34,7 @@ set_config_option() {
 get_config_option() {
   if [[ "$CONFIG" = "y" ]]
   then 
+    #make clean
     make menuconfig
   fi            
 }
