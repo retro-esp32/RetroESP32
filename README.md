@@ -1,34 +1,7 @@
-# ![Gaboze Express](Assets/GabozeExpress.png)
+# ![Retro ESP32](Assets/logo.jpg)
 > An ESP32 Wrover based Game Boy Pocket
 
-
-# Go Vote!!!
-> Have your say!
-
-We are moving into production soon and want to see what color you choose!
-**[Vote Here](https://forms.gle/fLzieRAKF758Bge16)**
-
-| White | Black |
-| ------------------ | ---------------- |
-| ![White Top](Assets/white-top.png) | ![Black Top](Assets/black-top.png) |
-| ![White Bottom](Assets/white-bottom.png) | ![Black Bottom](Assets/black-bottom.png) |
-
-## UPDATES!!!
-
-### Hardware
-> Testing FTDI Solution
-
-Thanks to a recent contribution, we will be testing out the replacement of the CP2104 USB to UART bridge IC with an FTDI FT232RL IC
-
-The FTDI IC is more hand solder friendly than the CP210x QFN series
-
-Here is a teaser of what we are testing
-
-| Top Layout | Bottom Layout |
-| ------------------ | ---------------- |
-| ![Gaboze Express](Assets/GabozeExpressFTDITop.png) | ![Gaboze Express](Assets/GabozeExpressFTDIBottom.png) |
-
-# Welcome
+## Welcome
 
 Based on the popularity of: 
 - [Gaboze Pocaio](https://github.com/32teeth/GabozePocaio-Round1)
@@ -39,6 +12,12 @@ Based on the popularity of:
 We have assemebled a team to pursue the development of:
 
 * [**Software Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Sofware)
+  * Including Custom Launcher:
+    * Themable
+    * Include Atari 2600, Atari 7800 and Commodor 64
+|   Splash   |   Navigation   |   ROM State Management   |   Run   |
+| ---- | ---- | ---- | ---- |
+|  ![](Assets/launcher/splash.jpg)    | ![](Assets/launcher/games.jpg)    | ![](Assets/launcher/manager.jpg)    | ![](Assets/launcher/run.jpg)    |
 * [**Hardware Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Hardware)
 
 ### Hardware
@@ -52,7 +31,7 @@ Here is a teaser of what we are testing
 
 | Top Layout | Bottom Layout |
 | ------------------ | ---------------- |
-| ![Gaboze Express](Assets/GabozeExpressFTDITop.png) | ![Gaboze Express](Assets/GabozeExpressFTDIBottom.png) |
+| ![Retro ESP32 Top](Assets/black-top.png) | ![Retro ESP32 Bottom](Assets/black-bottom.png) |
 
   
 
@@ -62,7 +41,7 @@ A **new** *Game Boy Pocket* footprint based on the [ESP32 Wrover](https://www.es
 
 We love [Hard Kernel](https://www.hardkernel.com/) and their amazing product base including the [Odroid GO](https://www.hardkernel.com/shop/odroid-go/)
 
-We wanted to design, build and solution on trusted ***<abbr title="System on a Chip"><u>SoC</u></abbr>***. The ESP32 Wroom was selected for ease of use and extensive build tools available across all development platforms
+We wanted to design, build and solution on trusted ***<abbr title="System on a Chip"><u>SoC</u></abbr>***. The ESP32 Wrover was selected for ease of use and extensive build tools available across all development platforms
 
 ### What?
 
