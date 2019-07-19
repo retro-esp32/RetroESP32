@@ -571,6 +571,8 @@
           ROMS.total++;
         } 
       }
+      ROMS.pages = ROMS.total/ROMS.limit;
+      printf("\nDIRECTORY:%s ROMS.page:%d ROMS.pages:%d\n", DIRECTORIES[STEP], ROMS.page, ROMS.pages);      
       closedir(directory);
     }
 
@@ -590,6 +592,7 @@
     int x = ORIGIN.x;                     
     int y = POS.y + 48;
     int game = ROMS.offset ;
+    ROMS.page = ROMS.offset/ROMS.limit;
 
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
     for(int n = 0; n < ROMS.total; n++) {
@@ -893,7 +896,8 @@
           ROMS.total = 0;                               
           animate(-1); 
         }
-        debounce(ODROID_INPUT_LEFT);
+        usleep(100000);
+        //debounce(ODROID_INPUT_LEFT);
       }
       /*
         RIGHT
@@ -908,7 +912,8 @@
           ROMS.total = 0;
           animate(1); 
         }
-        debounce(ODROID_INPUT_RIGHT);
+        usleep(100000);
+        //debounce(ODROID_INPUT_RIGHT);
       }  
       /*
         UP
@@ -932,7 +937,8 @@
             draw_options();
           }
         }
-        debounce(ODROID_INPUT_UP);
+        usleep(100000);
+        //debounce(ODROID_INPUT_UP);
       }
       /*
         DOWN
@@ -956,8 +962,48 @@
             draw_options();
           } 
         }
-        debounce(ODROID_INPUT_DOWN);       
-      }  
+
+        usleep(100000);
+        //debounce(ODROID_INPUT_DOWN);       
+      }
+
+      /*
+        START + SELECT
+      */
+      if (gamepad.values[ODROID_INPUT_START] || gamepad.values[ODROID_INPUT_SELECT]) {
+        /*
+          SELECT
+        */                                                                                        
+        if (gamepad.values[ODROID_INPUT_START] && !gamepad.values[ODROID_INPUT_SELECT]) {
+          if(!LAUNCHER) {
+            if(STEP != 0) {
+              ROMS.page++;
+              if( ROMS.page > ROMS.pages ) { ROMS.page = 0; }
+              ROMS.offset =  ROMS.page * ROMS.limit;                        
+              get_files();                             
+            }            
+          }
+          //debounce(ODROID_INPUT_START);
+        }        
+
+        /*
+          SELECT
+        */
+        if (!gamepad.values[ODROID_INPUT_START] && gamepad.values[ODROID_INPUT_SELECT]) {
+          if(!LAUNCHER) {
+            if(STEP != 0) {
+              ROMS.page--;
+              if( ROMS.page < 0 ) { ROMS.page = ROMS.pages; };
+              ROMS.offset =  ROMS.page * ROMS.limit;                            
+              get_files();
+            }            
+          }
+          //debounce(ODROID_INPUT_SELECT);      
+        }
+
+        usleep(200000);
+      }    
+
       /*
         BUTTON A
       */

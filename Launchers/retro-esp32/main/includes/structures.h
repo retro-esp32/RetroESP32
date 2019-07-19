@@ -20,8 +20,10 @@ typedef struct{
   int limit;
   int offset;
   int total;
+  int pages;
+  int page;
 } LIST;
-LIST ROMS = {8, 0, 0};
+LIST ROMS = {8, 0, 0, 0, 0};
 bool LAUNCHER = false;
 
 // FILE
