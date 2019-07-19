@@ -15,10 +15,11 @@ We have assemebled a team to pursue the development of:
   * Including Custom Launcher:
     * Themable
     * Include Atari 2600, Atari 7800 and Commodor 64
+* [**Hardware Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Hardware)
+
 |   Splash   |   Navigation   |   ROM State Management   |   Run   |
 | ---- | ---- | ---- | ---- |
 |  ![](Assets/launcher/splash.jpg)    | ![](Assets/launcher/games.jpg)    | ![](Assets/launcher/manager.jpg)    | ![](Assets/launcher/run.jpg)    |
-* [**Hardware Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Hardware)
 
 ### Hardware
 > Testing FTDI Solution
