@@ -631,18 +631,20 @@
 //}#pragma endregion Files  
 
 //{#pragma region Animations
-  void animate(int dir) {     
+  void animate(int dir) {    
     int y = POS.y + 46;                        
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);                 
     int sx[4][13] = {
       {8,8,4,4,4,3,3,3,3,2,2,2,2}, // 48
       {30,26,20,20,18,18,16,16,12,12,8,8,4} // 208 30+26+20+20+18+18+16+16+12+12+8+8+4
-    };  
+    };   
     for(int i = 0; i < 13; i++) {    
       if(dir == -1) {
         // LEFT
         for(int e = 0; e < COUNT; e++) {
-          SYSTEMS[e].x += STEP == (e-1) ? sx[1][i] : sx[0][i];
+          SYSTEMS[e].x += STEP != COUNT - 1 ?
+            STEP == (e-1) ? sx[1][i] : sx[0][i] :
+            e == 0 ? sx[1][i] : sx[0][i] ;
         }
       } else {
         // RIGHT
@@ -651,11 +653,14 @@
         }      
       }
       draw_mask(0,32,320,32);
+
       draw_systems();
+      usleep(20000);
     }
     draw_mask(0,0,SCREEN.w - 32,32);
     draw_text(16,16,EMULATORS[STEP], false, true);  
     STEP == 0 ? draw_themes() : get_files();
+    clean_up();
   }
 
   void restore_layout() {
@@ -686,44 +691,45 @@
         SYSTEMS[n].x = GAP/3+NEXT+(GAP*(delta-1));
       }
     }
-
     draw_systems();
     draw_text(16,16,EMULATORS[STEP],false,true); 
-    STEP == 0 ? draw_themes() : get_files();                          
+    STEP == 0 ? draw_themes() : get_files(); 
+    clean_up();
   }
+
+  void clean_up() {
+    int inc = 0;  
+    for(int n = 0; n < COUNT; n++) {
+      int delta = (n-STEP);                                      
+      if(SYSTEMS[n].x > 464) {
+        SYSTEMS[n].x -= 736;
+      }                  
+      if(SYSTEMS[n].x <= -272) {
+        SYSTEMS[n].x += 736;
+      }    
+    }                         
+  }    
+
 //}#pragma endregion Animations  
 
 //{#pragma region Boot Screens
   void splash() {
     draw_background();
-    sleep(1);
     int w = 128;
     int h = 18;
     int x = (SCREEN.w/2)-(w/2);
     int y = (SCREEN.h/2)-(h/2);
     int i = 0;
     for(int r = 0; r < h; r++) {
-      i = 0;
       for(int c = 0; c < w; c++) {
         buffer[i] = logo[r][c] == 0 ? GUI.bg : GUI.fg;
         i++;
-      }
-      ili9341_write_frame_rectangleLE(x, y+r, w, 1, buffer);
-      usleep(10000);    
+      } 
     }
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);    
 
     sleep(2);
-
-    for(int r = 0; r < h; r++) {
-      i = 0;
-      for(int c = 0; c < w; c++) {
-        buffer[i] = GUI.bg;
-        i++;
-      }
-      ili9341_write_frame_rectangleLE(x, y+r, w, 1, buffer);
-      usleep(10000);    
-    }  
-    sleep(1);
+    draw_background();
   }
 
   void boot() {
@@ -879,11 +885,13 @@
       if(gamepad.values[ODROID_INPUT_LEFT]) {
         if(!LAUNCHER) {
           STEP--;
-          if( STEP < 0 ) { STEP = 0; } else { 
-            ROMS.offset = 0; 
-            ROMS.total = 0;                               
-            animate(-1); 
-          }                       
+          if( STEP < 0 ) { 
+            STEP = COUNT - 1;
+          }
+
+          ROMS.offset = 0; 
+          ROMS.total = 0;                               
+          animate(-1); 
         }
         debounce(ODROID_INPUT_LEFT);
       }
@@ -893,11 +901,12 @@
       if(gamepad.values[ODROID_INPUT_RIGHT]) {
         if(!LAUNCHER) {
           STEP++;
-          if( STEP > COUNT-1 ) { STEP = COUNT-1; } else { 
-            ROMS.offset = 0; 
-            ROMS.total = 0; 
-            animate(1); 
-          }    
+          if( STEP > COUNT-1 ) { 
+            STEP = 0; 
+          }
+          ROMS.offset = 0; 
+          ROMS.total = 0;
+          animate(1); 
         }
         debounce(ODROID_INPUT_RIGHT);
       }  

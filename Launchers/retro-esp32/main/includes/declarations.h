@@ -59,6 +59,7 @@ void has_save_file(char *name);
 */
 void animate(int dir);
 void restore_layout();
+void clean_up();
 
 /*
   Boot Screens
