@@ -15,3 +15,21 @@ menu "LCD Screen Driver"
     endchoice
 
 endmenu
+
+menu "Menu Hot Keys"
+
+    choice MENU_HOT_KEYS
+        prompt "Menu Hot Keys Option"
+        default DEFAULT_MENU_KEY
+        help
+            Select Hot Key (Menu Button)
+
+    config DEFAULT_MENU_KEY
+        bool "Default Odroid Go MENU Button"
+
+    config COMBO_MENU_KEY
+        bool "Use START + SELECT buttons for MENU"
+
+    endchoice
+
+endmenu

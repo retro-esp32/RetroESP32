@@ -755,6 +755,7 @@
 
   void restart() {
     draw_background();
+    
     char message[100] = "restarting";
     int h = 5;
     int w = strlen(message)*h;  
@@ -937,7 +938,7 @@
             draw_options();
           }
         }
-        usleep(100000);
+        usleep(200000);
         //debounce(ODROID_INPUT_UP);
       }
       /*
@@ -963,7 +964,7 @@
           } 
         }
 
-        usleep(100000);
+        usleep(200000);
         //debounce(ODROID_INPUT_DOWN);       
       }
 

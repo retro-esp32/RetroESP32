@@ -78,8 +78,12 @@ odroid_gamepad_state odroid_input_read_raw()
     state.values[ODROID_INPUT_A] = !(gpio_get_level(ODROID_GAMEPAD_IO_A));
     state.values[ODROID_INPUT_B] = !(gpio_get_level(ODROID_GAMEPAD_IO_B));
 
-    //state.values[ODROID_INPUT_MENU] = !(gpio_get_level(ODROID_GAMEPAD_IO_MENU));
+#ifdef CONFIG_DEFAULT_MENU_KEY
+    state.values[ODROID_INPUT_MENU] = !(gpio_get_level(ODROID_GAMEPAD_IO_MENU));
+#endif    
+#ifdef CONFIG_COMBO_MENU_KEY
     state.values[ODROID_INPUT_MENU] = state.values[ODROID_INPUT_SELECT] && state.values[ODROID_INPUT_START];
+#endif    
     state.values[ODROID_INPUT_VOLUME] = !(gpio_get_level(ODROID_GAMEPAD_IO_VOLUME));
 
     return state;

@@ -147,3 +147,5 @@ make menuconfig inside Launchers/retro-esp32
 |   Splash   |   Navigation   |   ROM State Management   |   Run   |
 | ---- | ---- | ---- | ---- |
 |  ![](Assets/launcher/splash.jpg)    | ![](Assets/launcher/games.jpg)    | ![](Assets/launcher/manager.jpg)    | ![](Assets/launcher/run.jpg)    |
+
+- [ ] 
