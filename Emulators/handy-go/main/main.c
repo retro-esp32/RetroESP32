@@ -242,7 +242,7 @@ NOINLINE void update_display_task()
     printf("\nVIDEO: Task: Start\n");
 
 #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-    taskFunc = &videoTask_mode_original_mode0_rotate_R;
+    //taskFunc = &videoTask_mode_original_mode0_rotate_R;
 #endif
     xTaskCreatePinnedToCore(taskFunc, "videoTask", 1024 * 4, NULL, 5, &videoTaskHandle, 1);
     while (!videoTaskIsRunning) { vTaskDelay(1); }

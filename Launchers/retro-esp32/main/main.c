@@ -78,11 +78,13 @@
     nvs_flash_init();
     odroid_system_init();
 
-    int startHeap = esp_get_free_heap_size();
-
     // Audio
     odroid_audio_init(16000);
+#ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32    
     odroid_settings_Volume_set(4);   
+#else
+    odroid_settings_Volume_set(3);
+#endif
 
     // Display
     ili9341_init();  
@@ -344,7 +346,7 @@
   }
 
   void draw_media(int x, int y, bool current) {
-    int offset = STEP * 16;
+    int offset = (STEP-1) * 16;
     int i = 0;
     if(current) {
       for(int h = 0; h < 16; h++) {  
@@ -534,8 +536,6 @@
 
   void sort_files(char** files)
   {
-      bool swapped = true;
-
       if (ROMS.total > 1)
       {
           quick_sort(files, 0, ROMS.total - 1);
@@ -691,17 +691,15 @@
         SYSTEMS[n].x = GAP/3+NEXT+(GAP*(delta-1));
       }
     }
+    clean_up();    
     draw_systems();
     draw_text(16,16,EMULATORS[STEP],false,true); 
     STEP == 0 ? draw_themes() : get_files(); 
-    clean_up();
   }
 
   void clean_up() {
-    int inc = 0;  
     int MAX = 688;
-    for(int n = 0; n < COUNT; n++) {
-      int delta = (n-STEP);                                      
+    for(int n = 0; n < COUNT; n++) {                                  
       if(SYSTEMS[n].x > 464) {
         SYSTEMS[n].x -= MAX;
       }                  

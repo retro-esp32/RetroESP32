@@ -630,7 +630,7 @@ char *odroid_ui_choose_file(const char *path, const char *ext) {
             if (odroid_settings_ForceInternalGameSelect_get())
             {
                 odroid_settings_ForceInternalGameSelect_set(0);
-                choose=true;
+                choose=false;
             }
 #endif
             

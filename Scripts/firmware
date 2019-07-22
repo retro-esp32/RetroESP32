@@ -40,11 +40,7 @@ $MKFW_PATH/mkfw ${NAME} $FIRMWARE_PATH/Assets/${TILE}.raw \
 
 mv firmware.fw $FIRMWARE_PATH/Releases/${NAME}.fw
 
-clear
-echo "\n--------------------------------------------------------------------------"
-echo "\n${unicorn}  ${green}Copmleted ${cyan}${NAME}${nc}"
-echo "\n--------------------------------------------------------------------------"
-exit
 #---------------------------------
-# DON'T TOUCH END
+# Goodbye
 #---------------------------------
+source helpers/goodbye

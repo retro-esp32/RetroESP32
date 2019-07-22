@@ -43,7 +43,7 @@ OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
 echo "\n--------------------------------------------------------------------------"
 echo "\n${OPTION}"
 echo "\n--------------------------------------------------------------------------"
-select launcher in "GoGo" "RetroESP32" "Generic" "Exit"; do
+select launcher in "RetroESP32" "GoGo" "Generic" "Exit"; do
   case $launcher in
     GoGo )
       LAUNCHER="GoGo"
@@ -66,7 +66,9 @@ select launcher in "GoGo" "RetroESP32" "Generic" "Exit"; do
       TILE="generic"
       NAME="Emulator"
     break;;
-    Exit ) break;;
+    Exit ) 
+      exit
+    break;;      
     * ) echo "${OPTION}";;
   esac
 done
