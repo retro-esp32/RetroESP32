@@ -7,7 +7,19 @@ Based on the popularity of:
 - [Gaboze Pocaio](https://github.com/32teeth/GabozePocaio-Round1)
 - [Gaboze Pocaio Round 2](https://github.com/32teeth/GabozePocaio-Round2)
 
+## Supported Emulators
+>What else do you need to do
 
+- [x] Nintendo Entertainment System
+- [x] Nintendo Game Boy
+- [x] Nintendo Game Boy Color
+- [x] Sega Master System
+- [x] Sega Game Gear
+- [x] Colecovision
+- [x] Sinclair Zx Spectrum 48k
+- [x] Atari 2600
+- [x] Atari 7800
+- [x] Atari Lynx
 
 We have assemebled a team to pursue the development of:
 
