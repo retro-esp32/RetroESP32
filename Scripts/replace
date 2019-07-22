@@ -29,6 +29,9 @@ echo "\nRunning ${magenta}'make menuconfig'${nc}  will provide you option to set
 echo "\n${cyanbg} ${white}LCD Screen Driver                                          ${nc}"
 echo "\n\t${white}1.${nc} Odroid Go Default (ILI9341) [2.4\"] ${bluebg}  default  ${nc}"
 echo "\n\t${white}2.${nc} Retro ESP32 (ILI9342) [2.6\"]"
+echo "\n${cyanbg} ${white}Menu Hot Keys                                              ${nc}"
+echo "\n\t${white}1.${nc} Default Odroid Go MENU Button ${bluebg}  default  ${nc}"
+echo "\n\t${white}2.${nc} Use START + SELECT buttons for MENU"
 echo "\n ${nc}${green}Add Option?${nc} [y/${white}N${nc}]"
 echo "\n--------------------------------------------------------------------------"
 
@@ -72,6 +75,7 @@ then
   echo "\n--------------------------------------------------------------------------"
   cp -R $COMPONENTS/emulator-launcher-odroid-go/* $LAUNCHERS/emulator-launcher-odroid-go
   sleep 0.25
+  clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${whale}  ${green}Replacing ${cyan}gogo${nc} files"
   echo "\n--------------------------------------------------------------------------"
