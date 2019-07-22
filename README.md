@@ -9,6 +9,20 @@ This branch contains the specific modification for the Odroid Go hardware to use
 - [x] ROM Management
 - [x] Config for both ILI9341/2 
 
+## Supported Emulators
+>What else do you need to do
+
+- [x] Nintendo Entertainment System
+- [x] Nintendo Game Boy
+- [x] Nintendo Game Boy Color
+- [x] Sega Master System
+- [x] Sega Game Gear
+- [x] Colecovision
+- [x] Sinclair Zx Spectrum 48k
+- [x] Atari 2600
+- [x] Atari 7800
+- [x] Atari Lynx
+
 # Usage
 > How To
 
@@ -148,4 +162,3 @@ make menuconfig inside Launchers/retro-esp32
 | ---- | ---- | ---- | ---- |
 |  ![](Assets/launcher/splash.jpg)    | ![](Assets/launcher/games.jpg)    | ![](Assets/launcher/manager.jpg)    | ![](Assets/launcher/run.jpg)    |
 
-- [ ] 
