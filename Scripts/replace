@@ -53,6 +53,12 @@ then
   sleep 0.25  
   clear
   echo "\n--------------------------------------------------------------------------"
+  echo "\n${fox}  ${green}Replacing ${cyan}handy-go${nc} files"
+  echo "\n--------------------------------------------------------------------------"  
+  cp -R $COMPONENTS/handy-go/* $EMULATORS/handy-go
+  sleep 0.25
+  clear  
+  echo "\n--------------------------------------------------------------------------"
   echo "\n${fox}  ${green}Replacing ${cyan}frodo-go${nc} files"
   echo "\n--------------------------------------------------------------------------"  
   cp -R $COMPONENTS/frodo-go/* $EMULATORS/frodo-go

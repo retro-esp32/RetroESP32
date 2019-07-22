@@ -220,11 +220,7 @@ esp_err_t odroid_sdcard_open(const char* base_path)
         }
         else
         {
-            printf("==========================\n");
-            printf("GoGo\n");
-            printf("==========================\n");
             printf("odroid_sdcard_open: esp_vfs_fat_sdmmc_mount failed (%d)\n", ret);
-            printf("==========================\n");
         }
     }
 

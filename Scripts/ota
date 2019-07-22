@@ -72,7 +72,7 @@ esptool.py \
 0x3F0000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin \
 0x550000 $FIRMWARE_PATH/Bins/stella-go.bin \
 0x6F0000 $FIRMWARE_PATH/Bins/prosystem-go.bin \
-0x7B0000 $FIRMWARE_PATH/Bins/frodo-go.bin
+0x7B0000 $FIRMWARE_PATH/Bins/handy-go.bin
 
 #---------------------------------
 # Goodbye

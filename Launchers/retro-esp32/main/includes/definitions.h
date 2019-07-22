@@ -5,11 +5,6 @@
 #define HEIGHT 240
 
 /*
-  Emulator Count + 1 for Theme
-*/
-#define COUNT 12
-
-/*
   System Ribbon Display
 */
 #define GAP 48
@@ -25,3 +20,8 @@
 */
 #define WHITE 65535
 #define BLACK 0
+
+/*
+  Emulator Count + 1 for Theme
+*/
+#define COUNT 11

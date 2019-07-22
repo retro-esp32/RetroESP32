@@ -138,7 +138,7 @@ then
   rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
   rm $FIRMWARE_PATH/Bins/nesemu-go.bin
   rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin
-  rm $FIRMWARE_PATH/Bins/frodo-go.bin
+  rm $FIRMWARE_PATH/Bins/handy-go.bin
   rm $FIRMWARE_PATH/Bins/prosystem-go.bin
   rm $FIRMWARE_PATH/Bins/stella-go.bin
 
@@ -173,12 +173,12 @@ then
 
   clear
   echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}frodo-go${nc}"
+  echo "\n${panda}  ${green}Compiling ${cyan}handy-go${nc}"
   echo "\n--------------------------------------------------------------------------"
-  cd ../../frodo-go
+  cd ../../handy-go
   get_config_option
   make -j8
-  cp ./build/frodo-go.bin $FIRMWARE_PATH/Bins/
+  cp ./build/handy-go.bin $FIRMWARE_PATH/Bins/
 
   clear
   echo "\n--------------------------------------------------------------------------"

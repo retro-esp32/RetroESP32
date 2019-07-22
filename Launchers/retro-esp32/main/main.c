@@ -30,8 +30,7 @@
     "SINCLAIR ZX SPECTRUM 48K",
     "ATARI 2600",
     "ATARI 7800",
-    "COMMODORE 64",
-    "NEC TURBOGRAFX 16"
+    "ATARI LYNX"
   };
 
   char DIRECTORIES[COUNT][10] = {
@@ -45,8 +44,7 @@
     "spectrum", // 3
     "a26",      // 5
     "a78",      // 6
-    "c64",      // 7
-    "nec"       // 8
+    "lynx"       // 7
   };
 
   char EXTENSIONS[COUNT][10] = {
@@ -57,14 +55,13 @@
     "sms",      // 3
     "gg",       // 3
     "col",      // 3
-    "z80", // 3
+    "z80",      // 3
     "a26",      // 5
     "a78",      // 6
-    "d64",      // 7
-    "nec"       // 8
+    "lnx",      // 7
   };  
 
-  int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 3, 4, 5, 6, 7, 8};
+  int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 3, 4, 5, 6, 7};
   int LIMIT = 6;
 //}#pragma endregion Emulator and Directories
 
@@ -572,7 +569,7 @@
         } 
       }
       ROMS.pages = ROMS.total/ROMS.limit;
-      printf("\nDIRECTORY:%s ROMS.page:%d ROMS.pages:%d\n", DIRECTORIES[STEP], ROMS.page, ROMS.pages);      
+      //printf("\nDIRECTORY:%s ROMS.page:%d ROMS.pages:%d\n", DIRECTORIES[STEP], ROMS.page, ROMS.pages);      
       closedir(directory);
     }
 
@@ -702,13 +699,14 @@
 
   void clean_up() {
     int inc = 0;  
+    int MAX = 688;
     for(int n = 0; n < COUNT; n++) {
       int delta = (n-STEP);                                      
       if(SYSTEMS[n].x > 464) {
-        SYSTEMS[n].x -= 736;
+        SYSTEMS[n].x -= MAX;
       }                  
       if(SYSTEMS[n].x <= -272) {
-        SYSTEMS[n].x += 736;
+        SYSTEMS[n].x += MAX;
       }    
     }                         
   }    
@@ -859,6 +857,7 @@
       tmp[strlen(tmp)-4] = '\0';
       gets(tmp);
       if(strcmp(ROM.name, tmp) == 0) {
+        printf("\nDIRECTORIES[STEP]:%s ROM.name:%s tmp:%s",DIRECTORIES[STEP], ROM.name, tmp);                                        
         struct stat st;
         if (stat(file_to_delete, &st) == 0) {                               
           unlink(file_to_delete);

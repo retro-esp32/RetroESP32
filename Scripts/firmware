@@ -36,7 +36,7 @@ $MKFW_PATH/mkfw ${NAME} $FIRMWARE_PATH/Assets/${TILE}.raw \
 0 19 1441792 smsplusgx-go $FIRMWARE_PATH/Bins/smsplusgx-go.bin \
 0 20 1703936 stella-go $FIRMWARE_PATH/Bins/stella-go.bin \
 0 21 786432 prosystem-go $FIRMWARE_PATH/Bins/prosystem-go.bin \
-0 22 1507328 frodo-go $FIRMWARE_PATH/Bins/frodo-go.bin
+0 22 1507328 handy-go $FIRMWARE_PATH/Bins/handy-go.bin
 
 mv firmware.fw $FIRMWARE_PATH/Releases/${NAME}.fw
 
