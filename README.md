@@ -23,7 +23,7 @@ Based on the popularity of:
 
 We have assemebled a team to pursue the development of:
 
-* [**Software Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Software)
+* [**Software Branch**](https://github.com/retro-esp32/RetroESP32/tree/Software)
   * Including Custom Launcher:
     * Themable
     * Include Atari 2600, Atari 7800 and Commodor 64
@@ -33,7 +33,7 @@ We have assemebled a team to pursue the development of:
 |  ![](Assets/launcher/splash.jpg)    | ![](Assets/launcher/games.jpg)    | ![](Assets/launcher/manager.jpg)    | ![](Assets/launcher/run.jpg)    |
 
 
-* [**Hardware Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Hardware)
+* [**Hardware Branch**](https://github.com/retro-esp32/RetroESP32/tree/Hardware)
 
 ### Hardware
 > Testing FTDI Solution
