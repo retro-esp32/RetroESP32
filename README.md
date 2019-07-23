@@ -23,7 +23,7 @@ Based on the popularity of:
 
 We have assemebled a team to pursue the development of:
 
-* [**Software Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Sofware)
+* [**Software Branch**](https://github.com/gaboze-express/GabozeExpress/tree/Software)
   * Including Custom Launcher:
     * Themable
     * Include Atari 2600, Atari 7800 and Commodor 64
