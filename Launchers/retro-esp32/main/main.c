@@ -80,11 +80,11 @@
 
     // Audio
     odroid_audio_init(16000);
-#ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32    
-    odroid_settings_Volume_set(4);   
-#else
-    odroid_settings_Volume_set(3);
-#endif
+  #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32    
+      odroid_settings_Volume_set(4);   
+  #else
+      odroid_settings_Volume_set(3);
+  #endif
 
     // Display
     ili9341_init();  
@@ -523,6 +523,7 @@
       swap(&arr[i + 1], &arr[high]);
       return (i + 1);
   }     
+  
   void quick_sort(char* arr[], int low, int high)
   {
       if (low < high)
@@ -615,7 +616,7 @@
     struct dirent *file;                  
     char path[256] = "/sd/odroid/data/";
     strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
-    directory = opendir(path); 
+    directory = opendir(path);
     gets(name);
     while ((file = readdir(directory)) != NULL) {
       char tmp[256] = "";
