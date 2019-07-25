@@ -1,35 +1,29 @@
-menu "LCD Screen Driver"
-
+menu "Retro ESP32 Configuration"
     choice LCD_DRIVER_CHIP
         prompt "LCD Driver Chip"
         default LCD_DRIVER_CHIP_ODROID_GO
         help
-            Select Your LCD Driver
+            LCD Screen Driver
 
     config LCD_DRIVER_CHIP_ODROID_GO
-        bool "Odroid Go Default (ILI9341) [2.4\"]"
+        bool "Odroid Go - 2.4\" [ILI9341]"
 
     config LCD_DRIVER_CHIP_RETRO_ESP32
-        bool "Retro ESP32 (ILI9342) [2.6\"]"
+        bool "Retro ESP32 - 2.6\" [ILI9342]"
 
     endchoice
 
-endmenu
-
-menu "Menu Hot Keys"
-
     choice MENU_HOT_KEYS
-        prompt "Menu Hot Keys Option"
+        prompt "MENU Key Options"
         default DEFAULT_MENU_KEY
         help
             Select Hot Key (Menu Button)
 
     config DEFAULT_MENU_KEY
-        bool "Default Odroid Go MENU Button"
+        bool "Odroid Go MENU Button"
 
     config COMBO_MENU_KEY
-        bool "Use START + SELECT buttons for MENU"
+        bool "START + SELECT as MENU button"
 
     endchoice
-
-endmenu
+endmenu    
