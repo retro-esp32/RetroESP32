@@ -126,6 +126,15 @@ You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 ./ota
 ```
 
+### OTA
+> Flash directly to ESP32
+
+This is the easiest option, simple follow the onscreen prompts!
+
+```
+./ota
+```
+
 ### Erase
 > Erase flash and storage from ESP32
 
@@ -152,14 +161,16 @@ You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 Finally a new launcher for your Odroid-Go
 
 ```
-make menuconfig inside Launchers/retro-esp32
+cd Launchers/retro-esp32
+make menuconfig
 ```
 
-1. Select ```LCD Screen Driver``` ![LCD Screen Driver](Assets/menuconfig.png)
+1. Select ```Restro ESP32 Configuration``` ![Restro ESP32 Configuration](Assets/menuconfig.png)
 
-2. Select your display type ![LCD Driver Chip](Assets/driver.png)
-  - [x] Odroid Go Default (ILI9341) [2.4"] ***default***
-  - [ ] Retro ESP32 (ILI9342) [2.6"]
+2. Select your options![Options](Assets/driver.png)
+  * *Select* **LCD Driver Chip**
+  * *Select* **MENU Key Options**
+  * *Select* **In Game Menu**
   
 3. Run ```./ota```  (see above)
 
