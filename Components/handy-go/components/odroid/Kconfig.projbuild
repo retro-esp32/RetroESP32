@@ -16,6 +16,24 @@ menu "LCD Screen Driver"
 
 endmenu
 
+menu "Retro ESP32 - In Game Menu"
+
+    choice IN_GAME_MENU
+        prompt "Use Retro ESP32 - In Game Menu"
+        default IN_GAME_MENU_NO
+        help
+            Use Retro ESP32 - In Game Menu
+
+    config IN_GAME_MENU_YES
+        bool "Yes"
+
+    config IN_GAME_MENU_NO
+        bool "No"
+
+    endchoice
+
+endmenu
+
 menu "Menu Hot Keys"
 
     choice MENU_HOT_KEYS

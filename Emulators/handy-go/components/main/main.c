@@ -787,7 +787,7 @@ void odroid_retro_video_refresh_t(const void *data, unsigned width,
 #endif
 
 void odroidgo_retro_init(void) {
-	printf("%s - start\n", __func__);
+	printf("odroidgo_init\n");
 	odroid_display_unlock();
 	char *rc = odroid_ui_choose_file("/sd/roms/lynx", "lnx");
 	odroid_display_lock();
@@ -808,8 +808,6 @@ void odroidgo_retro_init(void) {
 	retro_set_video_refresh(&odroid_retro_video_refresh_t);
 	retro_set_audio_sample_batch(&odroid_retro_audio_sample_batch_t);
 	// retro_set_controller_port_device();
-
-    printf("%s - end\n", __func__);
 }
 
 void odroidgo_retro_init_post() {
