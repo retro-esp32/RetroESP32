@@ -126,15 +126,6 @@ You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 ./ota
 ```
 
-### OTA
-> Flash directly to ESP32
-
-This is the easiest option, simple follow the onscreen prompts!
-
-```
-./ota
-```
-
 ### Erase
 > Erase flash and storage from ESP32
 
