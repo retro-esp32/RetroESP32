@@ -13,7 +13,7 @@ echo "\n${squid}  ${red}(Re)Install ${cyan}xtensa-esp32? ${nc}[y/${white}N${nc}]
 echo "\n--------------------------------------------------------------------------"
 read -rs -k 1 response
 if [[ "$response" = "y" ]]
-then  
+then
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${monkey}  ${green}Downloading ${cyan}xtensa-esp32${nc}"
@@ -24,35 +24,45 @@ then
     'Linux')
       TAR='xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz'
       ;;
-    'Darwin') 
+    'Darwin')
       TAR='xtensa-esp32-elf-osx-1.22.0-80-g6c4433a-5.2.0.tar.gz'
       ;;
     *) ;;
-  esac  
+  esac
   [ -e ${TAR} ] && \
   rm  ${TAR}
-  
+
   curl https://dl.espressif.com/dl/${TAR} \
   --output ${TAR} \
   --progress-bar
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${fox}  ${blue}Extracting ${cyan}xtensa-esp32${nc}"
-  echo "\n--------------------------------------------------------------------------"  
+  echo "\n--------------------------------------------------------------------------"
   cd ~/esp
   tar -xzf ~/Downloads/${TAR}
   sleep 1
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${squid}  ${blue}Preparing ${cyan}environment variables${nc}"
-  echo "\n--------------------------------------------------------------------------"    
+  echo "\n--------------------------------------------------------------------------"
   cd ${SCRIPTS}
-  source paths  
+  #---------------------------------
+  # Paths
+  #---------------------------------
+  source helpers/paths
+
+  #---------------------------------
+  # Goodbye
+  #---------------------------------
+  source helpers/goodbye
 else
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${unicorn}  ${magenta}Goodbye${nc}"
-  echo "\n--------------------------------------------------------------------------"    
+
+  #---------------------------------
+  # Goodbye
+  #---------------------------------
+  source helpers/goodbye
 fi
 sleep 1
 clear
