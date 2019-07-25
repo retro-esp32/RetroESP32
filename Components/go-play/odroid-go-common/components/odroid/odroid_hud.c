@@ -242,7 +242,6 @@
     printf("\nDELETE_SAVE:%d\n\n", DELETE_SAVE); 
     if(DELETE_SAVE == 1) {
       hud_prepare_delete(0);
-      printf("\n\nfile_to_delete:\n%s\n\n", file_to_delete);  
       struct stat st;
       if (stat(file_to_delete, &st) == 0) {                                                                      
         unlink(file_to_delete);
@@ -272,6 +271,7 @@
         gets(tmp);
         if(strcmp(save_name, tmp) == 0) {
           SAVED = true;
+          printf("\n******\nfile_to_delete:%s\nsave_name:%s\ntmp%s\n******\n", file_to_delete, save_name, tmp); 
           hud_delete_save(file_to_delete);
         }
       }      
@@ -324,8 +324,8 @@
 
   void hud_background() {
     int w = 320;
-    int h = 60;
-    for (int i = 0; i < 4; i++) hud_mask(0, i*h, w, h);
+    int h = 30;
+    for (int i = 0; i < 240/h; i++) hud_mask(0, i*h, w, h);
   }
 //}#pragma endregion Mask
 
@@ -429,9 +429,9 @@
 //}#pragma endregion Display  
 
 //{#pragma region Init
-  void hud_init() {
+  void hud_init() {                    
     if(!INIT) {
-      size = 320 * 60 * sizeof(uint16_t);
+      size = 320 * 30 * sizeof(uint16_t);
       buffer = (uint16_t *)malloc(size);    
       if (!buffer) abort();   
       OPTION = 0;                 
@@ -497,6 +497,7 @@
         ACTION = STATE.action;
         switch(ACTION) {
           case 0: // "Resume Game"
+            ili9341_clear(0);
             return 0;
           break;
           case 1: // "Restart Game"
@@ -509,6 +510,7 @@
           break;
           case 3: // "Save Game"
           case 4: // "Overwrite Game"
+            ili9341_clear(0);
             return 0;
           break;
           case 5: // "Delete Save"
