@@ -29,9 +29,19 @@ This branch contains the specific modification for the Odroid Go hardware to use
 Clone the Software Branch of the [Official Retro ESP32](https://github.com/retro-esp32/RetroESP32/)
 
 ```shell
-git clone -b Software --single-branch git@github.com:gaboze-express/GabozeExpress.git --recursive
+git clone -b Software --single-branch git@github.com:retro-esp32/RetroESP32.git --recursive
+
+cd RetroESP32
+
 git submodule update --init --recursive
+
 git submodule foreach git pull origin master
+
+chmod -R 777 Scripts
+
+cd Scripts
+
+./installer
 ```
 It will take a while since we run a few ```git submodule``` inside the repository
 
@@ -85,15 +95,11 @@ cd Scripts
 Be sure to run installer first
 
 ```
-source paths
+source ./helpers/paths
 ```
 
 ### Build Firmware
-
-> Execute ```source paths``` before proceeding
-
-
-##### Follow Onscreen Prompts
+> Follow Onscreen Prompts
 > if this is your first time running the executable, answer **Y** to the options
 
 ```
@@ -107,10 +113,18 @@ You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 ##### Enabling new firmware
 > Insert the sd card into your Retro ESP32 /  (Odroid Go) and follow the prompts
 
-| Power On | List                    | Selection     |    Verification  |   Write   |   Reboot   |
-| ----------------------------------------- | -------------------------------- | ---- | ---- | ---- | ---- |
-| ![Power on your hardware](Assets/001.jpg) | ![Firmware List](Assets/002.jpg) |   ![Firmware Selection](Assets/003.jpg)   |  ![Firmware Verification](Assets/004.jpg)    |   ![Firmware Write](Assets/006.gif)    |   ![Reboot into new Firmware](Assets/007.jpg)   |
+| List | Selection                    | Verification     |    Write  |    Reboot   |
+| ----------------------------------------- | -------------------------------- | ---- | ---- | ---- |
+| ![Power on your hardware](Assets/IMG_1081.jpg) | ![Firmware List](Assets/IMG_1082.jpg) |   ![Firmware Selection](Assets/IMG_1083.jpg)   | ![Firmware Verification](Assets/IMG_1089.jpg) | ![Firmware Write](Assets/IMG_1090.jpg)   |
 
+### Build and Load OTA
+> Follow Onscreen Prompts
+> if this is your first time running the executable, answer **Y** to the options
+
+**NOTE:** This will flash your device
+```
+./ota
+```
 
 ### OTA
 > Flash directly to ESP32
