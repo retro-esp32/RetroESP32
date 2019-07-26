@@ -16,6 +16,9 @@
   bool SAVED = false;
   int8_t USER;
   bool RESTART = false;
+  char** FILES;
+  DIR *directory;   
+  struct dirent *file;    
 //}#pragma endregion Global
 
 //{#pragma region Emulator and Directories
@@ -93,7 +96,10 @@
     odroid_input_gamepad_init();
 
     // Battery
-    odroid_input_battery_level_init();    
+    odroid_input_battery_level_init();  
+
+    // SD
+    odroid_sdcard_open("/sd");  
 
     // Theme
     get_theme();
@@ -158,8 +164,10 @@
         STEP = 0;
     }   
     nvs_close(handle);
+    printf("\nGet nvs_get_i8:%d\n", STEP);
   }
   void set_step_state() {
+    printf("\nGet nvs_set_i8:%d\n", STEP);
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
     nvs_set_i8(handle, "STEP", STEP);
@@ -177,8 +185,7 @@
 
     nvs_handle handle;
     err = nvs_open("storage", NVS_READWRITE, &handle);
-
-    err = nvs_get_i8(handle, "OFFSET", &ROMS.offset);
+    err = nvs_get_i16(handle, "LAST", &ROMS.offset);
     switch (err) {
       case ESP_OK:
         break;
@@ -189,13 +196,16 @@
         ROMS.offset = 0;
     }   
     nvs_close(handle);
+    printf("\nGet nvs_get_i16:%d\n", ROMS.offset);
   }
   void set_list_state() {
+    printf("\nSet nvs_set_i16:%d", ROMS.offset);                           
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
-    nvs_set_i8(handle, "OFFSET", ROMS.offset);
+    nvs_set_i16(handle, "LAST", ROMS.offset);
     nvs_commit(handle);  
     nvs_close(handle);
+    get_list_state();
   }
 
   void set_restore_states() {
@@ -348,24 +358,12 @@
   void draw_media(int x, int y, bool current) {
     int offset = (STEP-1) * 16;
     int i = 0;
-    if(current) {
-      for(int h = 0; h < 16; h++) {  
-        for(int w = offset; w < (offset+16); w++) {                                 
-          buffer[i] = media[h][w] == WHITE ? GUI.fg : GUI.bg;
-          i++;    
-        }
-      }                   
-      ili9341_write_frame_rectangleLE(x+1, y+1, 16, 16, buffer);
-    }
-    i = 0;
     for(int h = 0; h < 16; h++) {  
       for(int w = offset; w < (offset+16); w++) {                                 
         buffer[i] = media[h][w] == WHITE ? current ? WHITE : GUI.fg : GUI.bg;
         i++;    
       }
     }
-    current ? 
-    ili9341_write_frame_rectangleLE(x-1, y-1, 16, 16, buffer) :
     ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
   }
 
@@ -491,65 +489,59 @@
 //}#pragma endregion GUI  
 
 //{#pragma region Files
-  inline static void swap(char** a, char** b)
-  {
-      char* t = *a;
-      *a = *b;
-      *b = t;
-  }
+  //{#pragma region Sort     
+    inline static void swap(char** a, char** b) {
+        char* t = *a;
+        *a = *b;
+        *b = t;
+    }
 
-  static int strcicmp(char const *a, char const *b)
-  {
-      for (;; a++, b++)
-      {
-          int d = tolower((int)*a) - tolower((int)*b);
-          if (d != 0 || !*a) return d;
-      }
-  }
+    static int strcicmp(char const *a, char const *b) {
+        for (;; a++, b++)
+        {
+            int d = tolower((int)*a) - tolower((int)*b);
+            if (d != 0 || !*a) return d;
+        }
+    }
 
-  static int partition (char* arr[], int low, int high)
-  {
-      char* pivot = arr[high];
-      int i = (low - 1);
+    static int partition (char* arr[], int low, int high) {
+        char* pivot = arr[high];
+        int i = (low - 1);
 
-      for (int j = low; j <= high- 1; j++)
-      {
-          if (strcicmp(arr[j], pivot) < 0)
-          {
-              i++;
-              swap(&arr[i], &arr[j]);
-          }
-      }
-      swap(&arr[i + 1], &arr[high]);
-      return (i + 1);
-  }     
-  
-  void quick_sort(char* arr[], int low, int high)
-  {
-      if (low < high)
-      {
-          int pi = partition(arr, low, high);
+        for (int j = low; j <= high- 1; j++)
+        {
+            if (strcicmp(arr[j], pivot) < 0)
+            {
+                i++;
+                swap(&arr[i], &arr[j]);
+            }
+        }
+        swap(&arr[i + 1], &arr[high]);
+        return (i + 1);
+    }     
+    
+    void quick_sort(char* arr[], int low, int high) {
+        if (low < high)
+        {
+            int pi = partition(arr, low, high);
 
-          quick_sort(arr, low, pi - 1);
-          quick_sort(arr, pi + 1, high);
-      }
-  }
+            quick_sort(arr, low, pi - 1);
+            quick_sort(arr, pi + 1, high);
+        }
+    }
 
-  void sort_files(char** files)
-  {
-      if (ROMS.total > 1)
-      {
-          quick_sort(files, 0, ROMS.total - 1);
-      }
-  }
+    void sort_files(char** files)
+    {
+        if (ROMS.total > 1)
+        {
+            quick_sort(files, 0, ROMS.total - 1);
+        }
+    }
+  //}#pragma endregion Sort  
 
   void get_files() {
-    odroid_sdcard_open("/sd");
-    const int MAX_FILES = 1024;
-    char** result = (char**)malloc(MAX_FILES * sizeof(void*));
-
-    DIR *directory;   
-    struct dirent *file;                  
+    FILES = (char**)malloc(MAX_FILES * sizeof(void*));
+                
     char path[256] = "/sd/roms/";
     strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
     strcpy(ROM.path, path);    
@@ -564,20 +556,18 @@
         bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], EXTENSIONS[STEP]) == 0 && file->d_name[0] != '.';
         if(extenstion) {
           size_t len = strlen(file->d_name);
-          result[ROMS.total] = (char*)malloc(len + 1);
-          strcpy(result[ROMS.total], file->d_name);
+          FILES[ROMS.total] = (char*)malloc(len + 1);
+          strcpy(FILES[ROMS.total], file->d_name);
           ROMS.total++;
         } 
       }
       ROMS.pages = ROMS.total/ROMS.limit;
-      //printf("\nDIRECTORY:%s ROMS.page:%d ROMS.pages:%d\n", DIRECTORIES[STEP], ROMS.page, ROMS.pages);      
       closedir(directory);
     }
 
     if(ROMS.total > 0) {
-      sort_files(result);                             
-      draw_files(result);
-      draw_numbers();      
+      sort_files(FILES);                             
+      draw_files();
     } else {
       char message[100] = "no games available";
       int center = ceil((320/2)-((strlen(message)*5)/2));
@@ -585,29 +575,34 @@
     }
   }
 
-  void draw_files(char** files) {
-    
+  void draw_files() {
+    printf("\n");
     int x = ORIGIN.x;                     
     int y = POS.y + 48;
     int game = ROMS.offset ;
     ROMS.page = ROMS.offset/ROMS.limit;
 
+    printf("\nROMS.offset:%d", ROMS.offset);
+    printf("\nROMS.limit:%d", ROMS.limit);
+    printf("\nROMS.total:%d", ROMS.total);
+    printf("\nROMS.page:%d", ROMS.page);
+    printf("\nROMS.pages:%d", ROMS.pages);
+
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
-    for(int n = 0; n < ROMS.total; n++) {
-      if(game < (ROMS.limit+ROMS.offset) && n >= game && game < ROMS.total) {                                      
-        draw_media(x,y-6,game == ROMS.offset ? true : false);
-        draw_text(x+24,y,files[n],true,game == ROMS.offset ? true : false);  
-        if(game == ROMS.offset) {
-          strcpy(ROM.name, files[n]);
-          int i = strlen(ROM.path); ROM.path[i] = '/'; 
-          ROM.path[i + 1] = 0;
-          strcat(ROM.path, ROM.name);
-          ROM.ready = true;
-        }
-        y+=20;         
-        game++;
-      }
+    
+    int limit = (ROMS.offset + ROMS.limit) > ROMS.total ? ROMS.total : ROMS.offset + ROMS.limit;
+    for(int n = ROMS.offset; n < limit; n++) {
+      draw_text(x+24,y,FILES[n],true,n == ROMS.offset ? true : false);  
+      draw_media(x,y-6,n == ROMS.offset ? true : false);
+      if(n == ROMS.offset) {
+        strcpy(ROM.name, FILES[n]);
+        ROM.ready = true;
+      }      
+      y+=20;
     }
+    
+
+    draw_numbers();
   }
 
   void has_save_file(char *name) {
@@ -777,7 +772,7 @@
   void rom_run(bool resume) {
 
     set_restore_states();
-
+    
     draw_background();
     char *message = !resume ? "loading..." : "hold start";
 
@@ -798,6 +793,7 @@
     odroid_system_application_set(PROGRAMS[STEP-1]);
     usleep(10000);
     esp_restart();
+    
   }
 
   void rom_resume() {
@@ -927,7 +923,7 @@
           if(STEP != 0) {
             ROMS.offset--;
             if( ROMS.offset < 0 ) { ROMS.offset = ROMS.total - 1; }
-            get_files();
+            draw_files();
           }
         } else {
           if(SAVED) {
@@ -952,7 +948,7 @@
           if(STEP != 0) {
             ROMS.offset++;
             if( ROMS.offset > ROMS.total - 1 ) { ROMS.offset = 0; }
-            get_files();
+            draw_files();
           }            
         } else {
           if(SAVED) {
@@ -979,7 +975,7 @@
               ROMS.page++;
               if( ROMS.page > ROMS.pages ) { ROMS.page = 0; }
               ROMS.offset =  ROMS.page * ROMS.limit;                        
-              get_files();                             
+              draw_files();                             
             }            
           }
           //debounce(ODROID_INPUT_START);
@@ -994,7 +990,7 @@
               ROMS.page--;
               if( ROMS.page < 0 ) { ROMS.page = ROMS.pages; };
               ROMS.offset =  ROMS.page * ROMS.limit;                            
-              get_files();
+              draw_files();
             }            
           }
           //debounce(ODROID_INPUT_SELECT);      
@@ -1013,9 +1009,13 @@
           if (ROM.ready && !LAUNCHER) {
             OPTION = 0;
             LAUNCHER = true;
+
+            char file_to_load[256] = "";
+            sprintf(file_to_load, "%s/%s", ROM.path, ROM.name); 
+            odroid_settings_RomFilePath_set(file_to_load);
+
             draw_launcher();
           } else {
-            odroid_settings_RomFilePath_set(ROM.path);
             switch(OPTION) {
               case 0:
                 SAVED ? rom_resume() : rom_run(false);
@@ -1040,7 +1040,7 @@
           draw_background();
           draw_systems();
           draw_text(16,16,EMULATORS[STEP],false,true); 
-          STEP == 0 ? draw_themes() : get_files();
+          STEP == 0 ? draw_themes() : draw_files();
         }
         debounce(ODROID_INPUT_B);
       }  

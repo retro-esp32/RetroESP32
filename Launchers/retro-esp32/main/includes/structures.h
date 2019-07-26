@@ -18,7 +18,7 @@ OFFSET ORIGIN = {16,48};
 // LIST
 typedef struct{
   int limit;
-  int8_t offset;
+  int16_t offset;
   int total;
   int pages;
   int page;

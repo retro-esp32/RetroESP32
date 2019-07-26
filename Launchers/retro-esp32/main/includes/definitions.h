@@ -25,3 +25,8 @@
   Emulator Count + 1 for Theme
 */
 #define COUNT 11
+
+/*
+
+*/
+#define MAX_FILES 2048
