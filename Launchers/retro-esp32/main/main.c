@@ -386,9 +386,11 @@
       }            
       ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
 
+      int percentage = battery_state.percentage/10;
       x += 2;
       y += 6;
-      w = (int)battery_state.percentage/10 > 0 ? ((int)battery_state.percentage/10) : 10;
+      w = percentage > 0 ? percentage > 10 ? 10 : percentage : 10;
+      printf("\nbattery_state.percentage:%d\n(percentage):%d\n", battery_state.percentage, percentage);
       h = 4;
       i = 0;
 
