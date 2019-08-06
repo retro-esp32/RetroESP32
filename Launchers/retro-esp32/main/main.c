@@ -346,7 +346,7 @@
       if(x > 0 && x < 288) {
         for(int r = 0; r < 32; r++) {
           for(int c = 0; c < 32; c++) { 
-            buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;                                  
+            buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;                                
             i++;
           }      
         }
