@@ -52,6 +52,7 @@
   Sprites
 */
 #include "../sprites/battery.h"
+#include "../sprites/charge.h"
 #include "../sprites/characters.h"
 #include "../sprites/icons.h"
 #include "../sprites/logo.h"

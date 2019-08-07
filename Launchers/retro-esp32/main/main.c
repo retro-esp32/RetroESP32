@@ -110,7 +110,7 @@
     ili9341_prepare();
     ili9341_clear(0);
 
-    printf("==============\n%s\n==============\n", "RETRO ESP32");
+    //printf("==============\n%s\n==============\n", "RETRO ESP32");
     switch(esp_reset_reason()) {
       case ESP_RST_POWERON:
         RESTART = false;
@@ -164,10 +164,10 @@
         STEP = 0;
     }   
     nvs_close(handle);
-    printf("\nGet nvs_get_i8:%d\n", STEP);
+    //printf("\nGet nvs_get_i8:%d\n", STEP);
   }
   void set_step_state() {
-    printf("\nGet nvs_set_i8:%d\n", STEP);
+    //printf("\nGet nvs_set_i8:%d\n", STEP);
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
     nvs_set_i8(handle, "STEP", STEP);
@@ -196,10 +196,10 @@
         ROMS.offset = 0;
     }   
     nvs_close(handle);
-    printf("\nGet nvs_get_i16:%d\n", ROMS.offset);
+    //printf("\nGet nvs_get_i16:%d\n", ROMS.offset);
   }
   void set_list_state() {
-    printf("\nSet nvs_set_i16:%d", ROMS.offset);                           
+    //printf("\nSet nvs_set_i16:%d", ROMS.offset);                           
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
     nvs_set_i16(handle, "LAST", ROMS.offset);
@@ -346,7 +346,7 @@
       if(x > 0 && x < 288) {
         for(int r = 0; r < 32; r++) {
           for(int c = 0; c < 32; c++) { 
-            buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;                                
+            buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;                                  
             i++;
           }      
         }
@@ -390,20 +390,33 @@
       x += 2;
       y += 6;
       w = percentage > 0 ? percentage > 10 ? 10 : percentage : 10;
-      printf("\nbattery_state.percentage:%d\n(percentage):%d\n", battery_state.percentage, percentage);
+      printf("\nbattery_state.percentage:%d\n(percentage):%d\n(millivolts)%d\n", battery_state.percentage, percentage, battery_state.millivolts);
       h = 4;
       i = 0;
 
       int color[11] = {24576,24576,64288,64288,65504,65504,65504,26592,26592,26592,26592};
 
-
+      int fill = color[w];
       for(int c = 0; c < h; c++) {
         for(int n = 0; n <= w; n++) {
-          buffer[i] = color[w];
+          buffer[i] = fill;
           i++;
         }                                  
       }
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+
+      /*
+      if(battery_state.millivolts > 4200) {
+        i = 0;
+        for(h = 0; h < 5; h++) {  
+          for(w = 0; w < 3; w++) {                                 
+            buffer[i] = charge[h][w] == WHITE ? WHITE : fill;
+            i++;    
+          }
+        }     
+        ili9341_write_frame_rectangleLE(x+4, y, 3, 5, buffer);              
+      }
+      */
     #endif
   }
 
@@ -578,17 +591,19 @@
   }
 
   void draw_files() {
-    printf("\n");
+    //printf("\n");
     int x = ORIGIN.x;                     
     int y = POS.y + 48;
     int game = ROMS.offset ;
     ROMS.page = ROMS.offset/ROMS.limit;
 
+    /*
     printf("\nROMS.offset:%d", ROMS.offset);
     printf("\nROMS.limit:%d", ROMS.limit);
     printf("\nROMS.total:%d", ROMS.total);
     printf("\nROMS.page:%d", ROMS.page);
     printf("\nROMS.pages:%d", ROMS.pages);
+    */
 
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
     
@@ -854,7 +869,7 @@
       tmp[strlen(tmp)-4] = '\0';
       gets(tmp);
       if(strcmp(ROM.name, tmp) == 0) {
-        printf("\nDIRECTORIES[STEP]:%s ROM.name:%s tmp:%s",DIRECTORIES[STEP], ROM.name, tmp);                                        
+        //printf("\nDIRECTORIES[STEP]:%s ROM.name:%s tmp:%s",DIRECTORIES[STEP], ROM.name, tmp);                                        
         struct stat st;
         if (stat(file_to_delete, &st) == 0) {                               
           unlink(file_to_delete);
