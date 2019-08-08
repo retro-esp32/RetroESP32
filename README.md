@@ -1,5 +1,22 @@
+------
+#### Buy Us A Coffee
+> It's Not Mandatory, But Much [Appreciated](https://www.paypal.me/32teeth/1.99USD)
+
+We work tirelessly to bring you the best **Odroid GO** and **Retro ESP32** user experience.
+
+Everything we provide is free to use, Feedback is always welcome.
+
+If you like what you see, and feel like giving us additional support, we accept **PayPal** donation of $1.99 USD, that's like, 1 coffee. But fee free to change the amount. We won't shy away!
+
+*Thank You*
+Retro ESP32 Team
+
+------
+
 # ![Retro ESP32](Assets/logo.jpg)
 > Software Branch
+
+## Launcher
 
 This branch contains the specific modification for the Odroid Go hardware to use the 320x240 ILI9342 2.6" and 240x320 ILI9341 display
 
@@ -10,7 +27,7 @@ This branch contains the specific modification for the Odroid Go hardware to use
 - [x] Config for both ILI9341/2 
 
 ## Supported Emulators
->What else do you need to do
+> What else do you need to know, there are 10 currently supported
 
 - [x] Nintendo Entertainment System
 - [x] Nintendo Game Boy
@@ -22,6 +39,8 @@ This branch contains the specific modification for the Odroid Go hardware to use
 - [x] Atari 2600
 - [x] Atari 7800
 - [x] Atari Lynx
+- [ ] Commodore 64
+- [ ] Nintendo Game & Watch
 
 # Usage
 > How To
