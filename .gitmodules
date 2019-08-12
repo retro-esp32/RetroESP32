@@ -21,3 +21,6 @@
 [submodule "Emulators/go-play"]
 	path = Emulators/go-play
 	url = git@github.com:OtherCrashOverride/go-play.git
+[submodule "Emulators/odroid-go-pcengine-huexpress"]
+	path = Emulators/odroid-go-pcengine-huexpress
+	url = git@github.com:pelle7/odroid-go-pcengine-huexpress.git
