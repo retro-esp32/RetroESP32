@@ -2,6 +2,8 @@
 
 # Build folder
 **/build/*
+**/Firmware/Bins/*
+**/Firmware/Release/Retro ESP32.fw
 
 # Prerequisites
 *.d

@@ -37,22 +37,6 @@ clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${game}  ${green}Flashing Device ${nc} - Hang Tight"
 echo "\n--------------------------------------------------------------------------"
-# esptool.py \
-# --chip esp32 \
-# --port ${PORT} \
-# --baud ${BAUD} \
-# --before default_reset \
-# --after hard_reset write_flash -z \
-# --flash_mode dio \
-# --flash_freq 80m \
-# --flash_size detect \
-# 0x1000 $FIRMWARE_PATH/Bins/bootloader.bin \
-# 0x8000 $FIRMWARE_PATH/Bins/partitions.bin \
-# 0x10000 $FIRMWARE_PATH/Bins/${BIN}.bin \
-# 0x200000 $FIRMWARE_PATH/Bins/${BIN}.bin \
-# 0x300000 $FIRMWARE_PATH/Bins/nesemu-go.bin \
-# 0x400000 $FIRMWARE_PATH/Bins/gnuboy-go.bin \
-# 0x500000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin
 
 esptool.py \
 --chip esp32 \
@@ -72,7 +56,8 @@ esptool.py \
 0x3F0000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin \
 0x550000 $FIRMWARE_PATH/Bins/stella-go.bin \
 0x6F0000 $FIRMWARE_PATH/Bins/prosystem-go.bin \
-0x7B0000 $FIRMWARE_PATH/Bins/handy-go.bin
+0x7B0000 $FIRMWARE_PATH/Bins/handy-go.bin \
+0x890000 $FIRMWARE_PATH/Bins/pcengine-go.bin
 
 #---------------------------------
 # Goodbye

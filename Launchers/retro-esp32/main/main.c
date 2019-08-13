@@ -17,8 +17,8 @@
   int8_t USER;
   bool RESTART = false;
   char** FILES;
-  DIR *directory;   
-  struct dirent *file;    
+  DIR *directory;
+  struct dirent *file;
 //}#pragma endregion Global
 
 //{#pragma region Emulator and Directories
@@ -33,7 +33,8 @@
     "SINCLAIR ZX SPECTRUM 48K",
     "ATARI 2600",
     "ATARI 7800",
-    "ATARI LYNX"
+    "ATARI LYNX",
+    "PC ENGINE"
   };
 
   char DIRECTORIES[COUNT][10] = {
@@ -48,6 +49,7 @@
     "a26",      // 5
     "a78",      // 6
     "lynx"       // 7
+    "pce"       // 8
   };
 
   char EXTENSIONS[COUNT][10] = {
@@ -62,9 +64,10 @@
     "a26",      // 5
     "a78",      // 6
     "lnx",      // 7
-  };  
+    "pce",      // 8
+  };
 
-  int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 3, 4, 5, 6, 7};
+  int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 3, 4, 5, 6, 7, 8};
   int LIMIT = 6;
 //}#pragma endregion Emulator and Directories
 
@@ -83,23 +86,23 @@
 
     // Audio
     odroid_audio_init(16000);
-  #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32    
-      odroid_settings_Volume_set(4);   
+  #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
+      odroid_settings_Volume_set(4);
   #else
       odroid_settings_Volume_set(3);
   #endif
 
     // Display
-    ili9341_init();  
+    ili9341_init();
 
     // Joystick
     odroid_input_gamepad_init();
 
     // Battery
-    odroid_input_battery_level_init();  
+    odroid_input_battery_level_init();
 
     // SD
-    odroid_sdcard_open("/sd");  
+    odroid_sdcard_open("/sd");
 
     // Theme
     get_theme();
@@ -137,7 +140,7 @@
 //{#pragma region Debounce
   void debounce(int key) {
     draw_battery();
-    while (gamepad.values[key]) odroid_input_gamepad_read(&gamepad);    
+    while (gamepad.values[key]) odroid_input_gamepad_read(&gamepad);
   }
 //}#pragma endregion Debounce
 
@@ -148,7 +151,7 @@
         ESP_ERROR_CHECK(nvs_flash_erase());
         err = nvs_flash_init();
     }
-    ESP_ERROR_CHECK( err );                    
+    ESP_ERROR_CHECK( err );
 
     nvs_handle handle;
     err = nvs_open("storage", NVS_READWRITE, &handle);
@@ -162,7 +165,7 @@
         break;
       default :
         STEP = 0;
-    }   
+    }
     nvs_close(handle);
     //printf("\nGet nvs_get_i8:%d\n", STEP);
   }
@@ -171,7 +174,7 @@
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
     nvs_set_i8(handle, "STEP", STEP);
-    nvs_commit(handle);  
+    nvs_commit(handle);
     nvs_close(handle);
   }
 
@@ -181,7 +184,7 @@
         ESP_ERROR_CHECK(nvs_flash_erase());
         err = nvs_flash_init();
     }
-    ESP_ERROR_CHECK( err );                    
+    ESP_ERROR_CHECK( err );
 
     nvs_handle handle;
     err = nvs_open("storage", NVS_READWRITE, &handle);
@@ -194,16 +197,16 @@
         break;
       default :
         ROMS.offset = 0;
-    }   
+    }
     nvs_close(handle);
     //printf("\nGet nvs_get_i16:%d\n", ROMS.offset);
   }
   void set_list_state() {
-    //printf("\nSet nvs_set_i16:%d", ROMS.offset);                           
+    //printf("\nSet nvs_set_i16:%d", ROMS.offset);
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
     nvs_set_i16(handle, "LAST", ROMS.offset);
-    nvs_commit(handle);  
+    nvs_commit(handle);
     nvs_close(handle);
     get_list_state();
   }
@@ -236,22 +239,22 @@
   void draw_text(short x, short y, char *string, bool ext, bool current) {
     int length = !ext ? strlen(string) : strlen(string)-(strlen(EXTENSIONS[STEP])+1);
     int size = 5;
-    for(int n = 0; n < length; n++) {                                     
+    for(int n = 0; n < length; n++) {
       int dx = get_letter(string[n]);
-      int i = 0;       
+      int i = 0;
       for(int r = 0; r < (size); r++) {
         if(string[n] != ' ') {
           for(int c = dx; c < (dx+size); c++) {
             buffer[i] = characters[r][c] == 0 ? GUI.bg : current ? WHITE : GUI.fg;
             i++;
-          }                                            
-        }                                       
+          }
+        }
       }
       if(string[n] != ' ') {
-        ili9341_write_frame_rectangleLE(x, y, size, size, buffer);                            
+        ili9341_write_frame_rectangleLE(x, y, size, size, buffer);
       }
       x+= string[n] != ' ' ? 6 : 2;
-    }  
+    }
   }
 //}#pragma endregion Text
 
@@ -271,23 +274,23 @@
 
 //{#pragma region Theme
   void draw_themes() {
-    int x = ORIGIN.x;                     
+    int x = ORIGIN.x;
     int y = POS.y + 46;
     int filled = 0;
     int count = 22;
     for(int n = USER; n < count; n++){
       if(filled < ROMS.limit) {
         draw_mask(x,y,100,16);
-        draw_text(x,y,THEMES[n].name,false, n == USER ? true : false);    
+        draw_text(x,y,THEMES[n].name,false, n == USER ? true : false);
         y+=20;
-        filled++;            
+        filled++;
       }
     }
     int slots = (ROMS.limit - filled);
     for(int n = 0; n < slots; n++) {
       draw_mask(x,y,100,16);
-      draw_text(x,y,THEMES[n].name,false,false);    
-      y+=20;    
+      draw_text(x,y,THEMES[n].name,false,false);
+      y+=20;
     }
   }
 
@@ -297,7 +300,7 @@
         ESP_ERROR_CHECK(nvs_flash_erase());
         err = nvs_flash_init();
     }
-    ESP_ERROR_CHECK( err );                    
+    ESP_ERROR_CHECK( err );
 
     nvs_handle handle;
     err = nvs_open("storage", NVS_READWRITE, &handle);
@@ -311,7 +314,7 @@
         break;
       default :
         USER = 0;
-    }   
+    }
     nvs_close(handle);
   }
 
@@ -319,9 +322,9 @@
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
     nvs_set_i8(handle, "USER", i);
-    nvs_commit(handle);  
+    nvs_commit(handle);
     nvs_close(handle);
-    get_theme(); 
+    get_theme();
   }
 
   void update_theme() {
@@ -331,24 +334,24 @@
     draw_mask(0,0,320,64);
     draw_systems();
     draw_text(16,16,EMULATORS[STEP], false, true);
-    draw_themes();  
+    draw_themes();
   }
 //}#pragma endregion Theme
 
 //{#pragma region GUI
   void draw_systems() {
     for(int e = 0; e < COUNT; e++) {
-      int i = 0;                            
+      int i = 0;
       int x = SYSTEMS[e].x;
       int y = POS.y;
       int w = 32;
       int h = 32;
       if(x > 0 && x < 288) {
         for(int r = 0; r < 32; r++) {
-          for(int c = 0; c < 32; c++) { 
-            buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;                                  
+          for(int c = 0; c < 32; c++) {
+            buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
             i++;
-          }      
+          }
         }
         ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       }
@@ -358,10 +361,10 @@
   void draw_media(int x, int y, bool current) {
     int offset = (STEP-1) * 16;
     int i = 0;
-    for(int h = 0; h < 16; h++) {  
-      for(int w = offset; w < (offset+16); w++) {                                 
+    for(int h = 0; h < 16; h++) {
+      for(int w = offset; w < (offset+16); w++) {
         buffer[i] = media[h][w] == WHITE ? current ? WHITE : GUI.fg : GUI.bg;
-        i++;    
+        i++;
       }
     }
     ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
@@ -378,12 +381,12 @@
       int w = 0;
 
       draw_mask(x,y,16,16);
-      for(h = 0; h < 16; h++) {  
-        for(w = 0; w < 16; w++) {                                 
+      for(h = 0; h < 16; h++) {
+        for(w = 0; w < 16; w++) {
           buffer[i] = battery[h][w] == WHITE ? WHITE : GUI.bg;
-          i++;    
+          i++;
         }
-      }            
+      }
       ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
 
       int percentage = battery_state.percentage/10;
@@ -401,20 +404,20 @@
         for(int n = 0; n <= w; n++) {
           buffer[i] = fill;
           i++;
-        }                                  
+        }
       }
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
 
       /*
       if(battery_state.millivolts > 4200) {
         i = 0;
-        for(h = 0; h < 5; h++) {  
-          for(w = 0; w < 3; w++) {                                 
+        for(h = 0; h < 5; h++) {
+          for(w = 0; w < 3; w++) {
             buffer[i] = charge[h][w] == WHITE ? WHITE : fill;
-            i++;    
+            i++;
           }
-        }     
-        ili9341_write_frame_rectangleLE(x+4, y, 3, 5, buffer);              
+        }
+        ili9341_write_frame_rectangleLE(x+4, y, 3, 5, buffer);
       }
       */
     #endif
@@ -430,24 +433,24 @@
     w = strlen(count)*5;
     x -= w;
     draw_mask(x-5,y,w+5,h);
-    draw_text(x,y,count,false,false);  
+    draw_text(x,y,count,false,false);
   }
 
   void draw_launcher() {
     draw_background();
     draw_text(16,16,EMULATORS[STEP], false, true);
-    int i = 0;                            
+    int i = 0;
     int x = GAP/3;
     int y = POS.y;
     int w = 32;
-    int h = 32;  
+    int h = 32;
     for(int r = 0; r < 32; r++) {
-      for(int c = 0; c < 32; c++) { 
+      for(int c = 0; c < 32; c++) {
         buffer[i] = SYSTEMS[STEP].system[r][c] == WHITE ? WHITE : GUI.bg;
         i++;
-      }      
+      }
     }
-    ili9341_write_frame_rectangleLE(x, y, w, h, buffer); 
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
 
     y += 48;
     draw_media(x,y-6,true);
@@ -458,14 +461,14 @@
     has_save_file(ROM.name);
 
     int x = GAP/3 + 32;
-    int y = POS.y + 48;  
+    int y = POS.y + 48;
     int w = 5;
     int h = 5;
     int i = 0;
     int offset = 0;
     if(SAVED) {
-      // resume               
-      i = 0;  
+      // resume
+      i = 0;
       offset = 5;
       for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
         buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 0 ? WHITE : GUI.fg : GUI.bg;i++;
@@ -473,7 +476,7 @@
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       draw_text(x+10,y,"Resume",false,OPTION == 0?true:false);
       // restart
-      i = 0;  
+      i = 0;
       y+=20;
       offset = 10;
       for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
@@ -482,29 +485,29 @@
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       draw_text(x+10,y,"Restart",false,OPTION == 1?true:false);
       // restart
-      i = 0;  
+      i = 0;
       y+=20;
       offset = 20;
       for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
         buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 2 ? WHITE : GUI.fg : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
-      draw_text(x+10,y,"Delete Save",false,OPTION == 2?true:false);       
+      draw_text(x+10,y,"Delete Save",false,OPTION == 2?true:false);
     } else {
       // run
-      i = 0;  
+      i = 0;
       offset = 0;
       for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
         buffer[i] = icons[r+offset][c] == WHITE ? WHITE : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       draw_text(x+10,y,"Run",false,true);
-    } 
+    }
   }
-//}#pragma endregion GUI  
+//}#pragma endregion GUI
 
 //{#pragma region Files
-  //{#pragma region Sort     
+  //{#pragma region Sort
     inline static void swap(char** a, char** b) {
         char* t = *a;
         *a = *b;
@@ -533,8 +536,8 @@
         }
         swap(&arr[i + 1], &arr[high]);
         return (i + 1);
-    }     
-    
+    }
+
     void quick_sort(char* arr[], int low, int high) {
         if (low < high)
         {
@@ -552,14 +555,14 @@
             quick_sort(files, 0, ROMS.total - 1);
         }
     }
-  //}#pragma endregion Sort  
+  //}#pragma endregion Sort
 
   void get_files() {
     FILES = (char**)malloc(MAX_FILES * sizeof(void*));
-                
+
     char path[256] = "/sd/roms/";
     strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
-    strcpy(ROM.path, path);    
+    strcpy(ROM.path, path);
     bool files = !(directory = opendir(path)) ? false : true;
 
     ROMS.total = 0;
@@ -574,14 +577,14 @@
           FILES[ROMS.total] = (char*)malloc(len + 1);
           strcpy(FILES[ROMS.total], file->d_name);
           ROMS.total++;
-        } 
+        }
       }
       ROMS.pages = ROMS.total/ROMS.limit;
       closedir(directory);
     }
 
     if(ROMS.total > 0) {
-      sort_files(FILES);                             
+      sort_files(FILES);
       draw_files();
     } else {
       char message[100] = "no games available";
@@ -592,7 +595,7 @@
 
   void draw_files() {
     //printf("\n");
-    int x = ORIGIN.x;                     
+    int x = ORIGIN.x;
     int y = POS.y + 48;
     int game = ROMS.offset ;
     ROMS.page = ROMS.offset/ROMS.limit;
@@ -606,26 +609,26 @@
     */
 
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
-    
+
     int limit = (ROMS.offset + ROMS.limit) > ROMS.total ? ROMS.total : ROMS.offset + ROMS.limit;
     for(int n = ROMS.offset; n < limit; n++) {
-      draw_text(x+24,y,FILES[n],true,n == ROMS.offset ? true : false);  
+      draw_text(x+24,y,FILES[n],true,n == ROMS.offset ? true : false);
       draw_media(x,y-6,n == ROMS.offset ? true : false);
       if(n == ROMS.offset) {
         strcpy(ROM.name, FILES[n]);
         ROM.ready = true;
-      }      
+      }
       y+=20;
     }
-    
+
 
     draw_numbers();
   }
 
   void has_save_file(char *name) {
-    SAVED = false;                                  
-    DIR *directory;   
-    struct dirent *file;                  
+    SAVED = false;
+    DIR *directory;
+    struct dirent *file;
     char path[256] = "/sd/odroid/data/";
     strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
     directory = opendir(path);
@@ -641,17 +644,17 @@
     }
     closedir(directory);
   }
-//}#pragma endregion Files  
+//}#pragma endregion Files
 
 //{#pragma region Animations
-  void animate(int dir) {    
-    int y = POS.y + 46;                        
-    for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);                 
+  void animate(int dir) {
+    int y = POS.y + 46;
+    for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
     int sx[4][13] = {
       {8,8,4,4,4,3,3,3,3,2,2,2,2}, // 48
       {30,26,20,20,18,18,16,16,12,12,8,8,4} // 208 30+26+20+20+18+18+16+16+12+12+8+8+4
-    };   
-    for(int i = 0; i < 13; i++) {    
+    };
+    for(int i = 0; i < 13; i++) {
       if(dir == -1) {
         // LEFT
         for(int e = 0; e < COUNT; e++) {
@@ -663,7 +666,7 @@
         // RIGHT
         for(int e = 0; e < COUNT; e++) {
           SYSTEMS[e].x -= STEP == e ? sx[1][i] : sx[0][i];
-        }      
+        }
       }
       draw_mask(0,32,320,32);
 
@@ -671,7 +674,7 @@
       usleep(20000);
     }
     draw_mask(0,0,SCREEN.w - 32,32);
-    draw_text(16,16,EMULATORS[STEP], false, true);  
+    draw_text(16,16,EMULATORS[STEP], false, true);
     STEP == 0 ? draw_themes() : get_files();
     clean_up();
   }
@@ -687,7 +690,7 @@
       } else {
         SYSTEMS[n].x = GAP/3+NEXT+(GAP*(n-1));
       }
-    };  
+    };
 
     draw_background();
     for(int n = 0; n < COUNT; n++) {
@@ -695,7 +698,7 @@
       if(delta < 0) {
         SYSTEMS[n].x = (GAP/3) + (GAP * delta);
       } else if(delta == 0) {
-        SYSTEMS[n].x = (GAP/3); 
+        SYSTEMS[n].x = (GAP/3);
       } else if(delta == 1) {
         SYSTEMS[n].x = GAP/3+NEXT;
       } else if(delta == 2) {
@@ -704,25 +707,25 @@
         SYSTEMS[n].x = GAP/3+NEXT+(GAP*(delta-1));
       }
     }
-    clean_up();    
+    clean_up();
     draw_systems();
-    draw_text(16,16,EMULATORS[STEP],false,true); 
-    STEP == 0 ? draw_themes() : get_files(); 
+    draw_text(16,16,EMULATORS[STEP],false,true);
+    STEP == 0 ? draw_themes() : get_files();
   }
 
   void clean_up() {
     int MAX = 688;
-    for(int n = 0; n < COUNT; n++) {                                  
+    for(int n = 0; n < COUNT; n++) {
       if(SYSTEMS[n].x > 464) {
         SYSTEMS[n].x -= MAX;
-      }                  
+      }
       if(SYSTEMS[n].x <= -272) {
         SYSTEMS[n].x += MAX;
-      }    
-    }                         
-  }    
+      }
+    }
+  }
 
-//}#pragma endregion Animations  
+//}#pragma endregion Animations
 
 //{#pragma region Boot Screens
   void splash() {
@@ -736,9 +739,9 @@
       for(int c = 0; c < w; c++) {
         buffer[i] = logo[r][c] == 0 ? GUI.bg : GUI.fg;
         i++;
-      } 
+      }
     }
-    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);    
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
 
     sleep(2);
     draw_background();
@@ -764,12 +767,12 @@
 
   void restart() {
     draw_background();
-    
+
     char message[100] = "restarting";
     int h = 5;
-    int w = strlen(message)*h;  
+    int w = strlen(message)*h;
     int x = (SCREEN.w/2)-(w/2);
-    int y = (SCREEN.h/2)-(h/2);  
+    int y = (SCREEN.h/2)-(h/2);
     draw_text(x,y,message,false,false);
 
     y+=10;
@@ -779,24 +782,24 @@
       }
       ili9341_write_frame_rectangleLE(x+n, y, 1, 5, buffer);
       usleep(15000);
-    }  
+    }
 
     restore_layout();
   }
-//}#pragma endregion Boot Screens  
+//}#pragma endregion Boot Screens
 
 //{#pragma region ROM Options
   void rom_run(bool resume) {
 
     set_restore_states();
-    
+
     draw_background();
     char *message = !resume ? "loading..." : "hold start";
 
     int h = 5;
-    int w = strlen(message)*h;  
+    int w = strlen(message)*h;
     int x = (SCREEN.w/2)-(w/2);
-    int y = (SCREEN.h/2)-(h/2);  
+    int y = (SCREEN.h/2)-(h/2);
     draw_text(x,y,message,false,false);
     y+=10;
     for(int n = 0; n < (w+10); n++) {
@@ -806,23 +809,23 @@
       ili9341_write_frame_rectangleLE(x+n, y, 1, 5, buffer);
       usleep(15000);
     }
-    
+
     odroid_system_application_set(PROGRAMS[STEP-1]);
     usleep(10000);
     esp_restart();
-    
+
   }
 
   void rom_resume() {
-    
+
     set_restore_states();
 
-    draw_background();                 
+    draw_background();
     char message[100] = "resuming...";
     int h = 5;
-    int w = strlen(message)*h;  
+    int w = strlen(message)*h;
     int x = (SCREEN.w/2)-(w/2);
-    int y = (SCREEN.h/2)-(h/2);  
+    int y = (SCREEN.h/2)-(h/2);
     draw_text(x,y,message,false,false);
     y+=10;
     for(int n = 0; n < (w+10); n++) {
@@ -835,11 +838,11 @@
 
     odroid_system_application_set(PROGRAMS[STEP-1]);
     usleep(10000);
-    esp_restart();  
+    esp_restart();
   }
 
   void rom_delete_save() {
-    draw_background();                  
+    draw_background();
     char message[100] = "deleting...";
     int width = strlen(message)*5;
     int center = ceil((320/2)-(width/2));
@@ -853,13 +856,13 @@
       }
       ili9341_write_frame_rectangleLE(center+n, y, 1, 5, buffer);
       usleep(15000);
-    }  
+    }
 
-    DIR *directory;   
-    struct dirent *file;                  
+    DIR *directory;
+    struct dirent *file;
     char path[256] = "/sd/odroid/data/";
     strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
-    directory = opendir(path); 
+    directory = opendir(path);
     gets(ROM.name);
     while ((file = readdir(directory)) != NULL) {
       char tmp[256] = "";
@@ -869,25 +872,25 @@
       tmp[strlen(tmp)-4] = '\0';
       gets(tmp);
       if(strcmp(ROM.name, tmp) == 0) {
-        //printf("\nDIRECTORIES[STEP]:%s ROM.name:%s tmp:%s",DIRECTORIES[STEP], ROM.name, tmp);                                        
+        //printf("\nDIRECTORIES[STEP]:%s ROM.name:%s tmp:%s",DIRECTORIES[STEP], ROM.name, tmp);
         struct stat st;
-        if (stat(file_to_delete, &st) == 0) {                               
+        if (stat(file_to_delete, &st) == 0) {
           unlink(file_to_delete);
           LAUNCHER = false;
           draw_background();
           draw_systems();
-          draw_text(16,16,EMULATORS[STEP],false,true); 
+          draw_text(16,16,EMULATORS[STEP],false,true);
           STEP == 0 ? draw_themes() : get_files();
-        }      
+        }
       }
-    }  
+    }
     //closedir(path);
   }
 //}#pragma endregion ROM Options
 
 //{#pragma region Launcher
   static void launcher() {
-    draw_battery();                            
+    draw_battery();
     while (true) {
       /*
         Get Gamepad State
@@ -900,13 +903,13 @@
       if(gamepad.values[ODROID_INPUT_LEFT]) {
         if(!LAUNCHER) {
           STEP--;
-          if( STEP < 0 ) { 
+          if( STEP < 0 ) {
             STEP = COUNT - 1;
           }
 
-          ROMS.offset = 0; 
-          ROMS.total = 0;                               
-          animate(-1); 
+          ROMS.offset = 0;
+          ROMS.total = 0;
+          animate(-1);
         }
         usleep(100000);
         //debounce(ODROID_INPUT_LEFT);
@@ -917,16 +920,16 @@
       if(gamepad.values[ODROID_INPUT_RIGHT]) {
         if(!LAUNCHER) {
           STEP++;
-          if( STEP > COUNT-1 ) { 
-            STEP = 0; 
+          if( STEP > COUNT-1 ) {
+            STEP = 0;
           }
-          ROMS.offset = 0; 
+          ROMS.offset = 0;
           ROMS.total = 0;
-          animate(1); 
+          animate(1);
         }
         usleep(100000);
         //debounce(ODROID_INPUT_RIGHT);
-      }  
+      }
       /*
         UP
       */
@@ -966,17 +969,17 @@
             ROMS.offset++;
             if( ROMS.offset > ROMS.total - 1 ) { ROMS.offset = 0; }
             draw_files();
-          }            
+          }
         } else {
           if(SAVED) {
             OPTION++;
             if( OPTION > 2 ) { OPTION = 0; }
             draw_options();
-          } 
+          }
         }
 
         usleep(200000);
-        //debounce(ODROID_INPUT_DOWN);       
+        //debounce(ODROID_INPUT_DOWN);
       }
 
       /*
@@ -985,18 +988,18 @@
       if (gamepad.values[ODROID_INPUT_START] || gamepad.values[ODROID_INPUT_SELECT]) {
         /*
           SELECT
-        */                                                                                        
+        */
         if (gamepad.values[ODROID_INPUT_START] && !gamepad.values[ODROID_INPUT_SELECT]) {
           if(!LAUNCHER) {
             if(STEP != 0) {
               ROMS.page++;
               if( ROMS.page > ROMS.pages ) { ROMS.page = 0; }
-              ROMS.offset =  ROMS.page * ROMS.limit;                        
-              draw_files();                             
-            }            
+              ROMS.offset =  ROMS.page * ROMS.limit;
+              draw_files();
+            }
           }
           //debounce(ODROID_INPUT_START);
-        }        
+        }
 
         /*
           SELECT
@@ -1006,21 +1009,21 @@
             if(STEP != 0) {
               ROMS.page--;
               if( ROMS.page < 0 ) { ROMS.page = ROMS.pages; };
-              ROMS.offset =  ROMS.page * ROMS.limit;                            
+              ROMS.offset =  ROMS.page * ROMS.limit;
               draw_files();
-            }            
+            }
           }
-          //debounce(ODROID_INPUT_SELECT);      
+          //debounce(ODROID_INPUT_SELECT);
         }
 
         usleep(200000);
-      }    
+      }
 
       /*
         BUTTON A
       */
       if (gamepad.values[ODROID_INPUT_A]) {
-        if(STEP == 0) {                                            
+        if(STEP == 0) {
           update_theme();
         } else {
           if (ROM.ready && !LAUNCHER) {
@@ -1028,7 +1031,7 @@
             LAUNCHER = true;
 
             char file_to_load[256] = "";
-            sprintf(file_to_load, "%s/%s", ROM.path, ROM.name); 
+            sprintf(file_to_load, "%s/%s", ROM.path, ROM.name);
             odroid_settings_RomFilePath_set(file_to_load);
 
             draw_launcher();
@@ -1044,7 +1047,7 @@
                 rom_delete_save();
               break;
             }
-          }     
+          }
         }
         debounce(ODROID_INPUT_A);
       }
@@ -1052,15 +1055,15 @@
         BUTTON B
       */
       if (gamepad.values[ODROID_INPUT_B]) {
-        if (ROM.ready && LAUNCHER) {        
+        if (ROM.ready && LAUNCHER) {
           LAUNCHER = false;
           draw_background();
           draw_systems();
-          draw_text(16,16,EMULATORS[STEP],false,true); 
+          draw_text(16,16,EMULATORS[STEP],false,true);
           STEP == 0 ? draw_themes() : draw_files();
         }
         debounce(ODROID_INPUT_B);
-      }  
+      }
 
       /*
         START + SELECT (MENU)
@@ -1069,7 +1072,7 @@
         usleep(10000);
         esp_restart();
         debounce(ODROID_INPUT_MENU);
-      }      
-    }                               
+      }
+    }
   }
-//}#pragma endregion Launcher  
+//}#pragma endregion Launcher

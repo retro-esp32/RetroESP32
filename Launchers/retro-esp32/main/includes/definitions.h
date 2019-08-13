@@ -24,7 +24,7 @@
 /*
   Emulator Count + 1 for Theme
 */
-#define COUNT 11
+#define COUNT 12
 
 /*
 

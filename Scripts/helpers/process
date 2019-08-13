@@ -24,7 +24,7 @@ set_config_option() {
   echo "\n--------------------------------------------------------------------------"
   read -rs -k 1 response
   if [[ "$response" = "y" ]]
-  then  
+  then
     CONFIG="y"
   fi
   clear
@@ -33,10 +33,33 @@ set_config_option() {
 # get_config_option
 get_config_option() {
   if [[ "$CONFIG" = "y" ]]
-  then 
-    #make clean
+  then
     make menuconfig
-  fi            
+  fi
+}
+
+# set_clean_option
+set_clean_option() {
+  clear
+  CLEAN="n"
+  OPTION="${monkey}  Would you like to run ${magenta}'make clean'? ${nc}[y/${white}N${nc}]"
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${OPTION}"
+  echo "\n--------------------------------------------------------------------------"
+  read -rs -k 1 response
+  if [[ "$response" = "y" ]]
+  then
+    CLEAN="y"
+  fi
+  clear
+}
+
+# get_clean_option
+get_clean_option() {
+  if [[ "$CLEAN" = "y" ]]
+  then
+    make clean
+  fi
 }
 
 OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
@@ -58,7 +81,7 @@ select launcher in "RetroESP32" "GoGo" "Generic" "Exit"; do
       BIN="retro-esp32"
       TILE="retro-esp32"
       NAME="Retro ESP32"
-    break;;    
+    break;;
     Generic )
       LAUNCHER="Generic"
       LAUNCHER_PATH=${GENERIC_PATH}
@@ -66,9 +89,9 @@ select launcher in "RetroESP32" "GoGo" "Generic" "Exit"; do
       TILE="generic"
       NAME="Emulator"
     break;;
-    Exit ) 
+    Exit )
       exit
-    break;;      
+    break;;
     * ) echo "${OPTION}";;
   esac
 done
@@ -80,7 +103,7 @@ echo "\n------------------------------------------------------------------------
 read -rs -k 1 response
 if [[ "$response" = "y" ]]
 then
-
+  set_clean_option
   set_config_option
 
   echo "\n--------------------------------------------------------------------------"
@@ -98,7 +121,7 @@ then
   if [[ "$LAUNCHER" = "RetroESP32" ]]
   then
     rm $FIRMWARE_PATH/Bins/retro-esp32.bin
-  fi  
+  fi
 
   if [[ "$LAUNCHER" = "Generic" ]]
   then
@@ -106,6 +129,7 @@ then
   fi
 
   cd $LAUNCHER_PATH
+  get_clean_option
   get_config_option
   make -j8
   cp ./build/bootloader/bootloader.bin $FIRMWARE_PATH/Bins/
@@ -119,7 +143,7 @@ then
   if [[ "$LAUNCHER" = "RetroESP32" ]]
   then
     cp ./build/retro-esp32.bin $FIRMWARE_PATH/Bins/
-  fi  
+  fi
 
   if [[ "$LAUNCHER" = "Generic" ]]
   then
@@ -134,7 +158,7 @@ echo "\n------------------------------------------------------------------------
 read -rs -k 1 response
 if [[ "$response" = "y" ]]
 then
-
+  set_clean_option
   set_config_option
 
   rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
@@ -143,14 +167,16 @@ then
   rm $FIRMWARE_PATH/Bins/handy-go.bin
   rm $FIRMWARE_PATH/Bins/prosystem-go.bin
   rm $FIRMWARE_PATH/Bins/stella-go.bin
+  rm $FIRMWARE_PATH/Bins/pcengine-go.bin
 
-  cd $GOPLAY_PATH  
+  cd $GOPLAY_PATH
 
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${lion}  ${green}Compiling ${cyan}gnuboy-go${nc}"
   echo "\n--------------------------------------------------------------------------"
   cd gnuboy-go
+  get_clean_option
   get_config_option
   make -j8
   cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
@@ -160,6 +186,7 @@ then
   echo "\n${fox}  ${green}Compiling ${cyan}nesemu-go${nc}"
   echo "\n--------------------------------------------------------------------------"
   cd ../nesemu-go
+  get_clean_option
   get_config_option
   make -j8
   cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
@@ -169,36 +196,52 @@ then
   echo "\n${panda}  ${green}Compiling ${cyan}smsplusgx-go${nc}"
   echo "\n--------------------------------------------------------------------------"
   cd ../smsplusgx-go
+  get_clean_option
   get_config_option
   make -j8
   cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
 
-  clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}handy-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
-  cd ../../handy-go
-  get_config_option
-  make -j8
-  cp ./build/handy-go.bin $FIRMWARE_PATH/Bins/
+  cd ../
 
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${panda}  ${green}Compiling ${cyan}prosystem-odroid-go${nc}"
   echo "\n--------------------------------------------------------------------------"
   cd ../prosystem-odroid-go
+  get_clean_option
   get_config_option
   make -j8
   cp ./build/prosystem-go.bin $FIRMWARE_PATH/Bins/
 
-      clear
+  clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${panda}  ${green}Compiling ${cyan}stella-odroid-go${nc}"
   echo "\n--------------------------------------------------------------------------"
   cd ../stella-odroid-go
+  get_clean_option
   get_config_option
   make -j8
   cp ./build/stella-go.bin $FIRMWARE_PATH/Bins/
+
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${panda}  ${green}Compiling ${cyan}handy-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ../handy-go
+  get_clean_option
+  get_config_option
+  make -j8
+  cp ./build/handy-go.bin $FIRMWARE_PATH/Bins/
+
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${panda}  ${green}Compiling ${cyan}pcengine-go${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ../odroid-go-pcengine-huexpress/pcengine-go
+  get_clean_option
+  get_config_option
+  make -j8
+  cp ./build/pcengine-go.bin $FIRMWARE_PATH/Bins/
 fi
 
 cd $SRC_PATH

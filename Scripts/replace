@@ -53,29 +53,35 @@ then
   echo "\n${robot}  ${green}Replacing ${cyan}go-play${nc} files"
   echo "\n--------------------------------------------------------------------------"
   cp -R $COMPONENTS/go-play/* $EMULATORS/go-play
-  sleep 0.25  
+  sleep 0.25
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${fox}  ${green}Replacing ${cyan}handy-go${nc} files"
-  echo "\n--------------------------------------------------------------------------"  
+  echo "\n--------------------------------------------------------------------------"
   cp -R $COMPONENTS/handy-go/* $EMULATORS/handy-go
   sleep 0.25
-  clear  
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${fox}  ${green}Replacing ${cyan}odroid-go-pcengine-huexpress${nc} files"
+  echo "\n--------------------------------------------------------------------------"
+  cp -R $COMPONENTS/odroid-go-pcengine-huexpress/* $EMULATORS/odroid-go-pcengine-huexpress
+  sleep 0.25
+  clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${fox}  ${green}Replacing ${cyan}frodo-go${nc} files"
-  echo "\n--------------------------------------------------------------------------"  
+  echo "\n--------------------------------------------------------------------------"
   cp -R $COMPONENTS/frodo-go/* $EMULATORS/frodo-go
   sleep 0.25
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${lion}  ${green}Replacing ${cyan}prosystem-odroid-go${nc} files"
-  echo "\n--------------------------------------------------------------------------"  
+  echo "\n--------------------------------------------------------------------------"
   cp -R $COMPONENTS/prosystem-odroid-go/* $EMULATORS/prosystem-odroid-go
   sleep 0.25
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${monkey}  ${green}Replacing ${cyan}stella-odroid-go${nc} files"
-  echo "\n--------------------------------------------------------------------------"  
+  echo "\n--------------------------------------------------------------------------"
   cp -R $COMPONENTS/stella-odroid-go/* $EMULATORS/stella-odroid-go
   sleep 0.25
   clear
@@ -89,7 +95,7 @@ then
   echo "\n${whale}  ${green}Replacing ${cyan}gogo${nc} files"
   echo "\n--------------------------------------------------------------------------"
   cp -R $COMPONENTS/gogo/* $LAUNCHERS/gogo
-  sleep 0.25  
+  sleep 0.25
 fi
 
 #---------------------------------
