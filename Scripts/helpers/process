@@ -6,6 +6,7 @@ GOGO_PATH="$REPO/Launchers/gogo/"
 RETRO_PATH="$REPO/Launchers/retro-esp32/"
 GENERIC_PATH="$REPO/Launchers/emulator-launcher-odroid-go/"
 GOPLAY_PATH="$REPO/Emulators/go-play/"
+EMULATOR_PATH="$REPO/Emulators/"
 
 MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
 LAUNCHER_PATH=""
@@ -201,7 +202,7 @@ then
   make -j8
   cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
 
-  cd ../
+  cd EMULATOR_PATH
 
   clear
   echo "\n--------------------------------------------------------------------------"
