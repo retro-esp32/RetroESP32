@@ -1,0 +1,20 @@
+#!/bin/zsh
+
+echo "\n--------------------------------------------------------------------------"
+echo "\n${squid}  ${red}(Re)Install ${cyan}ESP32 IDF? ${nc}[y/${white}N${nc}]"
+echo "\n--------------------------------------------------------------------------"
+read -rs -k 1 response
+if [[ "$response" = "y" ]]
+then
+  clear
+  echo "\n--------------------------------------------------------------------------"
+  echo "\n${fox}  ${blue}Processing ${cyan}ESP32 IDF${nc}"
+  echo "\n--------------------------------------------------------------------------"
+  cd ~/esp
+  #git clone --recursive git@github.com:OtherCrashOverride/esp-idf.git
+  git clone -b release/v3.2-odroid --single-branch git@github.com:OtherCrashOverride/esp-idf.git --recursive
+  cd ~/esp/esp-idf
+  git submodule update --init --recursive
+  ./install.sh
+fi
+clear

@@ -62,13 +62,17 @@ then
   # Goodbye
   #---------------------------------
   source helpers/goodbye
-else
-  clear
-
-  #---------------------------------
-  # Goodbye
-  #---------------------------------
-  source helpers/goodbye
 fi
+clear
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/esp32
+
+#---------------------------------
+# Goodbye
+#---------------------------------
+source helpers/goodbye
 sleep 1
 clear
