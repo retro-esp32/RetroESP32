@@ -48,7 +48,7 @@
     "spectrum", // 3
     "a26",      // 5
     "a78",      // 6
-    "lynx"       // 7
+    "lynx",       // 7
     "pce"       // 8
   };
 
@@ -169,6 +169,7 @@
     nvs_close(handle);
     //printf("\nGet nvs_get_i8:%d\n", STEP);
   }
+
   void set_step_state() {
     //printf("\nGet nvs_set_i8:%d\n", STEP);
     nvs_handle handle;
@@ -201,6 +202,7 @@
     nvs_close(handle);
     //printf("\nGet nvs_get_i16:%d\n", ROMS.offset);
   }
+
   void set_list_state() {
     //printf("\nSet nvs_set_i16:%d", ROMS.offset);
     nvs_handle handle;
@@ -393,9 +395,10 @@
       x += 2;
       y += 6;
       w = percentage > 0 ? percentage > 10 ? 10 : percentage : 10;
-      printf("\nbattery_state.percentage:%d\n(percentage):%d\n(millivolts)%d\n", battery_state.percentage, percentage, battery_state.millivolts);
       h = 4;
       i = 0;
+
+      //printf("\nbattery_state.percentage:%d\n(percentage):%d\n(millivolts)%d\n", battery_state.percentage, percentage, battery_state.millivolts);
 
       int color[11] = {24576,24576,64288,64288,65504,65504,65504,26592,26592,26592,26592};
 
@@ -693,6 +696,7 @@
     };
 
     draw_background();
+
     for(int n = 0; n < COUNT; n++) {
       int delta = (n-STEP);
       if(delta < 0) {
@@ -707,6 +711,7 @@
         SYSTEMS[n].x = GAP/3+NEXT+(GAP*(delta-1));
       }
     }
+
     clean_up();
     draw_systems();
     draw_text(16,16,EMULATORS[STEP],false,true);
@@ -714,9 +719,9 @@
   }
 
   void clean_up() {
-    int MAX = 688;
+    int MAX = 736;
     for(int n = 0; n < COUNT; n++) {
-      if(SYSTEMS[n].x > 464) {
+      if(SYSTEMS[n].x > 512) {
         SYSTEMS[n].x -= MAX;
       }
       if(SYSTEMS[n].x <= -272) {

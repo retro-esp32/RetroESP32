@@ -12,7 +12,8 @@ source helpers/styles
 REPO=$(dirname $PWD)
 ESP="$REPO/Tools/esp-idf"
 ODROID="$REPO/Odroid/odroid-go-firmware"
-GOPLAY="$REPO/Launchers/go-play"
+GOPLAY="$REPO/Emulators/go-play"
+PCE="$REPO/Emulators/odroid-go-pcengine-huexpress"
 
 clear
 cd $ESP
@@ -51,4 +52,16 @@ sleep 1
 clear
 echo "\n--------------------------------------------------------------------------"
 echo "\n${unicorn}  ${green}Success ${magenta}'go-play'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
+echo "\n--------------------------------------------------------------------------"
+clear
+cd $PCE
+required="develop"
+echo "\n--------------------------------------------------------------------------"
+echo "\n${monkey}  ${yellow}Checking ${magenta}'pcengine-go'${nc} for ${red}${required}${nc} branch"
+echo "\n--------------------------------------------------------------------------"
+git checkout -b ${required} origin/${required}
+sleep 1
+clear
+echo "\n--------------------------------------------------------------------------"
+echo "\n${unicorn}  ${green}Success ${magenta}'pcengine-go'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
 echo "\n--------------------------------------------------------------------------"

@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 SRC_PATH=`pwd`
+REPO=$(dirname $PWD)
 
 #---------------------------------
 # Styles

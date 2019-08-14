@@ -162,13 +162,13 @@ then
   set_clean_option
   set_config_option
 
-  rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
-  rm $FIRMWARE_PATH/Bins/nesemu-go.bin
-  rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin
-  rm $FIRMWARE_PATH/Bins/handy-go.bin
-  rm $FIRMWARE_PATH/Bins/prosystem-go.bin
-  rm $FIRMWARE_PATH/Bins/stella-go.bin
-  rm $FIRMWARE_PATH/Bins/pcengine-go.bin
+#  rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
+#  rm $FIRMWARE_PATH/Bins/nesemu-go.bin
+#  rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin
+#  rm $FIRMWARE_PATH/Bins/handy-go.bin
+#  rm $FIRMWARE_PATH/Bins/prosystem-go.bin
+#  rm $FIRMWARE_PATH/Bins/stella-go.bin
+#  rm $FIRMWARE_PATH/Bins/pcengine-go.bin
 
   cd $GOPLAY_PATH
 
@@ -202,13 +202,13 @@ then
   make -j8
   cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
 
-  cd EMULATOR_PATH
+  cd $EMULATOR_PATH
 
   clear
   echo "\n--------------------------------------------------------------------------"
   echo "\n${panda}  ${green}Compiling ${cyan}prosystem-odroid-go${nc}"
   echo "\n--------------------------------------------------------------------------"
-  cd ../prosystem-odroid-go
+  cd prosystem-odroid-go
   get_clean_option
   get_config_option
   make -j8
