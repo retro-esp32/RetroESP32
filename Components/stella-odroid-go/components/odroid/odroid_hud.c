@@ -54,8 +54,8 @@
   #define WHITE 65535
   #define BLACK 0     
   int OPTION = 0;
-  extern int ACTION = 0;
   int OPTIONS = 3;
+  int ACTION;
   int8_t USER;
   int8_t DELETE_SAVE;
   int x, y, w, h, i, size;
@@ -87,10 +87,9 @@
     {"Delete Save",5, 15},
     {"Exit Game",6, 20}
   };
-  STATES WITHOUTSAVE[4] = {
+  STATES WITHOUTSAVE[3] = {
     {"Resume Game",0, 0},
     {"Restart Game",1, 10},
-    {"Save Game",3, 25},
     {"Exit Game",6, 20}                      
   }; 
   STATES STATE; 
@@ -321,7 +320,7 @@
 
 //{#pragma region Mask
   void hud_mask(int x, int y, int w, int h){
-    for (int i = 0; i < w * h; i++) buffer[i] = GUI.bg;
+    for (i = 0; i < w * h; i++) buffer[i] = GUI.bg;
     ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
   }
 
@@ -438,11 +437,12 @@
       buffer = (uint16_t *)malloc(size);    
       if (!buffer) abort();   
       OPTION = 0;                 
-      OPTIONS = SAVED ? 6 : 4;
+      OPTIONS = SAVED ? 6 : 3;
       hud_theme();
       GUI = THEMES[USER];
       STATE = OPTIONS == 6 ? WITHSAVE[OPTION] : WITHOUTSAVE[OPTION];     
       INIT = true;
+      hud_debug("HUD - INIT");
     }                     
   }
 
@@ -451,6 +451,7 @@
     buffer = realloc(buffer, size);                      
     free(buffer);
     INIT = false;
+    hud_debug("HUD - DEINIT");
   }
 //}#pragma endregion Init  
 
@@ -458,6 +459,9 @@
   void hud_menu(void) {
     hud_init();                         
     hud_debug("HUD - MENU");
+    //hud_background();
+    //hud_logo();
+    usleep(200000);
     hud_background();
     hud_logo();
     hud_options();
@@ -488,7 +492,8 @@
         BUTTON A
       */
       if (gamepad.values[ODROID_INPUT_B]) {
-        ACTION = 0;
+        STATE.action = 0;
+        ili9341_clear(0);
         debounce(ODROID_INPUT_B);
         return 0;
       }      
@@ -504,7 +509,7 @@
             return 0;
           break;
           case 1: // "Restart Game"
-            odroid_settings_StartAction_set(1);
+            //odroid_settings_StartAction_set(1);
             forceConsoleReset = true;
             esp_restart();          
           break;

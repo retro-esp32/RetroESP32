@@ -396,7 +396,8 @@ NOINLINE void app_init(void)
         abort();
     }
     
-    char *rom_file = odroid_ui_choose_file("/sd/roms/pce", "pce");
+    //char *rom_file = odroid_ui_choose_file("/sd/roms/pce", "pce");
+    char* rom_file = odroid_settings_RomFilePath_get();
     if (!rom_file)
     {
         printf("No file selected!\n");

@@ -26,4 +26,18 @@ menu "Retro ESP32 Configuration"
         bool "START + SELECT as MENU button"
 
     endchoice
-endmenu    
+
+    choice IN_GAME_MENU
+        prompt "In Game Menu"
+        default IN_GAME_MENU_NO
+        help
+            Use Retro ESP32 - In Game Menu
+
+    config IN_GAME_MENU_YES
+        bool "YES"
+
+    config IN_GAME_MENU_NO
+        bool "NO"
+
+    endchoice
+endmenu

@@ -1447,6 +1447,27 @@ void odroid_display_show_hourglass()
 
 SemaphoreHandle_t gb_mutex = NULL;
 
+void odroid_display_lock()
+{
+    if (!gb_mutex)
+    {
+        gb_mutex = xSemaphoreCreateMutex();
+        if (!gb_mutex) abort();
+    }
+
+    if (xSemaphoreTake(gb_mutex, 1000 / portTICK_RATE_MS) != pdTRUE)
+    {
+        abort();
+    }
+}
+
+void odroid_display_unlock()
+{
+    if (!gb_mutex) abort();
+
+    xSemaphoreGive(gb_mutex);
+}
+
 void odroid_display_lock_gb_display()
 {
     if (!gb_mutex)

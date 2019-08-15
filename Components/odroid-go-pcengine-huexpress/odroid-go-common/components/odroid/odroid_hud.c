@@ -87,11 +87,10 @@
     {"Delete Save",5, 15},
     {"Exit Game",6, 20}
   };
-  STATES WITHOUTSAVE[4] = {
+  STATES WITHOUTSAVE[3] = {
     {"Resume Game",0, 0},
     {"Restart Game",1, 10},
-    {"Save Game",3, 25},
-    {"Exit Game",6, 20}                      
+    {"Exit Game",6, 20}
   }; 
   STATES STATE; 
 
@@ -438,7 +437,7 @@
       buffer = (uint16_t *)malloc(size);    
       if (!buffer) abort();   
       OPTION = 0;                 
-      OPTIONS = SAVED ? 6 : 4;
+      OPTIONS = SAVED ? 6 : 3;
       hud_theme();
       GUI = THEMES[USER];
       STATE = OPTIONS == 6 ? WITHSAVE[OPTION] : WITHOUTSAVE[OPTION];     
