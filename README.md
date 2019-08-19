@@ -27,7 +27,7 @@ This branch contains the specific modification for the Odroid Go hardware to use
 - [x] Config for both ILI9341/2 
 
 ## Supported Emulators
-> What else do you need to know, there are 10 currently supported
+> What else do you need to know, there are 11 currently supported
 
 - [x] Nintendo Entertainment System
 - [x] Nintendo Game Boy
@@ -39,6 +39,7 @@ This branch contains the specific modification for the Odroid Go hardware to use
 - [x] Atari 2600
 - [x] Atari 7800
 - [x] Atari Lynx
+- [x] PC Engine
 - [ ] Commodore 64
 - [ ] Nintendo Game & Watch
 
