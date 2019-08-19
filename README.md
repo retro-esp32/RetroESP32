@@ -8,7 +8,7 @@ Based on the popularity of:
 - [Gaboze Pocaio Round 2](https://github.com/32teeth/GabozePocaio-Round2)
 
 ## Supported Emulators
->What else do you need to do
+> What else do you need to know, there are 11 currently supported
 
 - [x] Nintendo Entertainment System
 - [x] Nintendo Game Boy
@@ -20,6 +20,9 @@ Based on the popularity of:
 - [x] Atari 2600
 - [x] Atari 7800
 - [x] Atari Lynx
+- [x] PC Engine
+- [ ] Commodore 64
+- [ ] Nintendo Game & Watch
 
 We have assemebled a team to pursue the development of:
 
