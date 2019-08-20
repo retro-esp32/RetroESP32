@@ -16,6 +16,14 @@ Retro ESP32 Team
 # ![Retro ESP32](Assets/logo.jpg)
 > An ESP32 Wrover based Game Boy Pocket
 
+### Branches and Releases
+
+| Hardware | Software | Release |
+| :------: | :------: | :-----: |
+| [![Hardware](Assets/hw.png)](https://github.com/retro-esp32/RetroESP32/tree/Hardware)         |     [![Software](Assets/sw.png)](https://github.com/retro-esp32/RetroESP32/tree/Software)      |    [![Firmware](Assets/fw.png)](https://github.com/retro-esp32/RetroESP32/releases)      |
+
+
+
 ## Welcome
 
 Based on the popularity of: 
