@@ -525,7 +525,7 @@
         }
     }
 
-    static int partition (char* arr[], int low, int high) {
+    static int partition (char** arr, int low, int high) {
         char* pivot = arr[high];
         int i = (low - 1);
 
@@ -541,7 +541,7 @@
         return (i + 1);
     }
 
-    void quick_sort(char* arr[], int low, int high) {
+    void quick_sort(char** arr, int low, int high) {
         if (low < high)
         {
             int pi = partition(arr, low, high);
@@ -587,7 +587,7 @@
     }
 
     if(ROMS.total > 0) {
-      sort_files(FILES);
+      if(ROMS.total < 500) sort_files(FILES);
       draw_files();
     } else {
       char message[100] = "no games available";
