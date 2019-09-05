@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 SRC_PATH=`pwd`
 REPO=$(dirname $PWD)
@@ -35,9 +35,9 @@ source helpers/eraser
 
 
 clear
-echo "\n--------------------------------------------------------------------------"
-echo "\n${game}  ${green}Flashing Device ${nc} - Hang Tight"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${game}  ${green}Flashing Device ${nc} - Hang Tight"
+echo "--------------------------------------------------------------------------"
 
 esptool.py \
 --chip esp32 \

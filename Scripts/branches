@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 #---------------------------------
 # Styles
@@ -18,50 +18,50 @@ PCE="$REPO/Emulators/odroid-go-pcengine-huexpress"
 clear
 cd $ESP
 required="release/v3.2-odroid"
-echo "\n--------------------------------------------------------------------------"
-echo "\n${monkey}  ${yellow}Checking ${magenta}'esp-idf'${nc} for ${red}${required}${nc} branch"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${monkey}  ${yellow}Checking ${magenta}'esp-idf'${nc} for ${red}${required}${nc} branch"
+echo "--------------------------------------------------------------------------"
 git checkout -b ${required} origin/${required}
 sleep 1
 clear
-echo "\n--------------------------------------------------------------------------"
-echo "\n${unicorn}  ${green}Success ${magenta}'esp-idf'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${unicorn}  ${green}Success ${magenta}'esp-idf'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
+echo "--------------------------------------------------------------------------"
 sleep 1
 clear
 cd $ODROID
 required="esp-idf-v3.2"
-echo "\n--------------------------------------------------------------------------"
-echo "\n${monkey}  ${yellow}Checking ${magenta}'odroid-go-firmware'${nc} for ${red}${required}${nc} branch"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${monkey}  ${yellow}Checking ${magenta}'odroid-go-firmware'${nc} for ${red}${required}${nc} branch"
+echo "--------------------------------------------------------------------------"
 git checkout -b ${required} origin/${required}
 sleep 1
 clear
-echo "\n--------------------------------------------------------------------------"
-echo "\n${unicorn}  ${green}Success ${magenta}'odroid-go-firmware'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${unicorn}  ${green}Success ${magenta}'odroid-go-firmware'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
+echo "--------------------------------------------------------------------------"
 sleep 1
 clear
 cd $GOPLAY
 required="master"
-echo "\n--------------------------------------------------------------------------"
-echo "\n${monkey}  ${yellow}Checking ${magenta}'go-play'${nc} for ${red}${required}${nc} branch"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${monkey}  ${yellow}Checking ${magenta}'go-play'${nc} for ${red}${required}${nc} branch"
+echo "--------------------------------------------------------------------------"
 git checkout -b ${required} origin/${required}
 sleep 1
 clear
-echo "\n--------------------------------------------------------------------------"
-echo "\n${unicorn}  ${green}Success ${magenta}'go-play'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${unicorn}  ${green}Success ${magenta}'go-play'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
+echo "--------------------------------------------------------------------------"
 clear
 cd $PCE
 required="develop"
-echo "\n--------------------------------------------------------------------------"
-echo "\n${monkey}  ${yellow}Checking ${magenta}'pcengine-go'${nc} for ${red}${required}${nc} branch"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${monkey}  ${yellow}Checking ${magenta}'pcengine-go'${nc} for ${red}${required}${nc} branch"
+echo "--------------------------------------------------------------------------"
 git checkout -b ${required} origin/${required}
 sleep 1
 clear
-echo "\n--------------------------------------------------------------------------"
-echo "\n${unicorn}  ${green}Success ${magenta}'pcengine-go'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${unicorn}  ${green}Success ${magenta}'pcengine-go'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
+echo "--------------------------------------------------------------------------"

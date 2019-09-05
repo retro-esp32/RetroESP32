@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 SRC_PATH=`pwd`
 REPO=$(dirname $PWD)
@@ -18,9 +18,9 @@ source helpers/paths
 #---------------------------------
 source helpers/process
 
-echo "\n--------------------------------------------------------------------------"
-echo "\n${panda}  ${green}Creating ${cyan}${NAME}${nc} Firmware"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${panda}  ${green}Creating ${cyan}${NAME}${nc} Firmware"
+echo "--------------------------------------------------------------------------"
 
 echo "Building mkfw"
 cd $MKFW_PATH

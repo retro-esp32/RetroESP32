@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 function install_esp32() {
     python=python
@@ -58,16 +58,16 @@ export install_esp32
 
 clear
 
-echo "\n--------------------------------------------------------------------------"
-echo "\n${squid}  ${red}(Re)Install ${cyan}ESP32 IDF? ${nc}[y/${white}N${nc}]"
-echo "\n--------------------------------------------------------------------------"
-read -rs -k 1 response
+echo "--------------------------------------------------------------------------"
+echo -e "${squid}  ${red}(Re)Install ${cyan}ESP32 IDF? ${nc}[y/${bold}N${nc}]"
+echo "--------------------------------------------------------------------------"
+read -n 1 -r response
 if [[ "$response" = "y" ]]
 then
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${fox}  ${blue}Processing ${cyan}ESP32 IDF${nc}"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${fox}  ${blue}Processing ${cyan}ESP32 IDF${nc}"
+  echo "--------------------------------------------------------------------------"
 #  cd ~/esp
 #  git clone --recursive https://github.com/espressif/esp-idf.git
 #  cd ~/esp/esp-idf

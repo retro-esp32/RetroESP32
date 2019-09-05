@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 SRC_PATH=`pwd`
 
@@ -22,78 +22,78 @@ ODROID="$REPO/Odroid"
 source helpers/styles
 
 
-echo "\n--------------------------------------------------------------------------"
-echo "\n${game}  ${white}LCD Screen Driver Option"
-echo "\nThis will add a ${white}Kconfig.projbuild${nc} for the TFT Display"
-echo "\nRunning ${magenta}'make menuconfig'${nc}  will provide you option to set:"
-echo "\n${cyanbg} ${white}LCD Screen Driver                                          ${nc}"
-echo "\n\t${white}1.${nc} Odroid Go Default (ILI9341) [2.4\"] ${bluebg}  default  ${nc}"
-echo "\n\t${white}2.${nc} Retro ESP32 (ILI9342) [2.6\"]"
-echo "\n${cyanbg} ${white}Retro ESP32 - In Game Menu                                 ${nc}"
-echo "\n\t${white}1.${nc} Yes"
-echo "\n\t${white}2.${nc} No ${bluebg}  default  ${nc}"
-echo "\n${cyanbg} ${white}Menu Hot Keys                                              ${nc}"
-echo "\n\t${white}1.${nc} Default Odroid Go MENU Button ${bluebg}  default  ${nc}"
-echo "\n\t${white}2.${nc} Use START + SELECT buttons for MENU"
-echo "\n ${nc}${green}Add Option?${nc} [y/${white}N${nc}]"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${game}  ${white}LCD Screen Driver Option"
+echo -e "This will add a ${white}Kconfig.projbuild${nc} for the TFT Display"
+echo -e "Running ${magenta}'make menuconfig'${nc}  will provide you option to set:"
+echo -e "${cyanbg} ${white}LCD Screen Driver                                          ${nc}"
+echo -e "\t${white}1.${nc} Odroid Go Default (ILI9341) [2.4\"] ${bluebg}  default  ${nc}"
+echo -e "\t${white}2.${nc} Retro ESP32 (ILI9342) [2.6\"]"
+echo -e "${cyanbg} ${white}Retro ESP32 - In Game Menu                                 ${nc}"
+echo -e "\t${white}1.${nc} Yes"
+echo -e "\t${white}2.${nc} No ${bluebg}  default  ${nc}"
+echo -e "${cyanbg} ${white}Menu Hot Keys                                              ${nc}"
+echo -e "\t${white}1.${nc} Default Odroid Go MENU Button ${bluebg}  default  ${nc}"
+echo -e "\t${white}2.${nc} Use START + SELECT buttons for MENU"
+echo -e " ${nc}${green}Add Option?${nc} [y/${bold}N${nc}]"
+echo "--------------------------------------------------------------------------"
 
-read -rs -k 1 response
+read -n 1 -r response
 if [[ "$response" = "y" ]]
 then
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${squid}  ${green}Replacing ${cyan}odroid-go-firmware${nc} files"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${squid}  ${green}Replacing ${cyan}odroid-go-firmware${nc} files"
+  echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/odroid-go-firmware/main/* $ODROID/odroid-go-firmware/main
   sleep 0.25
 
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${robot}  ${green}Replacing ${cyan}go-play${nc} files"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${robot}  ${green}Replacing ${cyan}go-play${nc} files"
+  echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/go-play/* $EMULATORS/go-play
   sleep 0.25
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${fox}  ${green}Replacing ${cyan}handy-go${nc} files"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${fox}  ${green}Replacing ${cyan}handy-go${nc} files"
+  echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/handy-go/* $EMULATORS/handy-go
   sleep 0.25
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${fox}  ${green}Replacing ${cyan}odroid-go-pcengine-huexpress${nc} files"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${fox}  ${green}Replacing ${cyan}odroid-go-pcengine-huexpress${nc} files"
+  echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/odroid-go-pcengine-huexpress/* $EMULATORS/odroid-go-pcengine-huexpress
   sleep 0.25
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${fox}  ${green}Replacing ${cyan}frodo-go${nc} files"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${fox}  ${green}Replacing ${cyan}frodo-go${nc} files"
+  echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/frodo-go/* $EMULATORS/frodo-go
   sleep 0.25
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${lion}  ${green}Replacing ${cyan}prosystem-odroid-go${nc} files"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${lion}  ${green}Replacing ${cyan}prosystem-odroid-go${nc} files"
+  echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/prosystem-odroid-go/* $EMULATORS/prosystem-odroid-go
   sleep 0.25
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${monkey}  ${green}Replacing ${cyan}stella-odroid-go${nc} files"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${monkey}  ${green}Replacing ${cyan}stella-odroid-go${nc} files"
+  echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/stella-odroid-go/* $EMULATORS/stella-odroid-go
   sleep 0.25
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Replacing ${cyan}emulator-launcher-odroid-go${nc} files"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${panda}  ${green}Replacing ${cyan}emulator-launcher-odroid-go${nc} files"
+  echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/emulator-launcher-odroid-go/* $LAUNCHERS/emulator-launcher-odroid-go
   sleep 0.25
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${whale}  ${green}Replacing ${cyan}gogo${nc} files"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${whale}  ${green}Replacing ${cyan}gogo${nc} files"
+  echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/gogo/* $LAUNCHERS/gogo
   sleep 0.25
 fi

@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 clear
 REPO=$(dirname $PWD)

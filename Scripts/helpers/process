@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 FIRMWARE_PATH="$REPO/Firmware"
 
@@ -19,12 +19,11 @@ NAME=""
 set_config_option() {
   clear
   CONFIG="n"
-  OPTION="${monkey}  Would you like to run ${magenta}'make menuconfig'? ${nc}[y/${white}N${nc}]"
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${OPTION}"
-  echo "\n--------------------------------------------------------------------------"
-  read -rs -k 1 response
-  if [[ "$response" = "y" ]]
+  OPTION="${monkey}  Would you like to run ${magenta}'make menuconfig'? ${nc}[y/${bold}N${nc}]"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${OPTION}"
+  echo "--------------------------------------------------------------------------"
+  read -n 1 -r response
   then
     CONFIG="y"
   fi
@@ -43,11 +42,11 @@ get_config_option() {
 set_clean_option() {
   clear
   CLEAN="n"
-  OPTION="${monkey}  Would you like to run ${magenta}'make clean'? ${nc}[y/${white}N${nc}]"
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${OPTION}"
-  echo "\n--------------------------------------------------------------------------"
-  read -rs -k 1 response
+  OPTION="${monkey}  Would you like to run ${magenta}'make clean'? ${nc}[y/${bold}N${nc}]"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${OPTION}"
+  echo "--------------------------------------------------------------------------"
+  read -n 1 -r response
   if [[ "$response" = "y" ]]
   then
     CLEAN="y"
@@ -64,9 +63,9 @@ get_clean_option() {
 }
 
 OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
-echo "\n--------------------------------------------------------------------------"
-echo "\n${OPTION}"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${OPTION}"
+echo "--------------------------------------------------------------------------"
 select launcher in "RetroESP32" "GoGo" "Generic" "Exit"; do
   case $launcher in
     GoGo )
@@ -93,23 +92,23 @@ select launcher in "RetroESP32" "GoGo" "Generic" "Exit"; do
     Exit )
       exit
     break;;
-    * ) echo "${OPTION}";;
+    * ) echo -e "${OPTION}";;
   esac
 done
 clear
 
-echo "\n--------------------------------------------------------------------------"
-echo "\n${squid}  ${red}Recompile ${cyan}Launcher? ${nc}[y/${white}N${nc}]"
-echo "\n--------------------------------------------------------------------------"
-read -rs -k 1 response
+echo "--------------------------------------------------------------------------"
+echo -e "${squid}  ${red}Recompile ${cyan}Launcher? ${nc}[y/${bold}N${nc}]"
+echo "--------------------------------------------------------------------------"
+read -n 1 -r response
 if [[ "$response" = "y" ]]
 then
   set_clean_option
   set_config_option
 
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${squid}  ${green}Compiling ${cyan}Launcher${nc}"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${squid}  ${green}Compiling ${cyan}Launcher${nc}"
+  echo "--------------------------------------------------------------------------"
 
   rm $FIRMWARE_PATH/Bins/bootloader.bin
   rm $FIRMWARE_PATH/Bins/partitions.bin
@@ -153,10 +152,10 @@ then
 fi
 clear
 
-echo "\n--------------------------------------------------------------------------"
-echo "\n${squid}  ${red}Recompile ${cyan}Emulators? ${nc}[y/${white}N${nc}]"
-echo "\n--------------------------------------------------------------------------"
-read -rs -k 1 response
+echo "--------------------------------------------------------------------------"
+echo -e "${squid}  ${red}Recompile ${cyan}Emulators? ${nc}[y/${bold}N${nc}]"
+echo "--------------------------------------------------------------------------"
+read -n 1 -r response
 if [[ "$response" = "y" ]]
 then
   set_clean_option
@@ -173,9 +172,9 @@ then
   cd $GOPLAY_PATH
 
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${lion}  ${green}Compiling ${cyan}gnuboy-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${lion}  ${green}Compiling ${cyan}gnuboy-go${nc}"
+  echo "--------------------------------------------------------------------------"
   cd gnuboy-go
   get_clean_option
   get_config_option
@@ -183,9 +182,9 @@ then
   cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
 
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${fox}  ${green}Compiling ${cyan}nesemu-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${fox}  ${green}Compiling ${cyan}nesemu-go${nc}"
+  echo "--------------------------------------------------------------------------"
   cd ../nesemu-go
   get_clean_option
   get_config_option
@@ -193,9 +192,9 @@ then
   cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
 
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}smsplusgx-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${panda}  ${green}Compiling ${cyan}smsplusgx-go${nc}"
+  echo "--------------------------------------------------------------------------"
   cd ../smsplusgx-go
   get_clean_option
   get_config_option
@@ -205,9 +204,9 @@ then
   cd $EMULATOR_PATH
 
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}prosystem-odroid-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${panda}  ${green}Compiling ${cyan}prosystem-odroid-go${nc}"
+  echo "--------------------------------------------------------------------------"
   cd prosystem-odroid-go
   get_clean_option
   get_config_option
@@ -215,9 +214,9 @@ then
   cp ./build/prosystem-go.bin $FIRMWARE_PATH/Bins/
 
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}stella-odroid-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${panda}  ${green}Compiling ${cyan}stella-odroid-go${nc}"
+  echo "--------------------------------------------------------------------------"
   cd ../stella-odroid-go
   get_clean_option
   get_config_option
@@ -225,9 +224,9 @@ then
   cp ./build/stella-go.bin $FIRMWARE_PATH/Bins/
 
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}handy-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${panda}  ${green}Compiling ${cyan}handy-go${nc}"
+  echo "--------------------------------------------------------------------------"
   cd ../handy-go
   get_clean_option
   get_config_option
@@ -235,9 +234,9 @@ then
   cp ./build/handy-go.bin $FIRMWARE_PATH/Bins/
 
   clear
-  echo "\n--------------------------------------------------------------------------"
-  echo "\n${panda}  ${green}Compiling ${cyan}pcengine-go${nc}"
-  echo "\n--------------------------------------------------------------------------"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${panda}  ${green}Compiling ${cyan}pcengine-go${nc}"
+  echo "--------------------------------------------------------------------------"
   cd ../odroid-go-pcengine-huexpress/pcengine-go
   get_clean_option
   get_config_option

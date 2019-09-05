@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 #---------------------------------
 # DON'T TOUCH START
@@ -20,15 +20,15 @@ SKETCH="Buttons" # <-- change the name and leave out .ino.bin
 source helpers/styles
 
 
-echo "\n--------------------------------------------------------------------------"
-echo "\n${panda}  ${green}Creating ${cyan}Arduino${nc} Firmware"
-echo "\n--------------------------------------------------------------------------"
+echo "--------------------------------------------------------------------------"
+echo -e "${panda}  ${green}Creating ${cyan}Arduino${nc} Firmware"
+echo "--------------------------------------------------------------------------"
 
 cd $SRC_PATH
 
 echo "Building mkfw"
 cd $MKFW_PATH
-make 
+make
 
 cd $SRC_PATH
 ffmpeg -i $ARDUINO_PATH/assets/$SKETCH.png -f rawvideo -pix_fmt rgb565 $ARDUINO_PATH/raw/$SKETCH.raw -y
