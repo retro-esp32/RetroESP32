@@ -24,6 +24,7 @@ set_config_option() {
   echo -e "${OPTION}"
   echo "--------------------------------------------------------------------------"
   read -n 1 -r response
+  if [[ "$response" = "y" ]]
   then
     CONFIG="y"
   fi
