@@ -457,6 +457,8 @@
 
 //{#pragma region Menu
   void hud_menu(void) {
+    int volume = odroid_audio_volume_get();                        
+    odroid_audio_terminate();
     hud_init();                         
     hud_debug("HUD - MENU");
     //hud_background();
@@ -489,7 +491,7 @@
         //debounce(ODROID_INPUT_DOWN);       
       }
       /*
-        BUTTON A
+        BUTTON B
       */
       if (gamepad.values[ODROID_INPUT_B]) {
         STATE.action = 0;
@@ -500,7 +502,8 @@
       /*
         BUTTON A
       */
-      if (gamepad.values[ODROID_INPUT_A]) {                                             
+      if (gamepad.values[ODROID_INPUT_A]) {
+        odroid_audio_volume_set(volume);                                             
         hud_debug(STATE.label);                                            
         ACTION = STATE.action;
         switch(ACTION) {
