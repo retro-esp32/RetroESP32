@@ -1,5 +1,5 @@
-[![Release](https://img.shields.io/github/v/release/retro-esp32/RetroESP32?style=for-the-badge)]()
-[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/total?style=for-the-badge)]()
+[![Release](https://img.shields.io/github/v/release/retro-esp32/RetroESP32?style=for-the-badge)](https://github.com/retro-esp32/RetroESP32/tree/master)
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/total?style=for-the-badge)](https://github.com/retro-esp32/RetroESP32/releases)
 
 ------
 #### Buy Us A Coffee
