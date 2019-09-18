@@ -561,16 +561,21 @@
   //}#pragma endregion Sort
 
   void get_files() {
+    ROMS.total = 0;
+
     FILES = (char**)malloc(MAX_FILES * sizeof(void*));
 
     char path[256] = "/sd/roms/";
     strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
     strcpy(ROM.path, path);
-    bool files = !(directory = opendir(path)) ? false : true;
+    //bool files = !(directory = opendir(path)) ? false : true;
+    DIR *directory = opendir(path);
 
-    ROMS.total = 0;
-
-    if(files) {
+    if(directory == NULL) {
+      char message[100] = "no games available";
+      int center = ceil((320/2)-((strlen(message)*5)/2));
+      draw_text(center,134,message,false,false);
+    } else {
       while ((file = readdir(directory)) != NULL) {
         int rom_length = strlen(file->d_name);
         int ext_lext = strlen(EXTENSIONS[STEP]);
@@ -580,19 +585,16 @@
           FILES[ROMS.total] = (char*)malloc(len + 1);
           strcpy(FILES[ROMS.total], file->d_name);
           ROMS.total++;
+          if(ROMS.total > MAX_FILES) { break; }
         }
       }
       ROMS.pages = ROMS.total/ROMS.limit;
-      closedir(directory);
-    }
 
-    if(ROMS.total > 0) {
+      closedir(directory);
+      free(FILES);
+
       if(ROMS.total < 500) sort_files(FILES);
       draw_files();
-    } else {
-      char message[100] = "no games available";
-      int center = ceil((320/2)-((strlen(message)*5)/2));
-      draw_text(center,134,message,false,false);
     }
   }
 
