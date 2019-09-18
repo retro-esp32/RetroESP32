@@ -227,8 +227,8 @@
 //{#pragma region Text
   int get_letter(char letter) {
     int dx = 0;
-    char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!-'&?.,/()[] ";
-    char lower[] = "abcdefghijklmnopqrstuvwxyz0123456789!-'&?.,/()[] ";
+    char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!-'&?.,/()[]~ ";
+    char lower[] = "abcdefghijklmnopqrstuvwxyz0123456789!-'&?.,/()[]~ ";
     for(int n = 0; n < strlen(upper); n++) {
       if(letter == upper[n] || letter == lower[n]) {
         return letter != ' ' ? n * 5 : 0;
