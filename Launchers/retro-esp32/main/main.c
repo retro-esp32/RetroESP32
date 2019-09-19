@@ -11,12 +11,19 @@
 //}#pragma endregion Odroid
 
 //{#pragma region Global
+  bool SAVED = false;  
+  bool RESTART = false;
+  bool LAUNCHER = false;
+  bool FOLDER = false;
+
   int STEP = 1;
   int OPTION = 0;
-  bool SAVED = false;
+  int PREVIOUS = 0;  
   int8_t USER;
-  bool RESTART = false;
+  
   char** FILES;
+  char folder_path[256] = "";  
+  
   DIR *directory;
   struct dirent *file;
 //}#pragma endregion Global
@@ -227,8 +234,8 @@
 //{#pragma region Text
   int get_letter(char letter) {
     int dx = 0;
-    char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!-'&?.,/()[]~ ";
-    char lower[] = "abcdefghijklmnopqrstuvwxyz0123456789!-'&?.,/()[]~ ";
+    char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!-'&?.,/()[] ";
+    char lower[] = "abcdefghijklmnopqrstuvwxyz0123456789!-'&?.,/()[] ";
     for(int n = 0; n < strlen(upper); n++) {
       if(letter == upper[n] || letter == lower[n]) {
         return letter != ' ' ? n * 5 : 0;
@@ -359,6 +366,17 @@
       }
     }
   }
+
+  void draw_folder(int x, int y, bool current) {
+    int i = 0;
+    for(int h = 0; h < 16; h++) {
+      for(int w = 0; w < 16; w++) {
+        buffer[i] = folder[h][w] == WHITE ? current ? WHITE : GUI.fg : GUI.bg;
+        i++;
+      }
+    }
+    ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
+  }  
 
   void draw_media(int x, int y, bool current) {
     int offset = (STEP-1) * 16;
@@ -561,14 +579,16 @@
   //}#pragma endregion Sort
 
   void get_files() {
-    ROMS.total = 0;
-
     FILES = (char**)malloc(MAX_FILES * sizeof(void*));
+    ROMS.total = 0;
 
     char path[256] = "/sd/roms/";
     strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
+    strcat(&path[strlen(path) - 1],folder_path);
+    printf("\npath:%s", path);
+
     strcpy(ROM.path, path);
-    //bool files = !(directory = opendir(path)) ? false : true;
+
     DIR *directory = opendir(path);
 
     if(directory == NULL) {
@@ -576,25 +596,36 @@
       int center = ceil((320/2)-((strlen(message)*5)/2));
       draw_text(center,134,message,false,false);
     } else {
+      struct dirent *file;
       while ((file = readdir(directory)) != NULL) {
         int rom_length = strlen(file->d_name);
         int ext_lext = strlen(EXTENSIONS[STEP]);
         bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], EXTENSIONS[STEP]) == 0 && file->d_name[0] != '.';
-        if(extenstion) {
+        if(extenstion || (file->d_type == 2)) {
+          if(ROMS.total >= MAX_FILES) { break; }                          
           size_t len = strlen(file->d_name);
-          FILES[ROMS.total] = (char*)malloc(len + 1);
-          strcpy(FILES[ROMS.total], file->d_name);
+          FILES[ROMS.total] = (file->d_type == 2) ? (char*)malloc(len + 5) : (char*)malloc(len + 1);
+          if((file->d_type == 2)) {
+            char dir[256];
+            strcpy(dir, file->d_name);
+            char dd[8];
+            sprintf(dd, "%s", ext_lext == 2 ? "dir" : ".dir");
+            strcat(&dir[strlen(dir) - 1], dd);         
+            strcpy(FILES[ROMS.total], dir);           
+          } else {
+            strcpy(FILES[ROMS.total], file->d_name);
+          }
           ROMS.total++;
-          if(ROMS.total > MAX_FILES) { break; }
         }
       }
       ROMS.pages = ROMS.total/ROMS.limit;
+      if(ROMS.offset > ROMS.total) { ROMS.offset = 0;}
 
       closedir(directory);
-      free(FILES);
-
       if(ROMS.total < 500) sort_files(FILES);
       draw_files();
+
+      //free(FILES); 
     }
   }
 
@@ -618,7 +649,9 @@
     int limit = (ROMS.offset + ROMS.limit) > ROMS.total ? ROMS.total : ROMS.offset + ROMS.limit;
     for(int n = ROMS.offset; n < limit; n++) {
       draw_text(x+24,y,FILES[n],true,n == ROMS.offset ? true : false);
-      draw_media(x,y-6,n == ROMS.offset ? true : false);
+
+      bool directory = strcmp(&FILES[n][strlen(FILES[n]) - 3], "dir") == 0;
+      directory ? draw_folder(x,y-6,n == ROMS.offset ? true : false) : draw_media(x,y-6,n == ROMS.offset ? true : false);
       if(n == ROMS.offset) {
         strcpy(ROM.name, FILES[n]);
         ROM.ready = true;
@@ -908,7 +941,7 @@
         LEFT
       */
       if(gamepad.values[ODROID_INPUT_LEFT]) {
-        if(!LAUNCHER) {
+        if(!LAUNCHER && !FOLDER) {
           STEP--;
           if( STEP < 0 ) {
             STEP = COUNT - 1;
@@ -925,7 +958,7 @@
         RIGHT
       */
       if(gamepad.values[ODROID_INPUT_RIGHT]) {
-        if(!LAUNCHER) {
+        if(!LAUNCHER && !FOLDER) {
           STEP++;
           if( STEP > COUNT-1 ) {
             STEP = 0;
@@ -1035,13 +1068,27 @@
         } else {
           if (ROM.ready && !LAUNCHER) {
             OPTION = 0;
-            LAUNCHER = true;
-
             char file_to_load[256] = "";
             sprintf(file_to_load, "%s/%s", ROM.path, ROM.name);
-            odroid_settings_RomFilePath_set(file_to_load);
+            bool directory = strcmp(&file_to_load[strlen(file_to_load) - 3], "dir") == 0; 
 
-            draw_launcher();
+            if(directory) {
+              FOLDER = true;
+              PREVIOUS = ROMS.offset;
+              ROMS.offset = 0;
+              ROMS.total = 0;              
+
+              sprintf(folder_path, "/%s", ROM.name);
+              folder_path[strlen(folder_path)-(strlen(EXTENSIONS[STEP]) == 3 ? 4 : 3)] = 0;
+              draw_background();
+              draw_systems();
+              draw_text(16,16,EMULATORS[STEP],false,true);
+              get_files();
+            } else {
+              LAUNCHER = true;
+              odroid_settings_RomFilePath_set(file_to_load);
+              draw_launcher();
+            }
           } else {
             switch(OPTION) {
               case 0:
@@ -1068,6 +1115,14 @@
           draw_systems();
           draw_text(16,16,EMULATORS[STEP],false,true);
           STEP == 0 ? draw_themes() : draw_files();
+        }
+        if(FOLDER) {
+          FOLDER = false;
+          ROMS.offset = PREVIOUS;       
+          ROMS.total = 0;              
+          PREVIOUS = 0;   
+          folder_path[0] = 0;
+          get_files();
         }
         debounce(ODROID_INPUT_B);
       }

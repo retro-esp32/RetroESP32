@@ -41,6 +41,7 @@ void get_restore_states();
 */
 void draw_systems();
 void draw_media(int x, int y, bool current);
+void draw_folder(int x, int y, bool current);
 void draw_battery();
 void draw_numbers();
 void draw_launcher();

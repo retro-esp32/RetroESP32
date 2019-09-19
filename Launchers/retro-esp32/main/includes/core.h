@@ -57,3 +57,4 @@
 #include "../sprites/icons.h"
 #include "../sprites/logo.h"
 #include "../sprites/media.h"
+#include "../sprites/folder.h"

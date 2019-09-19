@@ -29,4 +29,4 @@
 /*
 
 */
-#define MAX_FILES 2048
+#define MAX_FILES 1024

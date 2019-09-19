@@ -24,7 +24,6 @@ typedef struct{
   int page;
 } LIST;
 LIST ROMS = {8, 0, 0, 0, 0};
-bool LAUNCHER = false;
 
 // FILE
 typedef struct{
