@@ -248,21 +248,24 @@
   void draw_text(short x, short y, char *string, bool ext, bool current) {
     int length = !ext ? strlen(string) : strlen(string)-(strlen(EXTENSIONS[STEP])+1);
     int size = 5;
+    int rows = 7;
+    int cols = 5;
     for(int n = 0; n < length; n++) {
       int dx = get_letter(string[n]);
       int i = 0;
-      for(int r = 0; r < (size); r++) {
+      for(int r = 0; r < (rows); r++) {
         if(string[n] != ' ') {
-          for(int c = dx; c < (dx+size); c++) {
-            buffer[i] = characters[r][c] == 0 ? GUI.bg : current ? WHITE : GUI.fg;
+          for(int c = dx; c < (dx+cols); c++) {
+            //buffer[i] = FONT_5x5[r][c] == 0 ? GUI.bg : current ? WHITE : GUI.fg;
+            buffer[i] = FONT_5x7[r][c] == 0 ? GUI.bg : current ? WHITE : GUI.fg;
             i++;
           }
         }
       }
       if(string[n] != ' ') {
-        ili9341_write_frame_rectangleLE(x, y, size, size, buffer);
+        ili9341_write_frame_rectangleLE(x, y-1, cols, rows, buffer);
       }
-      x+= string[n] != ' ' ? 6 : 2;
+      x+= string[n] != ' ' ? 7 : 3;
     }
   }
 //}#pragma endregion Text
