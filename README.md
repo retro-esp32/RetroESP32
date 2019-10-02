@@ -1,6 +1,13 @@
 [![Release](https://img.shields.io/github/v/release/retro-esp32/RetroESP32?style=for-the-badge)]()
 [![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/total?style=for-the-badge)]()
 
+## Downloads By Tag
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.1.0-Font-Size-Fix/total?style=for-the-badge
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.8-Folders/total?style=for-the-badge
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.7-Sound-Fix/total?style=for-the-badge
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.6-Sound-Fix/total?style=for-the-badge
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.5-PC-Engine-/-Turbo-Grafx/total?style=for-the-badge
+
 ------
 #### Buy Us A Coffee
 > It's Not Mandatory, But Much [Appreciated](https://www.paypal.me/32teeth/1.99USD)
@@ -27,7 +34,7 @@ This branch contains the specific modification for the Odroid Go hardware to use
 - [x] Odroid Go - [Go Play Emulators](https://github.com/OtherCrashOverride/go-play)
 - [x] Launcher based on [GoGo](https://bitbucket.org/odroid_go_stuff/gogo/src/master/) Launcher
 - [x] ROM Management
-- [x] Config for both ILI9341/2 
+- [x] Config for both ILI9341/2
 
 ## Supported Emulators
 > What else do you need to know, there are 11 currently supported
@@ -194,7 +201,7 @@ make menuconfig
   * *Select* **LCD Driver Chip**
   * *Select* **MENU Key Options**
   * *Select* **In Game Menu**
-  
+
 3. Run ```./ota```  (see above)
 
 |   Splash   |   Navigation   |   ROM State Management   |   Run   |
