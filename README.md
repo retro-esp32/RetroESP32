@@ -1,6 +1,6 @@
 [![Release](https://img.shields.io/github/v/release/retro-esp32/RetroESP32?style=for-the-badge)]()
 [![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/total?style=for-the-badge)]()
-
+[![Last Commit](https://img.shields.io/github/last-commit/retro-esp32/RetroESP32/Software?style=for-the-badge)]()
 ------
 #### Buy Us A Coffee
 > It's Not Mandatory, But Much [Appreciated](https://www.paypal.me/32teeth/1.99USD)
