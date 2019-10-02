@@ -2,11 +2,11 @@
 [![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/total?style=for-the-badge)]()
 
 ## Downloads By Tag
-[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.1.0-Font-Size-Fix/total?style=for-the-badge
-[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.8-Folders/total?style=for-the-badge
-[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.7-Sound-Fix/total?style=for-the-badge
-[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.6-Sound-Fix/total?style=for-the-badge
-[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.5-PC-Engine-/-Turbo-Grafx/total?style=for-the-badge
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.1.0-Font-Size-Fix/total?style=for-the-badge)]()
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.8-Folders/total?style=for-the-badge)]()
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.7-Sound-Fix/total?style=for-the-badge)]()
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.6-Sound-Fix/total?style=for-the-badge)]()
+[![Downloads](https://img.shields.io/github/downloads/retro-esp32/RetroESP32/v.1.0.5-PC-Engine-/-Turbo-Grafx/total?style=for-the-badge)]()
 
 ------
 #### Buy Us A Coffee
