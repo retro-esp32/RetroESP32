@@ -20,6 +20,11 @@ Retro ESP32 Team
 # ![Retro ESP32](Assets/logo.jpg)
 > An ESP32 Wrover based Game Boy Pocket
 
+### Launcher Features
+[![Launcher Features](Assets/launcher.jpg)](https://github.com/retro-esp32/RetroESP32/releases)
+
+[Download Firmware TODAY](https://github.com/retro-esp32/RetroESP32/releases)
+
 ### Branches and Releases
 
 | Hardware | Software | Release |
