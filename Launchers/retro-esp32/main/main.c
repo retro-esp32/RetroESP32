@@ -292,7 +292,7 @@
     int count = 22;
     for(int n = USER; n < count; n++){
       if(filled < ROMS.limit) {
-        draw_mask(x,y,100,16);
+        draw_mask(x,y-1,100,17);
         draw_text(x,y,THEMES[n].name,false, n == USER ? true : false);
         y+=20;
         filled++;
@@ -300,7 +300,7 @@
     }
     int slots = (ROMS.limit - filled);
     for(int n = 0; n < slots; n++) {
-      draw_mask(x,y,100,16);
+      draw_mask(x,y-1,100,17);
       draw_text(x,y,THEMES[n].name,false,false);
       y+=20;
     }

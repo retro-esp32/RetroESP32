@@ -24,3 +24,6 @@
 [submodule "Emulators/odroid-go-pcengine-huexpress"]
 	path = Emulators/odroid-go-pcengine-huexpress
 	url = git@github.com:pelle7/odroid-go-pcengine-huexpress.git
+[submodule "Emulators/super-go-play"]
+	path = Emulators/super-go-play
+	url = git@github.com:mattkj/super-go-play.git

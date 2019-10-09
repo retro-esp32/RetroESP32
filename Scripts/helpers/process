@@ -6,6 +6,7 @@ GOGO_PATH="$REPO/Launchers/gogo/"
 RETRO_PATH="$REPO/Launchers/retro-esp32/"
 GENERIC_PATH="$REPO/Launchers/emulator-launcher-odroid-go/"
 GOPLAY_PATH="$REPO/Emulators/go-play/"
+SUPER_GOPLAY_PATH="$REPO/Emulators/super-go-play/"
 EMULATOR_PATH="$REPO/Emulators/"
 
 MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
@@ -170,7 +171,7 @@ then
 #  rm $FIRMWARE_PATH/Bins/stella-go.bin
 #  rm $FIRMWARE_PATH/Bins/pcengine-go.bin
 
-  cd $GOPLAY_PATH
+  cd $SUPER_GOPLAY_PATH
 
   clear
   echo "--------------------------------------------------------------------------"
@@ -181,6 +182,8 @@ then
   get_config_option
   make -j8
   cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
+
+  cd $GOPLAY_PATH
 
   clear
   echo "--------------------------------------------------------------------------"
