@@ -189,7 +189,7 @@ then
   echo "--------------------------------------------------------------------------"
   echo -e "${fox}  ${green}Compiling ${cyan}nesemu-go${nc}"
   echo "--------------------------------------------------------------------------"
-  cd ../nesemu-go
+  cd nesemu-go
   get_clean_option
   get_config_option
   make -j8
