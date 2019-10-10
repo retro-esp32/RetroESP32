@@ -56,8 +56,20 @@ Use our [Project](https://github.com/retro-esp32/RetroESP32/projects/1) and [Iss
 | [![Hardware](Assets/hw.png)](https://github.com/retro-esp32/RetroESP32/tree/Hardware)         |     [![Software](Assets/sw.png)](https://github.com/retro-esp32/RetroESP32/tree/Software)      |    [![Firmware](Assets/fw.png)](https://github.com/retro-esp32/RetroESP32/releases)      |
 
 
+## Authors
 
+* **Eugene Yevhen Andruszczenko** - *Initial and Ongoing Work* - [32teeth](https://github.com/32teeth)
+* **Fuji Pebri** - *Espressif IOT Consultant* - [pebri86](https://github.com/pebri86)
 
+### License
+
+This project is licensed under the Creative Commons Attribution Share Alike 4.0 International - see the [LICENSE.md](LICENSE.md) file for details
+
+### Acknowledgments
+[othercrashoverride](https://github.com/othercrashoverride)
+[pelle7](https://github.com/pelle7)
+[pebri86](https://github.com/pebri86)
+[hardkernel](https://github.com/hardkernel)
 
 
 ------
