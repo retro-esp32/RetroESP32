@@ -24,8 +24,6 @@ Retro ESP32 Team
 This branch contains the specific modification for the Odroid Go hardware to use the 320x240 ILI9342 2.6" and 240x320 ILI9341 display
 
 - [x] Odroid Go - [Firmware](https://github.com/OtherCrashOverride/odroid-go-firmware)
-- [x] Odroid Go - [Go Play Emulators](https://github.com/OtherCrashOverride/go-play)
-- [x] Launcher based on [GoGo](https://bitbucket.org/odroid_go_stuff/gogo/src/master/) Launcher
 - [x] ROM Management
 - [x] Config for both ILI9341/2
 
@@ -142,12 +140,7 @@ You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 
 ### Build and Load OTA
 > Follow Onscreen Prompts
-> if this is your first time running the executable, answer **Y** to the options
-
-**NOTE:** This will flash your device
-```
-./ota
-```
+> if this is your first time running the executable, answer **Y** to the applicable options
 
 ### OTA
 > Flash directly to ESP32
@@ -158,7 +151,25 @@ This is the easiest option, simple follow the onscreen prompts!
 ./ota
 ```
 
+*note:*
+
+You will need to set the SPI ram for the emulators
+
+| Screen Grab | Instructions |
+| ---- |---- |
+| ![Assets/SPI/001.jpg](Assets/SPI/001.jpg) |   Answer **Y**   |
+| ![Assets/SPI/002.jpg](Assets/SPI/002.jpg) |   Answer **N**   |
+| ![Assets/SPI/003.jpg](Assets/SPI/003.jpg) |   Answer **Y** (This is IMPORTANT)   |
+| ![Assets/SPI/004.jpg](Assets/SPI/004.jpg) |   Navigate to ```Component config -->```   |
+| ![Assets/SPI/005.jpg](Assets/SPI/005.jpg) |   Navigate to ```ESP32-specific -->```   |
+| ![Assets/SPI/006.jpg](Assets/SPI/006.jpg) |   Navigate to ```SPI RAM config -->```   |
+| ![Assets/SPI/007.jpg](Assets/SPI/007.jpg) |   Navigate to ```Type of SPI RAM chip in use (some value) -->```   |
+| ![Assets/SPI/007.jpg](Assets/SPI/008.jpg) |   Select ```Auto-detect```   |
+
+
+
 ### Erase
+
 > Erase flash and storage from ESP32
 
 ```
