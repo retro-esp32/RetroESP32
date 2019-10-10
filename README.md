@@ -48,3 +48,29 @@ We kept installation of Retro ESP32 super simple.
 *Have a great idea? Want to see a feature? Ran into a problem?*
 Use our [Project](https://github.com/retro-esp32/RetroESP32/projects/1) and [Issue](https://github.com/retro-esp32/RetroESP32/issues) sections to have your say.
 
+## More, more and more
+> Branches and Releases
+
+| Hardware | Software | Release |
+| :------: | :------: | :-----: |
+| [![Hardware](Assets/hw.png)](https://github.com/retro-esp32/RetroESP32/tree/Hardware)         |     [![Software](Assets/sw.png)](https://github.com/retro-esp32/RetroESP32/tree/Software)      |    [![Firmware](Assets/fw.png)](https://github.com/retro-esp32/RetroESP32/releases)      |
+
+
+
+
+
+
+------
+#### Buy Us A Coffee
+> It's Not Mandatory, But Much [Appreciated](https://www.paypal.me/32teeth/1.99USD)
+
+We work tirelessly to bring you the best **Odroid GO** and **Retro ESP32** user experience.
+
+Everything we provide is free to use, Feedback is always welcome.
+
+If you like what you see, and feel like giving us additional support, we accept **PayPal** donation of $1.99 USD, that's like, 1 coffee. But fee free to change the amount. We won't shy away!
+
+*Thank You*
+Retro ESP32 Team
+
+------
