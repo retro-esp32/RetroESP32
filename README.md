@@ -7,7 +7,7 @@
 
 | Retro ESP32 In Action                              |        Summary                                                      |
 | ----------------------------- | ------------------------------------------------------------ |
-| <img src="Assets/animated.gif" alt="Teaser" width="200"/> | **Retro ESP32** is the ultimate feature packed [Odroid Go](https://www.hardkernel.com/shop/odroid-go/) Launcher. Includes color schemes and theming. Drawing inspiration from the popular [RetroArch](https://www.retroarch.com/) emulator front end of choice, we included 11 (current count) prebundled emulators (see list below), in system ROM / Game manager. Additionally each emulator includes an in game menu for further ROM / Game management.<br/>**[Get Your Copy Today](https://github.com/retro-esp32/RetroESP32/releases)** |
+| <img src="Assets/animated.gif" alt="Teaser" width="360" height="560"> | **Retro ESP32** is the ultimate feature packed [Odroid Go](https://www.hardkernel.com/shop/odroid-go/) Launcher. Includes color schemes and theming. Drawing inspiration from the popular [RetroArch](https://www.retroarch.com/) emulator front end of choice, we included 11 (current count) prebundled emulators (see list below), in system ROM / Game manager. Additionally each emulator includes an in game menu for further ROM / Game management.<br/>**[Get Your Copy Today](https://github.com/retro-esp32/RetroESP32/releases)** |
 
 ### Installation
 > Copy, Mount, Flash
