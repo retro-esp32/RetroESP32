@@ -66,10 +66,11 @@ Use our [Project](https://github.com/retro-esp32/RetroESP32/projects/1) and [Iss
 This project is licensed under the Creative Commons Attribution Share Alike 4.0 International - see the [LICENSE.md](LICENSE.md) file for details
 
 ### Acknowledgments
-[othercrashoverride](https://github.com/othercrashoverride)
-[pelle7](https://github.com/pelle7)
-[pebri86](https://github.com/pebri86)
-[hardkernel](https://github.com/hardkernel)
+
+* [othercrashoverride](https://github.com/othercrashoverride)
+* [pelle7](https://github.com/pelle7)
+* [pebri86](https://github.com/pebri86)
+* [hardkernel](https://github.com/hardkernel)
 
 
 ------
