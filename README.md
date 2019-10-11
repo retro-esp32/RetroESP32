@@ -74,8 +74,10 @@ This project is licensed under the Creative Commons Attribution Share Alike 4.0 
 
 
 ------
-#### Buy Us A Coffee
-> It's Not Mandatory, But Much [Appreciated](https://www.paypal.me/32teeth/1.99USD)
+## Support
+> Buy Us A Coffee
+
+*It's Not Mandatory, But Much [Appreciated](https://www.paypal.me/32teeth/1.99USD)*
 
 We work tirelessly to bring you the best **Odroid GO** and **Retro ESP32** user experience.
 
