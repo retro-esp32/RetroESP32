@@ -11,26 +11,30 @@
 //}#pragma endregion Odroid
 
 //{#pragma region Global
-  bool SAVED = false;  
+  bool SAVED = false;
   bool RESTART = false;
   bool LAUNCHER = false;
   bool FOLDER = false;
+  bool SPLASH = false;
+  bool SETTINGS = false;
 
-  int STEP = 1;
+  int STEP = 0;
   int OPTION = 0;
-  int PREVIOUS = 0;  
+  int PREVIOUS = 0;
+  int32_t VOLUME = 0;
   int8_t USER;
-  
+  int8_t SETTING;
+
   char** FILES;
-  char folder_path[256] = "";  
-  
+  char folder_path[256] = "";
+
   DIR *directory;
   struct dirent *file;
 //}#pragma endregion Global
 
 //{#pragma region Emulator and Directories
   char EMULATORS[COUNT][30] = {
-    "THEME",
+    "SETTINGS",
     "NINTENDO ENTERTAINMENT SYSTEM",
     "NINTENDO GAME BOY",
     "NINTENDO GAME BOY COLOR",
@@ -93,11 +97,16 @@
 
     // Audio
     odroid_audio_init(16000);
-  #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-      odroid_settings_Volume_set(4);
-  #else
-      odroid_settings_Volume_set(3);
-  #endif
+    /*
+    #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
+        odroid_settings_Volume_set(4);
+    #else
+        odroid_settings_Volume_set(3);
+    #endif
+    */
+
+    VOLUME = odroid_settings_Volume_get();
+    odroid_settings_Volume_set(VOLUME);
 
     // Display
     ili9341_init();
@@ -134,7 +143,7 @@
         RESTART = false;
       break;
     }
-    RESTART ? restart() : splash();
+    RESTART ? restart() : SPLASH ? splash() : NULL;
     draw_background();
     restore_layout();
     xTaskCreate(launcher, "launcher", 8192, NULL, 5, NULL);
@@ -284,6 +293,67 @@
   }
 //}#pragma endregion Mask
 
+//{#pragma region Options
+  void draw_settings() {
+    int x = ORIGIN.x;
+    int y = POS.y + 46;
+
+    draw_mask(x,y-1,100,17);
+    draw_text(x,y,"THEMES",false, SETTING == 0 ? true : false);
+
+    y+=20;
+    draw_mask(x,y-1,100,17);
+    draw_text(x,y,"VOLUME",false, SETTING == 1 ? true : false);
+
+    draw_volume();
+  }
+//}#pragma endregion Options
+
+//{#pragma region Volume
+  void draw_volume() {
+    int32_t volume = get_volume();
+    int x = SCREEN.w - 120;
+    int y = POS.y + 66;
+    //int w = 25 * volume;
+    int w, h;
+
+    int i = 0;
+    for(h = 0; h < 7; h++) {
+      for(w = 0; w < 100; w++) {
+        if(SETTING == 1) {
+          buffer[i] = GUI.fg;
+        } else {
+          buffer[i] = i%2 == 0 ? GUI.fg : GUI.bg;
+        }
+        i++;
+      }
+    }
+    ili9341_write_frame_rectangleLE(x, y, 100, 7, buffer);
+
+    if(volume > 0) {
+      i = 0;
+      for(h = 0; h < 7; h++) {
+        for(w = 0; w < (25 * volume); w++) {
+          if(SETTING == 1) {
+            buffer[i] = WHITE;
+          } else {
+            buffer[i] = GUI.fg;
+          }
+          i++;
+        }
+      }
+      ili9341_write_frame_rectangleLE(x, y, (25 * volume), 7, buffer);
+    }
+  }
+  int32_t get_volume() {
+    return odroid_settings_Volume_get();
+  }
+  void set_volume() {
+    odroid_settings_Volume_set(VOLUME);
+    draw_volume();
+  }
+//}#pragma endregion Volume
+
 //{#pragma region Theme
   void draw_themes() {
     int x = ORIGIN.x;
@@ -379,7 +449,7 @@
       }
     }
     ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
-  }  
+  }
 
   void draw_media(int x, int y, bool current) {
     int offset = (STEP-1) * 16;
@@ -478,10 +548,10 @@
 
     y += 48;
     draw_media(x,y-6,true);
-    draw_options();
+    draw_launcher_options();
   }
 
-  void draw_options() {
+  void draw_launcher_options() {
     has_save_file(ROM.name);
 
     int x = GAP/3 + 32;
@@ -605,7 +675,7 @@
         int ext_lext = strlen(EXTENSIONS[STEP]);
         bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], EXTENSIONS[STEP]) == 0 && file->d_name[0] != '.';
         if(extenstion || (file->d_type == 2)) {
-          if(ROMS.total >= MAX_FILES) { break; }                          
+          if(ROMS.total >= MAX_FILES) { break; }
           size_t len = strlen(file->d_name);
           FILES[ROMS.total] = (file->d_type == 2) ? (char*)malloc(len + 5) : (char*)malloc(len + 1);
           if((file->d_type == 2)) {
@@ -613,8 +683,8 @@
             strcpy(dir, file->d_name);
             char dd[8];
             sprintf(dd, "%s", ext_lext == 2 ? "dir" : ".dir");
-            strcat(&dir[strlen(dir) - 1], dd);         
-            strcpy(FILES[ROMS.total], dir);           
+            strcat(&dir[strlen(dir) - 1], dd);
+            strcpy(FILES[ROMS.total], dir);
           } else {
             strcpy(FILES[ROMS.total], file->d_name);
           }
@@ -628,7 +698,7 @@
       if(ROMS.total < 500) sort_files(FILES);
       draw_files();
 
-      //free(FILES); 
+      //free(FILES);
     }
   }
 
@@ -716,7 +786,7 @@
     }
     draw_mask(0,0,SCREEN.w - 32,32);
     draw_text(16,16,EMULATORS[STEP], false, true);
-    STEP == 0 ? draw_themes() : get_files();
+    STEP == 0 ? draw_settings() : get_files();
     clean_up();
   }
 
@@ -753,7 +823,7 @@
     clean_up();
     draw_systems();
     draw_text(16,16,EMULATORS[STEP],false,true);
-    STEP == 0 ? draw_themes() : get_files();
+    STEP == 0 ? draw_settings() : get_files();
   }
 
   void clean_up() {
@@ -945,14 +1015,22 @@
       */
       if(gamepad.values[ODROID_INPUT_LEFT]) {
         if(!LAUNCHER && !FOLDER) {
-          STEP--;
-          if( STEP < 0 ) {
-            STEP = COUNT - 1;
-          }
+          if(SETTING != 1) {
+            STEP--;
+            if( STEP < 0 ) {
+              STEP = COUNT - 1;
+            }
 
-          ROMS.offset = 0;
-          ROMS.total = 0;
-          animate(-1);
+            ROMS.offset = 0;
+            ROMS.total = 0;
+            animate(-1);
+          } else {
+            if(VOLUME > 0) {
+              VOLUME--;
+              set_volume();
+              usleep(200000);
+            }
+          }
         }
         usleep(100000);
         //debounce(ODROID_INPUT_LEFT);
@@ -962,13 +1040,21 @@
       */
       if(gamepad.values[ODROID_INPUT_RIGHT]) {
         if(!LAUNCHER && !FOLDER) {
-          STEP++;
-          if( STEP > COUNT-1 ) {
-            STEP = 0;
+          if(SETTING != 1) {
+            STEP++;
+            if( STEP > COUNT-1 ) {
+              STEP = 0;
+            }
+            ROMS.offset = 0;
+            ROMS.total = 0;
+            animate(1);
+          } else {
+            if(VOLUME < 4) {
+              VOLUME++;
+              set_volume();
+              usleep(200000);
+            }
           }
-          ROMS.offset = 0;
-          ROMS.total = 0;
-          animate(1);
         }
         usleep(100000);
         //debounce(ODROID_INPUT_RIGHT);
@@ -979,9 +1065,15 @@
       if (gamepad.values[ODROID_INPUT_UP]) {
         if(!LAUNCHER) {
           if(STEP == 0) {
-            USER--;
-            if( USER < 0 ) { USER = 21; }
-            draw_themes();
+            if(!SETTINGS) {
+              SETTING--;
+              if( SETTING < 0 ) { SETTING = 1; }
+              draw_settings();
+            } else {
+              USER--;
+              if( USER < 0 ) { USER = 21; }
+              draw_themes();
+            }
           }
           if(STEP != 0) {
             ROMS.offset--;
@@ -992,7 +1084,7 @@
           if(SAVED) {
             OPTION--;
             if( OPTION < 0 ) { OPTION = 2; }
-            draw_options();
+            draw_launcher_options();
           }
         }
         usleep(200000);
@@ -1004,9 +1096,15 @@
       if (gamepad.values[ODROID_INPUT_DOWN]) {
         if(!LAUNCHER) {
           if(STEP == 0) {
-            USER++;
-            if( USER > 21 ) { USER = 0; }
-            draw_themes();
+            if(!SETTINGS) {
+              SETTING++;
+              if( SETTING > 1 ) { SETTING = 0; }
+              draw_settings();
+            } else {
+              USER++;
+              if( USER > 21 ) { USER = 0; }
+              draw_themes();
+            }
           }
           if(STEP != 0) {
             ROMS.offset++;
@@ -1017,7 +1115,7 @@
           if(SAVED) {
             OPTION++;
             if( OPTION > 2 ) { OPTION = 0; }
-            draw_options();
+            draw_launcher_options();
           }
         }
 
@@ -1067,19 +1165,35 @@
       */
       if (gamepad.values[ODROID_INPUT_A]) {
         if(STEP == 0) {
-          update_theme();
+          if(!SETTINGS) {
+            SETTINGS = true;
+            draw_background();
+            draw_systems();
+            switch(SETTING) {
+              case 0:
+                draw_text(16,16,"THEMES",false,true);
+                draw_themes();
+              break;
+            }
+          } else {
+            switch(SETTING) {
+              case 0:
+                update_theme();
+              break;
+            }
+          }
         } else {
           if (ROM.ready && !LAUNCHER) {
             OPTION = 0;
             char file_to_load[256] = "";
             sprintf(file_to_load, "%s/%s", ROM.path, ROM.name);
-            bool directory = strcmp(&file_to_load[strlen(file_to_load) - 3], "dir") == 0; 
+            bool directory = strcmp(&file_to_load[strlen(file_to_load) - 3], "dir") == 0;
 
             if(directory) {
               FOLDER = true;
               PREVIOUS = ROMS.offset;
               ROMS.offset = 0;
-              ROMS.total = 0;              
+              ROMS.total = 0;
 
               sprintf(folder_path, "/%s", ROM.name);
               folder_path[strlen(folder_path)-(strlen(EXTENSIONS[STEP]) == 3 ? 4 : 3)] = 0;
@@ -1117,15 +1231,22 @@
           draw_background();
           draw_systems();
           draw_text(16,16,EMULATORS[STEP],false,true);
-          STEP == 0 ? draw_themes() : draw_files();
+          STEP == 0 ? draw_settings() : draw_files();
         }
         if(FOLDER) {
           FOLDER = false;
-          ROMS.offset = PREVIOUS;       
-          ROMS.total = 0;              
-          PREVIOUS = 0;   
+          ROMS.offset = PREVIOUS;
+          ROMS.total = 0;
+          PREVIOUS = 0;
           folder_path[0] = 0;
           get_files();
+        }
+        if(SETTINGS) {
+          SETTINGS = false;
+          draw_background();
+          draw_systems();
+          draw_text(16,16,EMULATORS[STEP],false,true);
+          draw_settings();
         }
         debounce(ODROID_INPUT_B);
       }

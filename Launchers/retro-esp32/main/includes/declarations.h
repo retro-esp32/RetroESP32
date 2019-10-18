@@ -16,6 +16,18 @@ void draw_mask(int x, int y, int w, int h);
 void draw_background();
 
 /*
+ Options
+*/
+void draw_settings();
+
+/*
+ Volume
+*/
+void draw_volume();
+int32_t get_volume();
+void set_volume();
+
+/*
  Theme
 */
 void draw_themes();
@@ -45,7 +57,7 @@ void draw_folder(int x, int y, bool current);
 void draw_battery();
 void draw_numbers();
 void draw_launcher();
-void draw_options();
+void draw_launcher_options();
 
 /*
   Files
