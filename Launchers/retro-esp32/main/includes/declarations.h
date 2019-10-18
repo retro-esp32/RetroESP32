@@ -55,6 +55,7 @@ void draw_systems();
 void draw_media(int x, int y, bool current);
 void draw_folder(int x, int y, bool current);
 void draw_battery();
+void draw_speaker();
 void draw_numbers();
 void draw_launcher();
 void draw_launcher_options();

@@ -58,3 +58,4 @@
 #include "../sprites/logo.h"
 #include "../sprites/media.h"
 #include "../sprites/folder.h"
+#include "../sprites/speaker.h"

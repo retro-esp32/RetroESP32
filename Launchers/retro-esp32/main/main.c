@@ -156,6 +156,7 @@
 //{#pragma region Debounce
   void debounce(int key) {
     draw_battery();
+    draw_speaker();
     while (gamepad.values[key]) odroid_input_gamepad_read(&gamepad);
   }
 //}#pragma endregion Debounce
@@ -290,6 +291,7 @@
     int h = 60;
     for (int i = 0; i < 4; i++) draw_mask(0, i*h, w, h);
     draw_battery();
+    draw_speaker();
   }
 //}#pragma endregion Mask
 
@@ -320,11 +322,7 @@
     int i = 0;
     for(h = 0; h < 7; h++) {
       for(w = 0; w < 100; w++) {
-        if(SETTING == 1) {
-          buffer[i] = GUI.fg;
-        } else {
-          buffer[i] = i%2 == 0 ? GUI.fg : GUI.bg;
-        }
+        buffer[i] = (w+h)%2 == 0 ? GUI.fg : GUI.bg;
         i++;
       }
     }
@@ -344,6 +342,8 @@
       }
       ili9341_write_frame_rectangleLE(x, y, (25 * volume), 7, buffer);
     }
+
+    draw_speaker();
   }
   int32_t get_volume() {
     return odroid_settings_Volume_get();
@@ -515,6 +515,27 @@
       }
       */
     #endif
+  }
+
+  void draw_speaker() {
+    int32_t volume = get_volume();
+
+    int i = 0;
+    int x = SCREEN.w - 52;
+    int y = 8;
+    int h = 16;
+    int w = 16;
+
+    draw_mask(x,y,16,16);
+
+    int dh = 64 - (volume*16);
+    for(h = 0; h < 16; h++) {
+      for(w = 0; w < 16; w++) {
+        buffer[i] = speaker[dh+h][w] == WHITE ? WHITE : GUI.bg;
+        i++;
+      }
+    }
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
   }
 
   void draw_numbers() {
@@ -784,7 +805,7 @@
       draw_systems();
       usleep(20000);
     }
-    draw_mask(0,0,SCREEN.w - 32,32);
+    draw_mask(0,0,SCREEN.w - 56,32);
     draw_text(16,16,EMULATORS[STEP], false, true);
     STEP == 0 ? draw_settings() : get_files();
     clean_up();
@@ -837,7 +858,6 @@
       }
     }
   }
-
 //}#pragma endregion Animations
 
 //{#pragma region Boot Screens
@@ -1004,6 +1024,7 @@
 //{#pragma region Launcher
   static void launcher() {
     draw_battery();
+    draw_speaker();
     while (true) {
       /*
         Get Gamepad State
@@ -1165,7 +1186,7 @@
       */
       if (gamepad.values[ODROID_INPUT_A]) {
         if(STEP == 0) {
-          if(!SETTINGS) {
+          if(!SETTINGS && SETTING != 1) {
             SETTINGS = true;
             draw_background();
             draw_systems();
