@@ -15,7 +15,7 @@
   bool RESTART = false;
   bool LAUNCHER = false;
   bool FOLDER = false;
-  bool SPLASH = false;
+  bool SPLASH = true;
   bool SETTINGS = false;
 
   int STEP = 0;
