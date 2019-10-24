@@ -212,6 +212,7 @@ static void LoadState(const char* cartName)
         if (f == NULL)
         {
             printf("LoadState: fopen load failed\n");
+            f = fopen(fileName, "r");
         }
         else
         {           
