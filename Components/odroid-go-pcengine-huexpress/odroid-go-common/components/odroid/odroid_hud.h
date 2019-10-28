@@ -48,4 +48,5 @@ void hud_menu();
 */   
 void hud_logo(void);
 void hud_progress(char *string, bool bar);
+void hud_frameskip();
 void hud_options();
