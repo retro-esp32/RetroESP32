@@ -26,6 +26,7 @@ extern char *syscard_filename;
 #include "../components/odroid/odroid_display.h"
 #include "../components/odroid/odroid_sdcard.h"
 #include "../components/odroid/odroid_ui.h"
+#include "../components/odroid/odroid_ui_choosefile.h"
 
 #include <dirent.h>
 #include <stdarg.h>
@@ -38,7 +39,7 @@ extern char *syscard_filename;
     #include "../components/odroid/odroid_hud.h"
     int ACTION;
 #endif
-
+    
 #define NOINLINE  __attribute__ ((noinline))
 
 const char* SD_BASE_PATH = "/sd";
@@ -332,7 +333,7 @@ void DoMenuHome(bool save)
 
     #ifdef CONFIG_IN_GAME_MENU_YES 
         //odroid_display_lock();
-        //EmuAudio(false);
+        EmuAudio(false);
         hud_menu();
         printf("\nACTION:%d\n", ACTION); 
         switch(ACTION) {
@@ -349,7 +350,7 @@ void DoMenuHome(bool save)
             break;   
         }               
         ili9341_clear(0);  
-        //EmuAudio(true);
+        EmuAudio(true);
         odroid_display_unlock();    
     #else
         // Clear audio to prevent studdering
@@ -489,7 +490,7 @@ NOINLINE void app_loop(void)
 {
    printf("up and running\n");
    //if (!(*osd_gfx_driver_list[video_driver].init) ())
-   odroid_ui_debug_enter_loop();
+   odroid_ui_enter_loop();
    RunPCE();
    abort();
 }
