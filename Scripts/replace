@@ -60,7 +60,13 @@ then
   echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/super-go-play/* $EMULATORS/super-go-play
   sleep 0.25
-  clear  
+  clear
+  echo "--------------------------------------------------------------------------"
+  echo -e "${robot}  ${green}Replacing ${cyan}pitpo${nc} files"
+  echo "--------------------------------------------------------------------------"
+  cp -R $COMPONENTS/pitpo/* $EMULATORS/pitpo
+  sleep 0.25
+  clear
   echo "--------------------------------------------------------------------------"
   echo -e "${fox}  ${green}Replacing ${cyan}handy-go${nc} files"
   echo "--------------------------------------------------------------------------"

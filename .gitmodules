@@ -27,3 +27,6 @@
 [submodule "Emulators/super-go-play"]
 	path = Emulators/super-go-play
 	url = git@github.com:mattkj/super-go-play.git
+[submodule "Emulators/pitpo"]
+	path = Emulators/pitpo
+	url = git@github.com:pitpo/go-play.git
