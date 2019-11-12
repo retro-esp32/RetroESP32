@@ -16,7 +16,6 @@ pce,        0,      ota_7,      0x890000,   0xb0000
 data_0,     0x40,   0x00,       0x940000,   0x400000
 #########################################################
 
-
 #   file size 0 kb            bytes 0           hex 0
 #   file size 64 kb           bytes 65536       hex 10000
 #   file size 128 kb          bytes 131072      hex 20000
@@ -50,15 +49,20 @@ data_0,     0x40,   0x00,       0x940000,   0x400000
 #   file size 1920 kb         bytes 1966080     hex 1e0000
 #   file size 1984 kb         bytes 2031616     hex 1f0000
 
-# Name,   Type, SubType, Offset,  Size
-#nvs,      data,     nvs,   0x9000,   0x4000
-#otadata,  data,     ota,   0xd000,   0x2000
-#phy_init, data,     phy,   0xf000,   0x1000
-#factory,  app, factory,  0x10000, 0x0F0000
-#storage,  data,  spiffs, 0x100000, 0x100000
-#app_0,       0,   ota_0, 0x200000, 0x100000
-#app_1,       0,   ota_1, 0x300000, 0x100000
-#app_2,       0,   ota_2, 0x400000, 0x100000
-#app_3,       0,   ota_3, 0x500000, 0x200000
-#data_0,   0x40,    0x00, 0x700000, 0x400000
-
+#   #########################################################
+#   # Name,     Type,   SubType,    Offset,     Size
+#   nvs,        data,   nvs,        0x9000,     0x4000
+#   otadata,    data,   ota,        0xd000,     0x2000
+#   phy_init,   data,   phy,        0xf000,     0x1000
+#   factory,    app,    factory,    0x10000,    0x100000
+#   storage,    data,   spiffs,     0x110000,   0x100000
+#   launcher,   0,      ota_0,      0x210000,   0x100000
+#   nes,        0,      ota_1,      0x310000,   0xc0000
+#   gb,         0,      ota_2,      0x3D0000,   0xb0000
+#   sms,        0,      ota_3,      0x480000,   0x160000
+#   a26,        0,      ota_4,      0x5E0000,   0x1a0000
+#   a78,        0,      ota_5,      0x780000,   0xc0000
+#   lnx,        0,      ota_6,      0x840000,   0xe0000
+#   pce,        0,      ota_7,      0x920000,   0xb0000
+#   data_0,     0x40,   0x00,       0x9D0000,   0x5D0000
+#   #########################################################

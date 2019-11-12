@@ -16,9 +16,16 @@ void draw_mask(int x, int y, int w, int h);
 void draw_background();
 
 /*
- Options
+ Settings
 */
 void draw_settings();
+
+/*
+ Toggle
+*/
+void draw_toggle();
+void get_toggle();
+void set_toggle();
 
 /*
  Volume

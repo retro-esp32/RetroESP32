@@ -26,12 +26,9 @@ void ili9341_write_frame_rectangleLE(short left, short top, short width, short h
 void display_tasktonotify_set(int value);
 
 int is_backlight_initialized();
-void odroid_display_show_splash();
 void odroid_display_drain_spi();
 void odroid_display_lock_gb_display();
 void odroid_display_unlock_gb_display();
-void odroid_display_show_sderr(int errNum);
-void odroid_display_show_hourglass();
 void odroid_display_lock_nes_display();
 void odroid_display_unlock_nes_display();
 void odroid_display_lock_sms_display();

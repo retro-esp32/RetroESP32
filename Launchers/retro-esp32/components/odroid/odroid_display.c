@@ -1,11 +1,6 @@
 #pragma GCC optimize ("O3")
 
 #include "odroid_display.h"
-#include "image_sd_card_alert.h"
-#include "image_sd_card_unknown.h"
-#include "hourglass_empty_black_48dp.h"
-
-#include "image_splash.h"
 
 #include "freertos/FreeRTOS.h"
 #include "esp_system.h"
@@ -1400,24 +1395,6 @@ int is_backlight_initialized()
     return isBackLightIntialized;
 }
 
-void odroid_display_show_splash()
-{
-    ili9341_write_frame_rectangleLE(0, 0, image_splash.width, image_splash.height, image_splash.pixel_data);
-
-    // // Drain SPI queue
-    // xTaskToNotify = 0;
-    //
-    // esp_err_t err = ESP_OK;
-    //
-    // while(err == ESP_OK)
-    // {
-    //     spi_transaction_t* trans_desc;
-    //     err = spi_device_get_trans_result(spi, &trans_desc, 0);
-    //
-    //     //printf("odroid_display_show_splash: removed pending transfer.\n");
-    // }
-}
-
 void odroid_display_drain_spi()
 {
     // if(xSemaphoreTake(spi_empty, 1000 / portTICK_RATE_MS) != pdTRUE )
@@ -1425,36 +1402,6 @@ void odroid_display_drain_spi()
     //     abort();
     // }
 }
-
-void odroid_display_show_sderr(int errNum)
-{
-    switch(errNum)
-    {
-        case ODROID_SD_ERR_BADFILE:
-            ili9341_write_frame_rectangleLE(0, 0, image_sd_card_unknown.width, image_sd_card_unknown.height, image_sd_card_unknown.pixel_data); // Bad File image
-            break;
-
-        case ODROID_SD_ERR_NOCARD:
-            ili9341_write_frame_rectangleLE(0, 0, image_sd_card_alert.width, image_sd_card_alert.height, image_sd_card_alert.pixel_data); // No Card image
-            break;
-
-        default:
-            abort();
-    }
-
-    // Drain SPI queue
-    odroid_display_drain_spi();
-}
-
-void odroid_display_show_hourglass()
-{
-    ili9341_write_frame_rectangleLE((320 / 2) - (image_hourglass_empty_black_48dp.width / 2),
-        (240 / 2) - (image_hourglass_empty_black_48dp.height / 2),
-        image_hourglass_empty_black_48dp.width,
-        image_hourglass_empty_black_48dp.height,
-        image_hourglass_empty_black_48dp.pixel_data);
-}
-
 
 SemaphoreHandle_t gb_mutex = NULL;
 

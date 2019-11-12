@@ -24,6 +24,7 @@
   int32_t VOLUME = 0;
   int8_t USER;
   int8_t SETTING;
+  int8_t COLOR;
 
   char** FILES;
   char folder_path[256] = "";
@@ -123,6 +124,9 @@
     // Theme
     get_theme();
     get_restore_states();
+
+    // Toggle
+    get_toggle();    
 
     GUI = THEMES[USER];
 
@@ -295,7 +299,7 @@
   }
 //}#pragma endregion Mask
 
-//{#pragma region Options
+//{#pragma region Settings
   void draw_settings() {
     int x = ORIGIN.x;
     int y = POS.y + 46;
@@ -305,17 +309,73 @@
 
     y+=20;
     draw_mask(x,y-1,100,17);
-    draw_text(x,y,"VOLUME",false, SETTING == 1 ? true : false);
+    draw_text(x,y,"COLORED ICONS",false, SETTING == 1 ? true : false);
+    draw_toggle();
+
+    y+=20;
+    draw_mask(x,y-1,100,17);
+    draw_text(x,y,"VOLUME",false, SETTING == 2 ? true : false);
 
     draw_volume();
   }
-//}#pragma endregion Options
+//}#pragma endregion Settings
+
+//{#pragma region Toggle
+  void draw_toggle() {
+    get_toggle();
+    int x = SCREEN.w - 38;
+    int y = POS.y + 66;
+    int w, h;
+
+    int i = 0;
+    for(int h = 0; h < 9; h++) {
+      for(int w = 0; w < 18; w++) {
+        buffer[i] = toggle[h + (COLOR*9)][w] == 0 ? GUI.bg : toggle[h + (COLOR*9)][w];
+        i++;
+      }
+    }
+    ili9341_write_frame_rectangleLE(x, y, 18, 9, buffer);
+  }
+
+  void set_toggle() {
+    COLOR = COLOR == 0 ? 1 : 0;
+    nvs_handle handle;
+    nvs_open("storage", NVS_READWRITE, &handle);
+    nvs_set_i8(handle, "COLOR", COLOR);
+    nvs_commit(handle);
+    nvs_close(handle);    
+  }
+
+  void get_toggle() {
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK( err );
+
+    nvs_handle handle;
+    err = nvs_open("storage", NVS_READWRITE, &handle);
+
+    err = nvs_get_i8(handle, "COLOR", &COLOR);
+    switch (err) {
+      case ESP_OK:
+        break;
+      case ESP_ERR_NVS_NOT_FOUND:
+        COLOR = false;
+        break;
+      default :
+        COLOR = false;
+    }
+    nvs_close(handle);
+  }  
+//}#pragma endregion Toggle  
 
 //{#pragma region Volume
   void draw_volume() {
     int32_t volume = get_volume();
     int x = SCREEN.w - 120;
-    int y = POS.y + 66;
+    int y = POS.y + 86;
     //int w = 25 * volume;
     int w, h;
 
@@ -332,7 +392,7 @@
       i = 0;
       for(h = 0; h < 7; h++) {
         for(w = 0; w < (25 * volume); w++) {
-          if(SETTING == 1) {
+          if(SETTING == 2) {
             buffer[i] = WHITE;
           } else {
             buffer[i] = GUI.fg;
@@ -431,7 +491,15 @@
       if(x > 0 && x < 288) {
         for(int r = 0; r < 32; r++) {
           for(int c = 0; c < 32; c++) {
-            buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
+            switch(COLOR) {
+              case 0:
+                buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
+              break;
+              case 1:
+                //buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
+                buffer[i] = SYSTEMS[e].color[r][c] == 0 ? GUI.bg : SYSTEMS[e].color[r][c];
+              break;
+            }
             i++;
           }
         }
@@ -456,7 +524,20 @@
     int i = 0;
     for(int h = 0; h < 16; h++) {
       for(int w = offset; w < (offset+16); w++) {
-        buffer[i] = media[h][w] == WHITE ? current ? WHITE : GUI.fg : GUI.bg;
+        switch(COLOR) {
+          case 0:
+            buffer[i] = media[h][w] == WHITE ? current ? WHITE : GUI.fg : GUI.bg;
+          break;
+          case 1:
+            buffer[i] = media_color[h][w] == 0 ? GUI.bg : media_color[h][w];        
+            if(current) {
+              buffer[i] = media_color[h+16][w] == 0 ? GUI.bg : media_color[h+16][w];                       
+            }          
+          break;
+        }
+        /*
+
+        */
         i++;
       }
     }
@@ -1036,7 +1117,7 @@
       */
       if(gamepad.values[ODROID_INPUT_LEFT]) {
         if(!LAUNCHER && !FOLDER) {
-          if(SETTING != 1) {
+          if(SETTING != 2) {
             STEP--;
             if( STEP < 0 ) {
               STEP = COUNT - 1;
@@ -1061,7 +1142,7 @@
       */
       if(gamepad.values[ODROID_INPUT_RIGHT]) {
         if(!LAUNCHER && !FOLDER) {
-          if(SETTING != 1) {
+          if(SETTING != 2) {
             STEP++;
             if( STEP > COUNT-1 ) {
               STEP = 0;
@@ -1088,7 +1169,7 @@
           if(STEP == 0) {
             if(!SETTINGS) {
               SETTING--;
-              if( SETTING < 0 ) { SETTING = 1; }
+              if( SETTING < 0 ) { SETTING = 2; }
               draw_settings();
             } else {
               USER--;
@@ -1119,7 +1200,7 @@
           if(STEP == 0) {
             if(!SETTINGS) {
               SETTING++;
-              if( SETTING > 1 ) { SETTING = 0; }
+              if( SETTING > 2 ) { SETTING = 0; }
               draw_settings();
             } else {
               USER++;
@@ -1186,7 +1267,7 @@
       */
       if (gamepad.values[ODROID_INPUT_A]) {
         if(STEP == 0) {
-          if(!SETTINGS && SETTING != 1) {
+          if(!SETTINGS && SETTING == 0) {
             SETTINGS = true;
             draw_background();
             draw_systems();
@@ -1197,9 +1278,15 @@
               break;
             }
           } else {
+            printf("\nSETTING:%d COLOR:%d\n", SETTING, COLOR);
             switch(SETTING) {
               case 0:
                 update_theme();
+              break;
+              case 1:
+                set_toggle();
+                draw_toggle();
+                draw_systems();
               break;
             }
           }

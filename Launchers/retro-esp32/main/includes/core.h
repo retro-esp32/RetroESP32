@@ -52,10 +52,11 @@
   Sprites
 */
 #include "../sprites/battery.h"
-#include "../sprites/charge.h"
 #include "../sprites/characters.h"
+#include "../sprites/folder.h"
 #include "../sprites/icons.h"
 #include "../sprites/logo.h"
 #include "../sprites/media.h"
-#include "../sprites/folder.h"
 #include "../sprites/speaker.h"
+#include "../sprites/systems.h"
+#include "../sprites/toggle.h"
