@@ -58,5 +58,5 @@
 #include "../sprites/logo.h"
 #include "../sprites/media.h"
 #include "../sprites/speaker.h"
-#include "../sprites/systems.h"
+//#include "../sprites/systems.h"
 #include "../sprites/toggle.h"
