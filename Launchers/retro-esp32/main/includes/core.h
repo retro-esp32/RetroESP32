@@ -37,6 +37,7 @@
 #include "driver/gpio.h"
 #include "driver/sdmmc_host.h"
 #include "driver/sdspi_host.h"
+#include "driver/ledc.h"
 
 /*
   Odroid
@@ -52,6 +53,7 @@
   Sprites
 */
 #include "../sprites/battery.h"
+#include "../sprites/brightness.h"
 #include "../sprites/characters.h"
 #include "../sprites/folder.h"
 #include "../sprites/icons.h"

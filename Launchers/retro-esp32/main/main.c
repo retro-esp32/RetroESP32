@@ -18,10 +18,12 @@
   bool SPLASH = true;
   bool SETTINGS = false;
 
-  int STEP = 0;
+  int8_t STEP = 0;
   int OPTION = 0;
   int PREVIOUS = 0;
   int32_t VOLUME = 0;
+  int32_t BRIGHTNESS = 10;
+  int32_t BRIGHTNESS_LEVELS[10] = {10,20,30,40,50,60,70,80,90,100};
   int8_t USER;
   int8_t SETTING;
   int8_t COLOR;
@@ -126,12 +128,15 @@
     get_restore_states();
 
     // Toggle
-    get_toggle();    
+    get_toggle();
 
     GUI = THEMES[USER];
 
     ili9341_prepare();
     ili9341_clear(0);
+
+    BRIGHTNESS = odroid_settings_Backlight_get();
+    odroid_settings_Backlight_set(BRIGHTNESS);
 
     //printf("==============\n%s\n==============\n", "RETRO ESP32");
     switch(esp_reset_reason()) {
@@ -147,6 +152,7 @@
         RESTART = false;
       break;
     }
+    STEP = 0;
     RESTART ? restart() : SPLASH ? splash() : NULL;
     draw_background();
     restore_layout();
@@ -261,7 +267,6 @@
 
   void draw_text(short x, short y, char *string, bool ext, bool current) {
     int length = !ext ? strlen(string) : strlen(string)-(strlen(EXTENSIONS[STEP])+1);
-    int size = 5;
     int rows = 7;
     int cols = 5;
     for(int n = 0; n < length; n++) {
@@ -317,6 +322,12 @@
     draw_text(x,y,"VOLUME",false, SETTING == 2 ? true : false);
 
     draw_volume();
+
+    y+=20;
+    draw_mask(x,y-1,100,17);
+    draw_text(x,y,"BRIGHTNESS",false, SETTING == 3 ? true : false);
+
+    draw_brightness();
   }
 //}#pragma endregion Settings
 
@@ -328,8 +339,8 @@
     int w, h;
 
     int i = 0;
-    for(int h = 0; h < 9; h++) {
-      for(int w = 0; w < 18; w++) {
+    for(h = 0; h < 9; h++) {
+      for(w = 0; w < 18; w++) {
         buffer[i] = toggle[h + (COLOR*9)][w] == 0 ? GUI.bg : toggle[h + (COLOR*9)][w];
         i++;
       }
@@ -343,7 +354,7 @@
     nvs_open("storage", NVS_READWRITE, &handle);
     nvs_set_i8(handle, "COLOR", COLOR);
     nvs_commit(handle);
-    nvs_close(handle);    
+    nvs_close(handle);
   }
 
   void get_toggle() {
@@ -368,8 +379,8 @@
         COLOR = false;
     }
     nvs_close(handle);
-  }  
-//}#pragma endregion Toggle  
+  }
+//}#pragma endregion Toggle
 
 //{#pragma region Volume
   void draw_volume() {
@@ -414,6 +425,68 @@
   }
 //}#pragma endregion Volume
 
+//{#pragma region Brightness
+  void draw_brightness() {
+    //int32_t brightness = get_brightness();
+    //printf("\n******\nbrightness:%d\n******\n", brightness);
+    int x = SCREEN.w - 120;
+    int y = POS.y + 106;
+    int w, h;
+
+    int i = 0;
+    for(h = 0; h < 7; h++) {
+      for(w = 0; w < 100; w++) {
+        buffer[i] = (w+h)%2 == 0 ? GUI.fg : GUI.bg;
+        i++;
+      }
+    }
+    ili9341_write_frame_rectangleLE(x, y, 100, 7, buffer);
+
+    //if(BRIGHTNESS > 0) {
+      i = 0;
+      for(h = 0; h < 7; h++) {
+        for(w = 0; w < (10 * BRIGHTNESS)+10; w++) {
+          if(SETTING == 3) {
+            buffer[i] = WHITE;
+          } else {
+            buffer[i] = GUI.fg;
+          }
+          i++;
+        }
+      }
+      ili9341_write_frame_rectangleLE(x, y, (10 * BRIGHTNESS)+10, 7, buffer);
+    //}
+
+    draw_speaker();
+  }
+  int32_t get_brightness() {
+    return odroid_settings_Backlight_get();
+  }
+  void set_brightness() {
+    printf("\n******\nBRIGHTNESS:%d\nBRIGHTNESS_LEVELS[%d]:%d\n******\n", BRIGHTNESS, BRIGHTNESS,BRIGHTNESS_LEVELS[BRIGHTNESS]);
+    odroid_settings_Backlight_set(BRIGHTNESS);
+    apply_brightness();
+    draw_brightness();
+  }
+  void apply_brightness() {
+    const int DUTY_MAX = 0x1fff;
+    int duty = DUTY_MAX * (BRIGHTNESS_LEVELS[BRIGHTNESS] * 0.01f);
+
+    printf("\n******\nBRIGHTNESS:%d\nBRIGHTNESS_LEVELS[%d]:%d\nduty:%d\n******\n",
+      BRIGHTNESS,
+      BRIGHTNESS,
+      BRIGHTNESS_LEVELS[BRIGHTNESS],
+      duty);
+
+    if(is_backlight_initialized()) {
+      uint32_t currentDuty = ledc_get_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
+
+      ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty, 1);
+      ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE /*LEDC_FADE_NO_WAIT*/);
+    }
+
+  }
+//}#pragma endregion Brightness
 //{#pragma region Theme
   void draw_themes() {
     int x = ORIGIN.x;
@@ -529,10 +602,10 @@
             buffer[i] = media[h][w] == WHITE ? current ? WHITE : GUI.fg : GUI.bg;
           break;
           case 1:
-            buffer[i] = media_color[h][w] == 0 ? GUI.bg : media_color[h][w];        
+            buffer[i] = media_color[h][w] == 0 ? GUI.bg : media_color[h][w];
             if(current) {
-              buffer[i] = media_color[h+16][w] == 0 ? GUI.bg : media_color[h+16][w];                       
-            }          
+              buffer[i] = media_color[h+16][w] == 0 ? GUI.bg : media_color[h+16][w];
+            }
           break;
         }
         /*
@@ -808,7 +881,6 @@
     //printf("\n");
     int x = ORIGIN.x;
     int y = POS.y + 48;
-    int game = ROMS.offset ;
     ROMS.page = ROMS.offset/ROMS.limit;
 
     /*
@@ -1117,7 +1189,7 @@
       */
       if(gamepad.values[ODROID_INPUT_LEFT]) {
         if(!LAUNCHER && !FOLDER) {
-          if(SETTING != 2) {
+          if(SETTING != 2 && SETTING != 3) {
             STEP--;
             if( STEP < 0 ) {
               STEP = COUNT - 1;
@@ -1127,10 +1199,19 @@
             ROMS.total = 0;
             animate(-1);
           } else {
-            if(VOLUME > 0) {
-              VOLUME--;
-              set_volume();
-              usleep(200000);
+            if(SETTING == 2) {
+              if(VOLUME > 0) {
+                VOLUME--;
+                set_volume();
+                usleep(200000);
+              }
+            }
+            if(SETTING == 3) {
+              if(BRIGHTNESS > 0) {
+                BRIGHTNESS--;
+                set_brightness();
+                usleep(200000);
+              }
             }
           }
         }
@@ -1142,7 +1223,7 @@
       */
       if(gamepad.values[ODROID_INPUT_RIGHT]) {
         if(!LAUNCHER && !FOLDER) {
-          if(SETTING != 2) {
+          if(SETTING != 2 && SETTING != 3) {
             STEP++;
             if( STEP > COUNT-1 ) {
               STEP = 0;
@@ -1151,10 +1232,19 @@
             ROMS.total = 0;
             animate(1);
           } else {
-            if(VOLUME < 4) {
-              VOLUME++;
-              set_volume();
-              usleep(200000);
+            if(SETTING == 2) {
+              if(VOLUME < 4) {
+                VOLUME++;
+                set_volume();
+                usleep(200000);
+              }
+            }
+            if(SETTING == 3) {
+              if(BRIGHTNESS < 9) {
+                BRIGHTNESS++;
+                set_brightness();
+                usleep(200000);
+              }
             }
           }
         }
@@ -1169,7 +1259,7 @@
           if(STEP == 0) {
             if(!SETTINGS) {
               SETTING--;
-              if( SETTING < 0 ) { SETTING = 2; }
+              if( SETTING < 0 ) { SETTING = 3; }
               draw_settings();
             } else {
               USER--;
@@ -1200,7 +1290,7 @@
           if(STEP == 0) {
             if(!SETTINGS) {
               SETTING++;
-              if( SETTING > 2 ) { SETTING = 0; }
+              if( SETTING > 3 ) { SETTING = 0; }
               draw_settings();
             } else {
               USER++;

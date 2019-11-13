@@ -35,6 +35,14 @@ int32_t get_volume();
 void set_volume();
 
 /*
+ Brightness
+*/
+void draw_brightness();
+int32_t get_brightness();
+void set_brightness();
+void apply_brightness();
+
+/*
  Theme
 */
 void draw_themes();
