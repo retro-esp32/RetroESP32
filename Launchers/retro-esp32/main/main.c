@@ -111,6 +111,9 @@
     VOLUME = odroid_settings_Volume_get();
     odroid_settings_Volume_set(VOLUME);
 
+    BRIGHTNESS = get_brightness();
+    //odroid_settings_Backlight_set(BRIGHTNESS);
+
     // Display
     ili9341_init();
 
@@ -134,9 +137,6 @@
 
     ili9341_prepare();
     ili9341_clear(0);
-
-    BRIGHTNESS = odroid_settings_Backlight_get();
-    //odroid_settings_Backlight_set(BRIGHTNESS);
 
     //printf("==============\n%s\n==============\n", "RETRO ESP32");
     switch(esp_reset_reason()) {
@@ -465,7 +465,7 @@
     odroid_settings_Backlight_set(BRIGHTNESS);
     usleep(15000);
     apply_brightness();
-    //draw_brightness();    
+    //draw_brightness();
   }
   void apply_brightness() {
     const int DUTY_MAX = 0x1fff;
@@ -478,7 +478,7 @@
         BRIGHTNESS,
         BRIGHTNESS_LEVELS[BRIGHTNESS],
         duty,
-        currentDuty);      
+        currentDuty);
       //if (currentDuty != duty) {
         ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty, 1);
         ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE);
