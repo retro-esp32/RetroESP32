@@ -22,7 +22,7 @@
   int OPTION = 0;
   int PREVIOUS = 0;
   int32_t VOLUME = 0;
-  int32_t BRIGHTNESS = 10;
+  int32_t BRIGHTNESS = 0;
   int32_t BRIGHTNESS_LEVELS[10] = {10,20,30,40,50,60,70,80,90,100};
   int8_t USER;
   int8_t SETTING;
@@ -136,7 +136,7 @@
     ili9341_clear(0);
 
     BRIGHTNESS = odroid_settings_Backlight_get();
-    odroid_settings_Backlight_set(BRIGHTNESS);
+    //odroid_settings_Backlight_set(BRIGHTNESS);
 
     //printf("==============\n%s\n==============\n", "RETRO ESP32");
     switch(esp_reset_reason()) {
@@ -427,8 +427,7 @@
 
 //{#pragma region Brightness
   void draw_brightness() {
-    //int32_t brightness = get_brightness();
-    //printf("\n******\nbrightness:%d\n******\n", brightness);
+    BRIGHTNESS = get_brightness();
     int x = SCREEN.w - 120;
     int y = POS.y + 106;
     int w, h;
@@ -457,36 +456,40 @@
       ili9341_write_frame_rectangleLE(x, y, (10 * BRIGHTNESS)+10, 7, buffer);
     //}
 
-    draw_speaker();
+    //draw_speaker();
   }
   int32_t get_brightness() {
     return odroid_settings_Backlight_get();
   }
   void set_brightness() {
-    printf("\n******\nBRIGHTNESS:%d\nBRIGHTNESS_LEVELS[%d]:%d\n******\n", BRIGHTNESS, BRIGHTNESS,BRIGHTNESS_LEVELS[BRIGHTNESS]);
     odroid_settings_Backlight_set(BRIGHTNESS);
+    usleep(15000);
     apply_brightness();
-    draw_brightness();
+    //draw_brightness();    
   }
   void apply_brightness() {
     const int DUTY_MAX = 0x1fff;
     int duty = DUTY_MAX * (BRIGHTNESS_LEVELS[BRIGHTNESS] * 0.01f);
 
-    printf("\n******\nBRIGHTNESS:%d\nBRIGHTNESS_LEVELS[%d]:%d\nduty:%d\n******\n",
-      BRIGHTNESS,
-      BRIGHTNESS,
-      BRIGHTNESS_LEVELS[BRIGHTNESS],
-      duty);
-
-    if(is_backlight_initialized()) {
+    //if(is_backlight_initialized()) {
       uint32_t currentDuty = ledc_get_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
+      printf("\n******\nBRIGHTNESS:%d\nBRIGHTNESS_LEVELS[%d]:%d\nduty:%d\ncurrentDuty:%d\n******\n",
+        BRIGHTNESS,
+        BRIGHTNESS,
+        BRIGHTNESS_LEVELS[BRIGHTNESS],
+        duty,
+        currentDuty);      
+      //if (currentDuty != duty) {
+        ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty, 1);
+        ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE);
+        ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty);
+      //}
+    //}
 
-      ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty, 1);
-      ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE /*LEDC_FADE_NO_WAIT*/);
-    }
-
+    //backlight_percentage_set(BRIGHTNESS_LEVELS[BRIGHTNESS]);
   }
 //}#pragma endregion Brightness
+
 //{#pragma region Theme
   void draw_themes() {
     int x = ORIGIN.x;

@@ -34,7 +34,10 @@
 /*
   Drivers
 */
+#include "driver/i2c.h"
 #include "driver/gpio.h"
+#include <driver/adc.h>
+#include "esp_adc_cal.h"
 #include "driver/sdmmc_host.h"
 #include "driver/sdspi_host.h"
 #include "driver/ledc.h"
