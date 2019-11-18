@@ -135,7 +135,7 @@ static void odroid_input_task(void *arg)
                     break;
             }
 		}
-
+        /*
         if (gamepad_state.values[ODROID_INPUT_START])
         {
 
@@ -158,13 +158,13 @@ static void odroid_input_task(void *arg)
 
 
         }
-
         if (is_backlight_initialized())
         {
             const int DUTY_MAX = 0x1fff;
             int duty = DUTY_MAX * (BacklightLevels[BacklightLevel] * 0.01f);
 
             uint32_t currentDuty = ledc_get_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
+
             if (currentDuty != duty)
             {
                 changed = true;
@@ -176,13 +176,14 @@ static void odroid_input_task(void *arg)
 
 
                 ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty, 1);
-                ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE /*LEDC_FADE_NO_WAIT*/);
+                ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE);
 
                 //ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty);
 
                 changed = false;
             }
         }
+        */
 
         previous_gamepad_state = gamepad_state;
 

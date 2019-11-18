@@ -23,10 +23,12 @@
   int PREVIOUS = 0;
   int32_t VOLUME = 0;
   int32_t BRIGHTNESS = 0;
+  int32_t BRIGHTNESS_COUNT = 10;
   int32_t BRIGHTNESS_LEVELS[10] = {10,20,30,40,50,60,70,80,90,100};
   int8_t USER;
   int8_t SETTING;
   int8_t COLOR;
+  uint32_t currentDuty;
 
   char** FILES;
   char folder_path[256] = "";
@@ -111,11 +113,12 @@
     VOLUME = odroid_settings_Volume_get();
     odroid_settings_Volume_set(VOLUME);
 
-    BRIGHTNESS = get_brightness();
     //odroid_settings_Backlight_set(BRIGHTNESS);
 
     // Display
     ili9341_init();
+    BRIGHTNESS = get_brightness();
+    apply_brightness();    
 
     // Joystick
     odroid_input_gamepad_init();
@@ -152,7 +155,7 @@
         RESTART = false;
       break;
     }
-    STEP = 0;
+    //STEP = 0;
     RESTART ? restart() : SPLASH ? splash() : NULL;
     draw_background();
     restore_layout();
@@ -167,6 +170,7 @@
   void debounce(int key) {
     draw_battery();
     draw_speaker();
+    draw_contrast();
     while (gamepad.values[key]) odroid_input_gamepad_read(&gamepad);
   }
 //}#pragma endregion Debounce
@@ -301,6 +305,7 @@
     for (int i = 0; i < 4; i++) draw_mask(0, i*h, w, h);
     draw_battery();
     draw_speaker();
+    draw_contrast();
   }
 //}#pragma endregion Mask
 
@@ -427,7 +432,6 @@
 
 //{#pragma region Brightness
   void draw_brightness() {
-    BRIGHTNESS = get_brightness();
     int x = SCREEN.w - 120;
     int y = POS.y + 106;
     int w, h;
@@ -444,7 +448,7 @@
     //if(BRIGHTNESS > 0) {
       i = 0;
       for(h = 0; h < 7; h++) {
-        for(w = 0; w < (10 * BRIGHTNESS)+10; w++) {
+        for(w = 0; w < (BRIGHTNESS_COUNT * BRIGHTNESS)+BRIGHTNESS+1; w++) {
           if(SETTING == 3) {
             buffer[i] = WHITE;
           } else {
@@ -453,40 +457,41 @@
           i++;
         }
       }
-      ili9341_write_frame_rectangleLE(x, y, (10 * BRIGHTNESS)+10, 7, buffer);
+      ili9341_write_frame_rectangleLE(x, y, (BRIGHTNESS_COUNT * BRIGHTNESS)+BRIGHTNESS+1, 7, buffer);
     //}
-
-    //draw_speaker();
+    draw_contrast();
   }
   int32_t get_brightness() {
     return odroid_settings_Backlight_get();
   }
   void set_brightness() {
     odroid_settings_Backlight_set(BRIGHTNESS);
-    usleep(15000);
+    draw_brightness();
     apply_brightness();
-    //draw_brightness();
   }
   void apply_brightness() {
     const int DUTY_MAX = 0x1fff;
+    //BRIGHTNESS = get_brightness();
     int duty = DUTY_MAX * (BRIGHTNESS_LEVELS[BRIGHTNESS] * 0.01f);
 
-    //if(is_backlight_initialized()) {
-      uint32_t currentDuty = ledc_get_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-      printf("\n******\nBRIGHTNESS:%d\nBRIGHTNESS_LEVELS[%d]:%d\nduty:%d\ncurrentDuty:%d\n******\n",
-        BRIGHTNESS,
-        BRIGHTNESS,
-        BRIGHTNESS_LEVELS[BRIGHTNESS],
-        duty,
-        currentDuty);
-      //if (currentDuty != duty) {
-        ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty, 1);
-        ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE);
-        ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty);
-      //}
-    //}
-
-    //backlight_percentage_set(BRIGHTNESS_LEVELS[BRIGHTNESS]);
+    if(is_backlight_initialized()) {
+      currentDuty = ledc_get_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
+      if (currentDuty != duty) {
+        //ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, currentDuty);
+        //ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
+        //ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty, 1000);
+        //ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE /*LEDC_FADE_NO_WAIT|LEDC_FADE_WAIT_DONE|LEDC_FADE_MAX*/);        
+        //ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty);
+        //ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
+        ledc_set_fade_time_and_start(
+          LEDC_LOW_SPEED_MODE,
+          LEDC_CHANNEL_0,
+          duty,
+            25,
+          LEDC_FADE_WAIT_DONE
+        );
+      }
+    }
   }
 //}#pragma endregion Brightness
 
@@ -695,6 +700,46 @@
     ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
   }
 
+  void draw_contrast() {
+    int32_t dy = 0;
+    switch(BRIGHTNESS) {
+      case 10:
+      case 9:
+      case 8:
+        dy = 0;
+      break;
+      case 7:      
+      case 6:
+      case 5:
+        dy = 16;
+      break;
+      case 4:      
+      case 3:
+      case 2:
+        dy = 32;
+      break; 
+      case 1:
+      case 0:
+        dy = 48;
+      break;
+    }
+    int i = 0;
+    int x = SCREEN.w - 72;
+    int y = 8;
+    int h = 16;
+    int w = 16;    
+
+    draw_mask(x,y,16,16);
+
+    for(h = 0; h < 16; h++) {
+      for(w = 0; w < 16; w++) {
+        buffer[i] = brightness[dy+h][w] == WHITE ? WHITE : GUI.bg;
+        i++;
+      }
+    }
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);    
+  }
+
   void draw_numbers() {
     int x = 296;
     int y = POS.y + 48;
@@ -830,6 +875,7 @@
   //}#pragma endregion Sort
 
   void get_files() {
+    free(FILES);
     FILES = (char**)malloc(MAX_FILES * sizeof(void*));
     ROMS.total = 0;
 
@@ -1181,12 +1227,12 @@
   static void launcher() {
     draw_battery();
     draw_speaker();
+    draw_contrast();
     while (true) {
       /*
         Get Gamepad State
       */
       odroid_input_gamepad_read(&gamepad);
-
       /*
         LEFT
       */
@@ -1243,7 +1289,7 @@
               }
             }
             if(SETTING == 3) {
-              if(BRIGHTNESS < 9) {
+              if(BRIGHTNESS < (BRIGHTNESS_COUNT-1)) {
                 BRIGHTNESS++;
                 set_brightness();
                 usleep(200000);
