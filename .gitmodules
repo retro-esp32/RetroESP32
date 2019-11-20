@@ -30,3 +30,7 @@
 [submodule "Emulators/pitpo"]
 	path = Emulators/pitpo
 	url = git@github.com:pitpo/go-play.git
+[submodule "Emulators/odroid-go-spectrum-emulator"]
+	path = Emulators/odroid-go-spectrum-emulator
+	url = git@github.com:pelle7/odroid-go-spectrum-emulator.git
+	branch = feature/goemu
