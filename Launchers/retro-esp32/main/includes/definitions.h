@@ -30,3 +30,8 @@
 
 */
 #define MAX_FILES 4096
+
+/*
+
+*/
+#define BUILD "Version 1 Build 6 (v.1.6)"

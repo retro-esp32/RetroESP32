@@ -21,7 +21,7 @@ source helpers/styles
 
 
 echo "--------------------------------------------------------------------------"
-echo -e "${panda}  ${green}Creating ${cyan}Arduino${nc} Firmware"
+echo -e "${pad}  ${green}Creating ${cyan}Arduino${nc} Firmware"
 echo "--------------------------------------------------------------------------"
 
 cd $SRC_PATH

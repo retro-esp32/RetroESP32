@@ -55,10 +55,11 @@ esptool.py \
 0x280000 $FIRMWARE_PATH/Bins/nesemu-go.bin \
 0x340000 $FIRMWARE_PATH/Bins/gnuboy-go.bin \
 0x3F0000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin \
-0x550000 $FIRMWARE_PATH/Bins/stella-go.bin \
-0x6F0000 $FIRMWARE_PATH/Bins/prosystem-go.bin \
-0x7B0000 $FIRMWARE_PATH/Bins/handy-go.bin \
-0x890000 $FIRMWARE_PATH/Bins/pcengine-go.bin
+0x550000 $FIRMWARE_PATH/Bins/spectrum.bin \
+0x5E0000 $FIRMWARE_PATH/Bins/stella-go.bin \
+0x780000 $FIRMWARE_PATH/Bins/prosystem-go.bin \
+0x840000 $FIRMWARE_PATH/Bins/handy-go.bin \
+0x920000 $FIRMWARE_PATH/Bins/pcengine-go.bin
 
 #---------------------------------
 # Goodbye

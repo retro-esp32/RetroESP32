@@ -18,8 +18,9 @@ source helpers/paths
 #---------------------------------
 source helpers/process
 
+clear
 echo "--------------------------------------------------------------------------"
-echo -e "${panda}  ${green}Creating ${cyan}${NAME}${nc} Firmware"
+echo -e "${disk} ${green}Creating ${cyan}${NAME}${nc} Firmware"
 echo "--------------------------------------------------------------------------"
 
 echo "Building mkfw"
@@ -34,10 +35,11 @@ $MKFW_PATH/mkfw "${NAME}" $FIRMWARE_PATH/Assets/${TILE}.raw \
 0 17 786432 nesemu-go $FIRMWARE_PATH/Bins/nesemu-go.bin \
 0 18 720896 gnuboy-go $FIRMWARE_PATH/Bins/gnuboy-go.bin \
 0 19 1441792 smsplusgx-go $FIRMWARE_PATH/Bins/smsplusgx-go.bin \
-0 20 1703936 stella-go $FIRMWARE_PATH/Bins/stella-go.bin \
-0 21 786432 prosystem-go $FIRMWARE_PATH/Bins/prosystem-go.bin \
-0 22 1507328 handy-go $FIRMWARE_PATH/Bins/handy-go.bin \
-0 23 720896 pcengine-go $FIRMWARE_PATH/Bins/pcengine-go.bin
+0 20 524288 spectrum $FIRMWARE_PATH/Bins/spectrum.bin \
+0 21 1703936 stella-go $FIRMWARE_PATH/Bins/stella-go.bin \
+0 22 786432 prosystem-go $FIRMWARE_PATH/Bins/prosystem-go.bin \
+0 23 1507328 handy-go $FIRMWARE_PATH/Bins/handy-go.bin \
+0 24 720896 pcengine-go $FIRMWARE_PATH/Bins/pcengine-go.bin
 
 mv firmware.fw "$FIRMWARE_PATH/Releases/${NAME}.fw"
 

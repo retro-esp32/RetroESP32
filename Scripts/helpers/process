@@ -20,7 +20,7 @@ NAME=""
 set_config_option() {
   clear
   CONFIG="n"
-  OPTION="${monkey}  Would you like to run ${magenta}'make menuconfig'? ${nc}[y/${bold}N${nc}]"
+  OPTION="${memo}  Would you like to run ${magenta}'make menuconfig'? ${nc}[y/${bold}N${nc}]"
   echo "--------------------------------------------------------------------------"
   echo -e "${OPTION}"
   echo "--------------------------------------------------------------------------"
@@ -44,7 +44,7 @@ get_config_option() {
 set_clean_option() {
   clear
   CLEAN="n"
-  OPTION="${monkey}  Would you like to run ${magenta}'make clean'? ${nc}[y/${bold}N${nc}]"
+  OPTION="${bomb}  Would you like to run ${magenta}'make clean'? ${nc}[y/${bold}N${nc}]"
   echo "--------------------------------------------------------------------------"
   echo -e "${OPTION}"
   echo "--------------------------------------------------------------------------"
@@ -64,7 +64,7 @@ get_clean_option() {
   fi
 }
 
-OPTION="${monkey}  ${red}Please Select a ${cyan}Launcher? ${nc}"
+OPTION="${pad}  ${red}Please Select a ${cyan}Launcher? ${nc}"
 echo "--------------------------------------------------------------------------"
 echo -e "${OPTION}"
 echo "--------------------------------------------------------------------------"
@@ -100,7 +100,7 @@ done
 clear
 
 echo "--------------------------------------------------------------------------"
-echo -e "${squid}  ${red}Recompile ${cyan}Launcher? ${nc}[y/${bold}N${nc}]"
+echo -e "${wrench}  ${red}Recompile ${cyan}Launcher? ${nc}[y/${bold}N${nc}]"
 echo "--------------------------------------------------------------------------"
 read -n 1 -r response
 if [[ "$response" = "y" ]]
@@ -109,7 +109,7 @@ then
   set_config_option
 
   echo "--------------------------------------------------------------------------"
-  echo -e "${squid}  ${green}Compiling ${cyan}Launcher${nc}"
+  echo -e "${wrench}  ${green}Compiling ${cyan}Launcher${nc}"
   echo "--------------------------------------------------------------------------"
 
   rm $FIRMWARE_PATH/Bins/bootloader.bin
@@ -155,7 +155,7 @@ fi
 clear
 
 echo "--------------------------------------------------------------------------"
-echo -e "${squid}  ${red}Recompile ${cyan}Emulators? ${nc}[y/${bold}N${nc}]"
+echo -e "${game}  ${red}Recompile ${cyan}Emulators? ${nc}[y/${bold}N${nc}]"
 echo "--------------------------------------------------------------------------"
 read -n 1 -r response
 if [[ "$response" = "y" ]]
@@ -163,19 +163,11 @@ then
   set_clean_option
   set_config_option
 
-#  rm $FIRMWARE_PATH/Bins/gnuboy-go.bin
-#  rm $FIRMWARE_PATH/Bins/nesemu-go.bin
-#  rm $FIRMWARE_PATH/Bins/smsplusgx-go.bin
-#  rm $FIRMWARE_PATH/Bins/handy-go.bin
-#  rm $FIRMWARE_PATH/Bins/prosystem-go.bin
-#  rm $FIRMWARE_PATH/Bins/stella-go.bin
-#  rm $FIRMWARE_PATH/Bins/pcengine-go.bin
-
   cd $SUPER_GOPLAY_PATH
 
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${lion}  ${green}Compiling ${cyan}gnuboy-go${nc}"
+  echo -e "${game}  ${green}Compiling ${cyan}gnuboy-go${nc}"
   echo "--------------------------------------------------------------------------"
   cd gnuboy-go
   get_clean_option
@@ -187,7 +179,7 @@ then
 
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${fox}  ${green}Compiling ${cyan}nesemu-go${nc}"
+  echo -e "${game}  ${green}Compiling ${cyan}nesemu-go${nc}"
   echo "--------------------------------------------------------------------------"
   cd nesemu-go
   get_clean_option
@@ -197,7 +189,7 @@ then
 
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${panda}  ${green}Compiling ${cyan}smsplusgx-go${nc}"
+  echo -e "${game}  ${green}Compiling ${cyan}smsplusgx-go${nc}"
   echo "--------------------------------------------------------------------------"
   cd ../smsplusgx-go
   get_clean_option
@@ -205,12 +197,12 @@ then
   make -j8
   cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
 
-  cd $EMULATOR_PATH
 
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${panda}  ${green}Compiling ${cyan}prosystem-odroid-go${nc}"
+  echo -e "${game}  ${green}Compiling ${cyan}prosystem-odroid-go${nc}"
   echo "--------------------------------------------------------------------------"
+  cd $EMULATOR_PATH
   cd prosystem-odroid-go
   get_clean_option
   get_config_option
@@ -219,9 +211,10 @@ then
 
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${panda}  ${green}Compiling ${cyan}stella-odroid-go${nc}"
+  echo -e "${game}  ${green}Compiling ${cyan}stella-odroid-go${nc}"
   echo "--------------------------------------------------------------------------"
-  cd ../stella-odroid-go
+  cd $EMULATOR_PATH  
+  cd stella-odroid-go
   get_clean_option
   get_config_option
   make -j8
@@ -229,9 +222,10 @@ then
 
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${panda}  ${green}Compiling ${cyan}handy-go${nc}"
+  echo -e "${game}  ${green}Compiling ${cyan}handy-go${nc}"
   echo "--------------------------------------------------------------------------"
-  cd ../handy-go
+  cd $EMULATOR_PATH
+  cd handy-go
   get_clean_option
   get_config_option
   make -j8
@@ -239,13 +233,25 @@ then
 
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${panda}  ${green}Compiling ${cyan}pcengine-go${nc}"
+  echo -e "${game}  ${green}Compiling ${cyan}pcengine-go${nc}"
   echo "--------------------------------------------------------------------------"
-  cd ../odroid-go-pcengine-huexpress/pcengine-go
+  cd $EMULATOR_PATH
+  cd odroid-go-pcengine-huexpress/pcengine-go
   get_clean_option
   get_config_option
   make -j8
   cp ./build/pcengine-go.bin $FIRMWARE_PATH/Bins/
+
+  clear
+  echo "--------------------------------------------------------------------------"
+  echo -e "${game}  ${green}Compiling ${cyan}spectrum-go${nc}"
+  echo "--------------------------------------------------------------------------"
+  cd $EMULATOR_PATH
+  cd odroid-go-spectrum-emulator
+  get_clean_option
+  get_config_option
+  make -j8
+  cp ./build/spectrum.bin $FIRMWARE_PATH/Bins/  
 fi
 
 cd $SRC_PATH

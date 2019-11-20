@@ -23,7 +23,7 @@ source helpers/styles
 
 
 echo "--------------------------------------------------------------------------"
-echo -e "${game}  ${white}LCD Screen Driver Option"
+echo -e "${screen}  ${white}LCD Screen Driver Option"
 echo -e "This will add a ${white}Kconfig.projbuild${nc} for the TFT Display"
 echo -e "Running ${magenta}'make menuconfig'${nc}  will provide you option to set:"
 echo -e "${cyanbg} ${white}LCD Screen Driver                                          ${nc}"
@@ -62,49 +62,56 @@ then
   sleep 0.25
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${robot}  ${green}Replacing ${cyan}pitpo${nc} files"
+  echo -e "${unicorn}  ${green}Replacing ${cyan}pitpo${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/pitpo/* $EMULATORS/pitpo
   sleep 0.25
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${fox}  ${green}Replacing ${cyan}handy-go${nc} files"
+  echo -e "${dragon}  ${green}Replacing ${cyan}handy-go${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/handy-go/* $EMULATORS/handy-go
   sleep 0.25
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${fox}  ${green}Replacing ${cyan}odroid-go-pcengine-huexpress${nc} files"
+  echo -e "${lion}  ${green}Replacing ${cyan}odroid-go-pcengine-huexpress${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/odroid-go-pcengine-huexpress/* $EMULATORS/odroid-go-pcengine-huexpress
   sleep 0.25
   clear
+  clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${fox}  ${green}Replacing ${cyan}frodo-go${nc} files"
+  echo -e "${monkey}  ${green}Replacing ${cyan}odroid-go-spectrum-emulator${nc} files"
+  echo "--------------------------------------------------------------------------"
+  cp -R $COMPONENTS/odroid-go-spectrum-emulator/* $EMULATORS/odroid-go-spectrum-emulator
+  sleep 0.25
+  clear  
+  echo "--------------------------------------------------------------------------"
+  echo -e "${chicken}  ${green}Replacing ${cyan}frodo-go${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/frodo-go/* $EMULATORS/frodo-go
   sleep 0.25
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${lion}  ${green}Replacing ${cyan}prosystem-odroid-go${nc} files"
+  echo -e "${panda}  ${green}Replacing ${cyan}prosystem-odroid-go${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/prosystem-odroid-go/* $EMULATORS/prosystem-odroid-go
   sleep 0.25
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${monkey}  ${green}Replacing ${cyan}stella-odroid-go${nc} files"
+  echo -e "${whale}  ${green}Replacing ${cyan}stella-odroid-go${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/stella-odroid-go/* $EMULATORS/stella-odroid-go
   sleep 0.25
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${panda}  ${green}Replacing ${cyan}emulator-launcher-odroid-go${nc} files"
+  echo -e "${hamster}  ${green}Replacing ${cyan}emulator-launcher-odroid-go${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/emulator-launcher-odroid-go/* $LAUNCHERS/emulator-launcher-odroid-go
   sleep 0.25
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${whale}  ${green}Replacing ${cyan}gogo${nc} files"
+  echo -e "${rabbit}  ${green}Replacing ${cyan}gogo${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/gogo/* $LAUNCHERS/gogo
   sleep 0.25

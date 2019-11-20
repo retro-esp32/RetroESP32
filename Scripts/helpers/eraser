@@ -2,27 +2,27 @@
 
 clear
 echo "--------------------------------------------------------------------------"
-echo -e "${monkey}  ${red}Erase Flash ${nc}[y/${bold}N${nc}]"
+echo -e "${bomb}  ${red}Erase Flash ${nc}[y/${bold}N${nc}]"
 echo "--------------------------------------------------------------------------"
 read -n 1 -r response
 if [[ "$response" = "y" ]]
 then
     clear
     echo "--------------------------------------------------------------------------"
-    echo -e "${monkey}  ${red}Erasing${nc} --> Flash"
+    echo -e "${fire}  ${red}Erasing${nc} --> Flash"
     echo "--------------------------------------------------------------------------"
     esptool.py --chip esp32 --port ${PORT} --baud ${BAUD} --before default_reset --after hard_reset erase_flash
 fi
 clear
 echo "--------------------------------------------------------------------------"
-echo -e "${monkey}  ${red}Erase Storage ${nc}[y/${bold}N${nc}]"
+echo -e "${bomb}  ${red}Erase Storage ${nc}[y/${bold}N${nc}]"
 echo "--------------------------------------------------------------------------"
 read -n 1 -r response
 if [[ "$response" = "y" ]]
 then
 clear
     echo "--------------------------------------------------------------------------"
-    echo -e "${monkey}  ${red}Erasing${nc} --> Storage"
+    echo -e "${fire}  ${red}Erasing${nc} --> Storage"
     echo "--------------------------------------------------------------------------"
     esptool.py --chip esp32 --port ${PORT} --baud ${BAUD} erase_region 0xf00000 0x100000
 fi

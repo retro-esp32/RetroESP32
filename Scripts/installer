@@ -9,7 +9,7 @@ SCRIPTS=$PWD
 TAR=''
 
 echo "--------------------------------------------------------------------------"
-echo -e "${squid}  ${red}(Re)Install ${cyan}xtensa-esp32? ${nc}[y/${bold}N${nc}]"
+echo -e "${wrench}  ${red}(Re)Install ${cyan}xtensa-esp32? ${nc}[y/${bold}N${nc}]"
 echo "--------------------------------------------------------------------------"
 read -n 1 -r response
 if [[ "$response" = "y" ]]
@@ -37,14 +37,14 @@ then
   --progress-bar
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${fox}  ${blue}Extracting ${cyan}xtensa-esp32${nc}"
+  echo -e "${disk}  ${blue}Extracting ${cyan}xtensa-esp32${nc}"
   echo "--------------------------------------------------------------------------"
   cd ~/esp
   tar -xzf ~/Downloads/${TAR}
   sleep 1
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${squid}  ${blue}Preparing ${cyan}environment variables${nc}"
+  echo -e "${memo}  ${blue}Preparing ${cyan}environment variables${nc}"
   echo "--------------------------------------------------------------------------"
   cd ${SCRIPTS}
 

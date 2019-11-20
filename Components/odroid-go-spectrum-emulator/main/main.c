@@ -588,7 +588,7 @@ void app_main(void)
     odroid_sdcard_open(SD_BASE_PATH);   // map SD card.
     // see if there is a 'resume.txt' file, use it if so...
     
-    odroid_settings_RomFilePath_set("/sd/roms/spectrum/Donkey Kong (1986)(Ocean Software).z80");
+    //odroid_settings_RomFilePath_set("/sd/roms/spectrum/Donkey Kong (1986)(Ocean Software).z80");
     char* romPath = odroid_settings_RomFilePath_get();
     if (romPath)
     {

@@ -59,14 +59,14 @@ export install_esp32
 clear
 
 echo "--------------------------------------------------------------------------"
-echo -e "${squid}  ${red}(Re)Install ${cyan}ESP32 IDF? ${nc}[y/${bold}N${nc}]"
+echo -e "${disk}  ${red}(Re)Install ${cyan}ESP32 IDF? ${nc}[y/${bold}N${nc}]"
 echo "--------------------------------------------------------------------------"
 read -n 1 -r response
 if [[ "$response" = "y" ]]
 then
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${fox}  ${blue}Processing ${cyan}ESP32 IDF${nc}"
+  echo -e "${wrench}  ${blue}Processing ${cyan}ESP32 IDF${nc}"
   echo "--------------------------------------------------------------------------"
 #  cd ~/esp
 #  git clone --recursive https://github.com/espressif/esp-idf.git

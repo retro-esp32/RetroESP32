@@ -61,7 +61,7 @@
     "sms",      // 3
     "gg",       // 3
     "col",      // 3
-    "spectrum", // 3
+    "spectrum", // 4
     "a26",      // 5
     "a78",      // 6
     "lynx",       // 7
@@ -76,14 +76,14 @@
     "sms",      // 3
     "gg",       // 3
     "col",      // 3
-    "z80",      // 3
+    "z80",      // 4
     "a26",      // 5
     "a78",      // 6
     "lnx",      // 7
     "pce",      // 8
   };
 
-  int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 3, 4, 5, 6, 7, 8};
+  int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 4, 5, 6, 7, 8, 9};
   int LIMIT = 6;
 //}#pragma endregion Emulator and Directories
 
@@ -333,6 +333,15 @@
     draw_text(x,y,"BRIGHTNESS",false, SETTING == 3 ? true : false);
 
     draw_brightness();
+
+    /*
+      BUILD
+    */
+    char message[100] = BUILD;
+    int width = strlen(message)*5;
+    int center = ceil((320)-(width))-48;
+    y = 225;
+    draw_text(center,y,message,false,false);    
   }
 //}#pragma endregion Settings
 
@@ -763,7 +772,15 @@
     int h = 32;
     for(int r = 0; r < 32; r++) {
       for(int c = 0; c < 32; c++) {
-        buffer[i] = SYSTEMS[STEP].system[r][c] == WHITE ? WHITE : GUI.bg;
+        switch(COLOR) {
+          case 0:
+            buffer[i] = SYSTEMS[STEP].system[r][c] == WHITE ? WHITE : GUI.bg;
+          break;
+          case 1:
+            //buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
+            buffer[i] = SYSTEMS[STEP].color[r][c] == 0 ? GUI.bg : SYSTEMS[STEP].color[r][c];
+          break;
+        }        
         i++;
       }
     }
@@ -1077,6 +1094,15 @@
       }
     }
     ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+
+    /*
+      BUILD
+    */
+    char message[100] = BUILD;
+    int width = strlen(message)*5;
+    int center = ceil((320)-(width))-48;
+    y = 225;
+    draw_text(center,y,message,false,false);
 
     sleep(2);
     draw_background();
