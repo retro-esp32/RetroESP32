@@ -39,7 +39,7 @@ extern char *syscard_filename;
     #include "../components/odroid/odroid_hud.h"
     int ACTION;
 #endif
-    
+
 #define NOINLINE  __attribute__ ((noinline))
 
 const char* SD_BASE_PATH = "/sd";
@@ -70,7 +70,7 @@ void dump_heap_info_short() {
 }
 
 void *my_special_alloc(unsigned char speed, unsigned char bytes, unsigned long size) {
-    uint32_t caps = (speed?MALLOC_CAP_INTERNAL:MALLOC_CAP_SPIRAM) | 
+    uint32_t caps = (speed?MALLOC_CAP_INTERNAL:MALLOC_CAP_SPIRAM) |
       ( bytes==1?MALLOC_CAP_8BIT:MALLOC_CAP_32BIT);
       /*
     if (speed) {
@@ -169,7 +169,7 @@ void videoTask_mode0_w336(void *arg) { VID_TASK(ili9341_write_frame_pcengine_mod
 
 #ifdef MY_SND_AS_TASK
 #define AUDIO_SAMPLE_RATE (22050)
-#define AUDIO_BUFFER_SIZE (4096) 
+#define AUDIO_BUFFER_SIZE (4096)
 //(1920*4)
 #define AUDIO_CHANNELS 6
 short *sbuf_mix[2];
@@ -179,7 +179,7 @@ void audioTask_mode0(void *arg) {
     audioTaskIsRunning = true;
     printf("%s: STARTED\n", __func__);
     uint8_t buf = 0;
-    
+
     while(1)
     {
         if (xQueuePeek(audioQueue, &param, 0) == pdTRUE)
@@ -205,7 +205,7 @@ void audioTask_mode0(void *arg) {
         uchar lvol, rvol;
         lvol = (io.psg_volume >> 4) * 1.22;
         rvol = (io.psg_volume & 0x0F) * 1.22;
-        
+
         short *p = sbuf_mix[buf];
         for (int i = 0;i < AUDIO_BUFFER_SIZE/2;i++)
         {
@@ -227,7 +227,7 @@ void audioTask_mode0(void *arg) {
         uchar lvol, rvol;
         lvol = (io.psg_volume >> 4) * 1.22;
         rvol = (io.psg_volume & 0x0F) * 1.22;
-        
+
         short *p = sbuf_mix[buf];
         for (int i = 0;i < AUDIO_BUFFER_SIZE/2;i++)
         {
@@ -246,7 +246,7 @@ void audioTask_mode0(void *arg) {
             *(p+1) = rval;
             p+=2;
         }
-        
+
         odroid_audio_submit((short*)sbuf_mix[buf], AUDIO_BUFFER_SIZE/4);
         buf = buf?0:1;
     }
@@ -285,13 +285,13 @@ NOINLINE void update_display_task(int width)
         printf("VIDEO: Task: Stop\n");
         StopVideo();
         printf("VIDEO: Task: Stop done\n");
-        
+
         printf("VIDEO: Clear display\n");
         //odroid_display_lock();
         ili9341_clear(0);
         //odroid_display_unlock();
     }
-    
+
     TaskFunction_t taskFunc;
     if (width == 224)
         taskFunc = &videoTask_mode0_w224;
@@ -331,12 +331,33 @@ void DoMenuHome(bool save)
     uint16_t* param = TASK_BREAK;
     void *exitAudioTask = NULL;
 
-    #ifdef CONFIG_IN_GAME_MENU_YES 
+    #ifdef CONFIG_IN_GAME_MENU_YES
         //odroid_display_lock();
         EmuAudio(false);
         hud_menu();
-        printf("\nACTION:%d\n", ACTION); 
+        printf("\nACTION:%d\n", ACTION);
         switch(ACTION) {
+            case 1:
+                // Clear audio to prevent studdering
+                printf("PowerDown: stopping audio.\n");
+                #ifdef MY_SND_AS_TASK
+                    EmuAudio(false);
+                    odroid_audio_terminate();
+                #endif
+
+                // Stop tasks
+                printf("PowerDown: stopping tasks.\n");
+                StopVideo();
+                odroid_display_lock();
+                odroid_sdcard_close();
+                odroid_display_unlock();
+
+                gpio_set_level(GPIO_NUM_2, 0);
+                // Set menu application
+                odroid_system_application_set(8);
+                // Reset
+                esp_restart();
+            break;
             case 3:
             case 4:
                 hud_progress("Saving...", true);
@@ -347,11 +368,11 @@ void DoMenuHome(bool save)
             break;
             case 5:
                 printf("\nDELETE ROM\n");
-            break;   
-        }               
-        ili9341_clear(0);  
+            break;
+        }
+        ili9341_clear(0);
         EmuAudio(true);
-        odroid_display_unlock();    
+        odroid_display_unlock();
     #else
         // Clear audio to prevent studdering
         printf("PowerDown: stopping audio.\n");
@@ -363,7 +384,7 @@ void DoMenuHome(bool save)
         // Stop tasks
         printf("PowerDown: stopping tasks.\n");
         StopVideo();
-        //DoReboot(save);        
+        //DoReboot(save);
         DoReboot(false);
     #endif
 }
@@ -372,7 +393,7 @@ void DoMenuHome(bool save)
 NOINLINE void app_init(void)
 {
     printf("pcengine (%s-%s).\n", COMPILEDATE, GITREV);
-    
+
     nvs_flash_init();
 
     odroid_system_init();
@@ -390,14 +411,14 @@ NOINLINE void app_init(void)
 
     /////
     check_boot_cause();
-    
+
     esp_err_t r = odroid_sdcard_open(SD_BASE_PATH);
     if (r != ESP_OK)
     {
         odroid_display_show_sderr(ODROID_SD_ERR_NOCARD);
         abort();
     }
-    
+
     //char *rom_file = odroid_ui_choose_file("/sd/roms/pce", "pce");
     char* rom_file = odroid_settings_RomFilePath_get();
     if (!rom_file)
@@ -405,7 +426,7 @@ NOINLINE void app_init(void)
         printf("No file selected!\n");
         abort();
     }
-    
+
     cart_name = (char *)my_special_alloc(false, 1, PATH_MAX_MY);
     short_cart_name = (char *)my_special_alloc(false, 1, PATH_MAX_MY);
     short_iso_name = (char *)my_special_alloc(false, 1, PATH_MAX_MY);
@@ -418,7 +439,7 @@ NOINLINE void app_init(void)
     ISO_filename = (char *)my_special_alloc(false, 1, PATH_MAX_MY);
     syscard_filename = (char *)my_special_alloc(false, 1, PATH_MAX_MY);
     cdsystem_path = (char *)my_special_alloc(false, 1, PATH_MAX_MY);
-    
+
     spr_init_pos = (uint32 *)my_special_alloc(false, 4, 1024 * 4);
     SPM_raw = (uchar*)my_special_alloc(false, 1, XBUF_WIDTH * XBUF_HEIGHT);
     SPM = SPM_raw + XBUF_WIDTH * 64 + 32;
@@ -433,7 +454,7 @@ NOINLINE void app_init(void)
     strcpy(ISO_filename, "");
     strcpy(sav_basepath,"/sd/odroid/data");
     strcpy(sav_path,"pce");
-    
+
     framebuffer[0] = my_special_alloc(false, 1, XBUF_WIDTH * XBUF_HEIGHT);
     // framebuffer[0] = heap_caps_malloc(XBUF_WIDTH * XBUF_HEIGHT, MALLOC_CAP_8BIT | MALLOC_CAP_DMA);
     if (!framebuffer[0]) abort();
@@ -445,10 +466,10 @@ NOINLINE void app_init(void)
     printf("app_main: framebuffer[1]=%p\n", framebuffer[1]);
     memset(framebuffer[0], 0, XBUF_WIDTH * XBUF_HEIGHT);
     memset(framebuffer[1], 0, XBUF_WIDTH * XBUF_HEIGHT);
-    
+
     my_palette = my_special_alloc(false, 1, 256 * sizeof(uint16_t));
     if (!my_palette) abort();
-    
+
     XBuf = framebuffer[0];
     osd_gfx_buffer = XBuf + 32 + 64 * XBUF_WIDTH;
 #ifdef MY_GFX_AS_TASK
@@ -460,9 +481,9 @@ NOINLINE void app_init(void)
 #endif
 
     QuickSaveSetBuffer(my_special_alloc(false, 1, 512));
-    
+
     odroid_audio_init(odroid_settings_AudioSink_get(), AUDIO_SAMPLE_RATE);
-    
+
     InitPCE(rom_file);
     osd_init_machine();
 #ifdef MY_GFX_AS_TASK
@@ -476,10 +497,10 @@ NOINLINE void app_init(void)
     for (int i = 0;i < AUDIO_CHANNELS; i++)
     {
         sbuf[i] = my_special_alloc(false, 1, AUDIO_BUFFER_SIZE/2);
-    } 
+    }
     sbuf_mix[0] = my_special_alloc(false, 1, AUDIO_BUFFER_SIZE);
     sbuf_mix[1] = my_special_alloc(false, 1, AUDIO_BUFFER_SIZE);
-    
+
     audioQueue = xQueueCreate(1, sizeof(uint16_t*));
     EmuAudio(true);
     printf("VIDEO: Task: Start done\n");
@@ -490,7 +511,7 @@ NOINLINE void app_loop(void)
 {
    printf("up and running\n");
    //if (!(*osd_gfx_driver_list[video_driver].init) ())
-   odroid_ui_enter_loop();
+   //odroid_ui_enter_loop();
    RunPCE();
    abort();
 }

@@ -118,7 +118,7 @@
     // Display
     ili9341_init();
     BRIGHTNESS = get_brightness();
-    apply_brightness();    
+    apply_brightness();
 
     // Joystick
     odroid_input_gamepad_init();
@@ -341,7 +341,7 @@
     int width = strlen(message)*5;
     int center = ceil((320)-(width))-48;
     y = 225;
-    draw_text(center,y,message,false,false);    
+    draw_text(center,y,message,false,false);
   }
 //}#pragma endregion Settings
 
@@ -489,7 +489,7 @@
         //ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, currentDuty);
         //ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
         //ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty, 1000);
-        //ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE /*LEDC_FADE_NO_WAIT|LEDC_FADE_WAIT_DONE|LEDC_FADE_MAX*/);        
+        //ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE /*LEDC_FADE_NO_WAIT|LEDC_FADE_WAIT_DONE|LEDC_FADE_MAX*/);
         //ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty);
         //ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
         ledc_set_fade_time_and_start(
@@ -717,16 +717,16 @@
       case 8:
         dy = 0;
       break;
-      case 7:      
+      case 7:
       case 6:
       case 5:
         dy = 16;
       break;
-      case 4:      
+      case 4:
       case 3:
       case 2:
         dy = 32;
-      break; 
+      break;
       case 1:
       case 0:
         dy = 48;
@@ -736,7 +736,7 @@
     int x = SCREEN.w - 72;
     int y = 8;
     int h = 16;
-    int w = 16;    
+    int w = 16;
 
     draw_mask(x,y,16,16);
 
@@ -746,7 +746,7 @@
         i++;
       }
     }
-    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);    
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
   }
 
   void draw_numbers() {
@@ -780,7 +780,7 @@
             //buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
             buffer[i] = SYSTEMS[STEP].color[r][c] == 0 ? GUI.bg : SYSTEMS[STEP].color[r][c];
           break;
-        }        
+        }
         i++;
       }
     }
@@ -1174,7 +1174,6 @@
     odroid_system_application_set(PROGRAMS[STEP-1]);
     usleep(10000);
     esp_restart();
-
   }
 
   void rom_resume() {
