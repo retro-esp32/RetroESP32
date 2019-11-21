@@ -1503,22 +1503,28 @@
           draw_background();
           draw_systems();
           draw_text(16,16,EMULATORS[STEP],false,true);
-          STEP == 0 ? draw_settings() : draw_files();
-        }
-        if(FOLDER) {
-          FOLDER = false;
-          ROMS.offset = PREVIOUS;
-          ROMS.total = 0;
-          PREVIOUS = 0;
-          folder_path[0] = 0;
-          get_files();
-        }
-        if(SETTINGS) {
-          SETTINGS = false;
-          draw_background();
-          draw_systems();
-          draw_text(16,16,EMULATORS[STEP],false,true);
-          draw_settings();
+          if(FOLDER) {
+            printf("\n------\nfolder_path:%s\n-----\n", folder_path);
+            get_files();
+          } else {
+            STEP == 0 ? draw_settings() : draw_files();
+          }
+        } else {
+          if(FOLDER) {
+            FOLDER = false;
+            ROMS.offset = PREVIOUS;
+            ROMS.total = 0;
+            PREVIOUS = 0;
+            folder_path[0] = 0;
+            get_files();
+          }
+          if(SETTINGS) {
+            SETTINGS = false;
+            draw_background();
+            draw_systems();
+            draw_text(16,16,EMULATORS[STEP],false,true);
+            draw_settings();
+          }
         }
         debounce(ODROID_INPUT_B);
       }

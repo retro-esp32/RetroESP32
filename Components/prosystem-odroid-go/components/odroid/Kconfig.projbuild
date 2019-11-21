@@ -29,7 +29,7 @@ menu "Retro ESP32 Configuration"
 
     choice IN_GAME_MENU
         prompt "In Game Menu"
-        default IN_GAME_MENU_NO
+        default IN_GAME_MENU_YES
         help
             Use Retro ESP32 - In Game Menu
 
@@ -39,5 +39,5 @@ menu "Retro ESP32 Configuration"
     config IN_GAME_MENU_NO
         bool "NO"
 
-    endchoice    
-endmenu    
+    endchoice
+endmenu
