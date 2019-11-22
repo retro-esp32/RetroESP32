@@ -7,7 +7,7 @@
 
 | Retro ESP32 In Action                              |        Summary                                                      |
 | ----------------------------- | ------------------------------------------------------------ |
-| <img src="Assets/animated.gif" alt="Teaser" width="560"> | **Retro ESP32** is the ultimate feature packed [Odroid Go](https://www.hardkernel.com/shop/odroid-go/) Launcher. <br/><br/>Includes color schemes and theming. <br/>Drawing inspiration from the popular [RetroArch](https://www.retroarch.com/) emulator front end of choice. <br/>We packed 11 (current count) prebundled emulators including ROM / Game manager. <br/>Additionally each emulator includes an in game menu for further management.<br/><br/>**[Get Your Copy Today](https://github.com/retro-esp32/RetroESP32/releases)** |
+| <img src="Assets/animated.gif" alt="Teaser" width="560"> | ![Retro ESP32](Assets/logo.jpg)<br/><br/>**Retro ESP32** is the ultimate feature packed [Odroid Go](https://www.hardkernel.com/shop/odroid-go/) Launcher. <br/><br/>Includes color schemes and theming. <br/>Drawing inspiration from the popular [RetroArch](https://www.retroarch.com/) emulator front end of choice. <br/>We packed 11 (current count) prebundled emulators including ROM / Game manager. <br/>Additionally each emulator includes an in game menu for further management.<br/><br/>**[Get Your Copy Today](https://github.com/retro-esp32/RetroESP32/releases)** |
 
 ## Installation
 > Copy, Mount, Flash
@@ -72,18 +72,8 @@ This project is licensed under the Creative Commons Attribution Share Alike 4.0 
 * [pebri86](https://github.com/pebri86)
 * [hardkernel](https://github.com/hardkernel)
 
+### Support
+> We Like Coffee!
 
-------
-#### Buy Us A Coffee
-> It's Not Mandatory, But Much [Appreciated](https://www.paypal.me/32teeth/1.99USD)
-
-We work tirelessly to bring you the best **Odroid GO** and **Retro ESP32** user experience.
-
-Everything we provide is free to use, Feedback is always welcome.
-
-If you like what you see, and feel like giving us additional support, we accept **PayPal** donation of $1.99 USD, that's like, 1 coffee. But fee free to change the amount. We won't shy away!
-
-*Thank You*
-Retro ESP32 Team
-
-------
+* [32teeth](https://github.com/32teeth) is the core maintainer and updater of this project
+[![Suport](Assets/support.jpg)](https://github.com/sponsors/32teeth)
