@@ -76,4 +76,5 @@ This project is licensed under the Creative Commons Attribution Share Alike 4.0 
 > We Like Coffee!
 
 * [32teeth](https://github.com/32teeth) is the core maintainer and updater of this project
+<br/>
 [![Suport](https://raw.githubusercontent.com/retro-esp32/RetroESP32/master/Assets/sponsor.jpg)](https://github.com/sponsors/32teeth)
