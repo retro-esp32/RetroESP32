@@ -12,6 +12,10 @@
 ## Installation
 > Copy, Mount, Flash
 
+Preperation
+> Update Odroid Go Firmware
+[Follow the guide here](https://medium.com/@siloraptor/upgrading-the-firmware-of-the-odroid-go-dd7eebdc7ed4)
+
 We kept installation of Retro ESP32 super simple.
 1. Downloads the latest [release](https://github.com/retro-esp32/RetroESP32/releases)
 2. Unzip the file
