@@ -11,6 +11,7 @@
 
 ## Preperation
 > Update Odroid Go Firmware
+
 [Follow the guide here](https://medium.com/@siloraptor/upgrading-the-firmware-of-the-odroid-go-dd7eebdc7ed4)
 
 ## Installation
