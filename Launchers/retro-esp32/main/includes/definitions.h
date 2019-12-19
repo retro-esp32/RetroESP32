@@ -35,4 +35,4 @@
 /*
 
 */
-#define BUILD "Version 1 Build 6 (v.1.6)"
+#define BUILD "Version 1 Build 7 (v.1.7)"

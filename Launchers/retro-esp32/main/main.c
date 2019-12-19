@@ -1331,7 +1331,7 @@
       */
       if(gamepad.values[ODROID_INPUT_LEFT]) {
         if(!LAUNCHER && !FOLDER) {
-          if(SETTING != 2 && SETTING != 3) {
+          if(!SETTINGS && SETTING != 1 && SETTING != 2 && SETTING != 3) {
             STEP--;
             if( STEP < 0 ) {
               STEP = COUNT - 1;
@@ -1340,6 +1340,15 @@
             ROMS.offset = 0;
             animate(-1);
           } else {
+            if(SETTING == 1) {
+              nvs_handle handle;
+              nvs_open("storage", NVS_READWRITE, &handle);
+              nvs_set_i8(handle, "COLOR", 0);
+              nvs_commit(handle);
+              nvs_close(handle);
+              draw_toggle();
+              draw_systems();
+            }
             if(SETTING == 2) {
               if(VOLUME > 0) {
                 VOLUME--;
@@ -1364,7 +1373,7 @@
       */
       if(gamepad.values[ODROID_INPUT_RIGHT]) {
         if(!LAUNCHER && !FOLDER) {
-          if(SETTING != 2 && SETTING != 3) {
+          if(!SETTINGS && SETTING != 1 && SETTING != 2 && SETTING != 3) {
             STEP++;
             if( STEP > COUNT-1 ) {
               STEP = 0;
@@ -1372,6 +1381,15 @@
             ROMS.offset = 0;
             animate(1);
           } else {
+            if(SETTING == 1) {
+              nvs_handle handle;
+              nvs_open("storage", NVS_READWRITE, &handle);
+              nvs_set_i8(handle, "COLOR", 1);
+              nvs_commit(handle);
+              nvs_close(handle);
+              draw_toggle();
+              draw_systems();
+            }
             if(SETTING == 2) {
               if(VOLUME < 4) {
                 VOLUME++;
