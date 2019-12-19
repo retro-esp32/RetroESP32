@@ -82,7 +82,7 @@ void draw_launcher_options();
 void get_files();
 void sort_files(char** files);
 void draw_files();
-void has_save_file(char *name);
+void has_save_file(char *save_name);
 
 /*
   Animations
