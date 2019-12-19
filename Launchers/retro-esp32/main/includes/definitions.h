@@ -29,8 +29,8 @@
 /*
 
 */
-#define MAX_FILES 2048
-#define MAX_LENGTH 64
+#define MAX_FILES 4096
+#define MAX_LENGTH 100
 
 /*
 
