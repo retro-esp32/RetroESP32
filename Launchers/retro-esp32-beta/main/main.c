@@ -752,7 +752,7 @@
   void draw_numbers() {
     int x = 296;
     int y = POS.y + 48;
-    int h = 5;
+    int h = 7;
     int w = 0;
     char count[10];
     sprintf(count, "(%d/%d)", (ROMS.offset+1), ROMS.total);
@@ -891,61 +891,105 @@
     }
   //}#pragma endregion Sort
 
-  void get_files() {
+
+  void count_files() {
+    char message[100] = "loading";
+    int center = ceil((320/2)-((strlen(message)*5)/2));
+    draw_text(center,134,message,false,false);
+
     ROMS.total = 0;
 
     char path[256] = "/sd/roms/";
     strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
     strcat(&path[strlen(path) - 1],folder_path);
-    printf("\npath:%s", path);
-
     strcpy(ROM.path, path);
 
-    DIR *directory = opendir(path);
-
+    DIR *directory = opendir(path);  
+    
     if(directory == NULL) {
-      char message[100] = "no games available";
+      draw_mask(0,132,320,10);
+      char message[100] = "rom folder not found";
       int center = ceil((320/2)-((strlen(message)*5)/2));
       draw_text(center,134,message,false,false);
-    } else {
-      rewinddir(directory);
+    } else {              
       struct dirent *file;
       while ((file = readdir(directory)) != NULL) {
         int rom_length = strlen(file->d_name);
         int ext_lext = strlen(EXTENSIONS[STEP]);
         bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], EXTENSIONS[STEP]) == 0 && file->d_name[0] != '.';
         if(extenstion || (file->d_type == 2)) {
-          if(ROMS.total >= MAX_FILES) { break; }
-          char* name = file->d_name;          
-          size_t length = strlen(name);
-          if(length > MAX_LENGTH) {
-            char* sub = name.substr(0, MAX_LENGTH);
-            printf("\nname:%s length:%d", name, length);                                     
-          }
-          //if(FILES[ROMS.total]) {}
-          //FILES[ROMS.total] = (file->d_type == 2) ? (char*)malloc(len + 5) : (char*)malloc(len + 1);
+          ROMS.total++;
+        }
+      }
+      ROMS.pages = ROMS.total/ROMS.limit;
+      if(ROMS.offset > ROMS.total) { ROMS.offset = 0;}
+      closedir(directory); 
+    }
+
+    draw_mask(0,132,320,10);
+    if(ROMS.total != 0) {
+      draw_files();
+    } else {
+      char message[100] = "no roms available";
+      int center = ceil((320/2)-((strlen(message)*5)/2));
+      draw_text(center,134,message,false,false);
+    }
+  }
+
+  void seek_files() {
+    free(FILES);
+    FILES = (char**)malloc(ROMS.limit * sizeof(void*)); 
+
+    ///*
+    printf("\n-----------");
+    printf("\nROMS.offset:%d", ROMS.offset);
+    printf("\nROMS.limit:%d", ROMS.limit);
+    printf("\nROMS.total:%d", ROMS.total);
+    printf("\nROMS.page:%d", ROMS.page);
+    printf("\nROMS.pages:%d", ROMS.pages);
+    printf("\n-----------");
+    printf("\n");
+    //*/                          
+
+    char path[256] = "/sd/roms/";
+    strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
+    strcat(&path[strlen(path) - 1],folder_path);
+    strcpy(ROM.path, path); 
+    
+    DIR *directory = opendir(path); 
+
+    if(directory == NULL) {
+      char message[100] = "rom folder not found";
+      int center = ceil((320/2)-((strlen(message)*5)/2));
+      draw_text(center,134,message,false,false);
+    } else {              
+      rewinddir(directory);
+      seekdir(directory, ROMS.offset);
+      struct dirent *file;
+
+      int n =0;
+      while ((file = readdir(directory)) != NULL) {
+        if(n >= ROMS.limit){break;}
+        int rom_length = strlen(file->d_name);
+        int ext_lext = strlen(EXTENSIONS[STEP]);
+        bool extenstion = strcmp(&file->d_name[rom_length - ext_lext], EXTENSIONS[STEP]) == 0 && file->d_name[0] != '.';
+        if(extenstion || (file->d_type == 2)) {
+          size_t len = strlen(file->d_name);
+          FILES[n] = (file->d_type == 2) ? (char*)malloc(len + 5) : (char*)malloc(len + 1);
           if((file->d_type == 2)) {
             char dir[256];
             strcpy(dir, file->d_name);
             char dd[8];
             sprintf(dd, "%s", ext_lext == 2 ? "dir" : ".dir");
             strcat(&dir[strlen(dir) - 1], dd);
-            //strcpy(FILES[ROMS.total], dir);
+            strcpy(FILES[n], dir);
           } else {
-            //strcpy(FILES[ROMS.total], file->d_name);
-          }
-          ROMS.total++;
+            strcpy(FILES[n], file->d_name);
+          }          
+          n++;
         }
       }
-      ROMS.pages = ROMS.total/ROMS.limit;
-      if(ROMS.offset > ROMS.total) { ROMS.offset = 0;}
-
-      closedir(directory);
-      printf("\n");
-      //if(ROMS.total < 500) sort_files(FILES);
-      //draw_files();
-
-      //free(FILES);
+      closedir(directory); 
     }
   }
 
@@ -955,22 +999,16 @@
     int y = POS.y + 48;
     ROMS.page = ROMS.offset/ROMS.limit;
 
-    /*
-    printf("\nROMS.offset:%d", ROMS.offset);
-    printf("\nROMS.limit:%d", ROMS.limit);
-    printf("\nROMS.total:%d", ROMS.total);
-    printf("\nROMS.page:%d", ROMS.page);
-    printf("\nROMS.pages:%d", ROMS.pages);
-    */
-
+    seek_files();
+    
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
 
-    int limit = (ROMS.offset + ROMS.limit) > ROMS.total ? ROMS.total : ROMS.offset + ROMS.limit;
-    for(int n = ROMS.offset; n < limit; n++) {
-      draw_text(x+24,y,FILES[n],true,n == ROMS.offset ? true : false);
-
+    int limit = ROMS.total < ROMS.limit ? ROMS.total : ROMS.limit;                                                 
+    for(int n = 0; n < limit; n++) {                                   
+      //printf("\n%d:%s", n, FILES[n]);
+      draw_text(x+24,y,FILES[n],true,n == 0 ? true : false);
       bool directory = strcmp(&FILES[n][strlen(FILES[n]) - 3], "dir") == 0;
-      directory ? draw_folder(x,y-6,n == ROMS.offset ? true : false) : draw_media(x,y-6,n == ROMS.offset ? true : false);
+      directory ? draw_folder(x,y-6,n == 0 ? true : false) : draw_media(x,y-6,n == 0 ? true : false);
       if(n == ROMS.offset) {
         strcpy(ROM.name, FILES[n]);
         ROM.ready = true;
@@ -1032,7 +1070,7 @@
     }
     draw_mask(0,0,SCREEN.w - 56,32);
     draw_text(16,16,EMULATORS[STEP], false, true);
-    STEP == 0 ? draw_settings() : get_files();
+    STEP == 0 ? draw_settings() : count_files();
     clean_up();
   }
 
@@ -1069,7 +1107,7 @@
     clean_up();
     draw_systems();
     draw_text(16,16,EMULATORS[STEP],false,true);
-    STEP == 0 ? draw_settings() : get_files();
+    STEP == 0 ? draw_settings() : count_files();
   }
 
   void clean_up() {
@@ -1246,7 +1284,7 @@
           draw_background();
           draw_systems();
           draw_text(16,16,EMULATORS[STEP],false,true);
-          STEP == 0 ? draw_themes() : get_files();
+          STEP == 0 ? draw_themes() : count_files();
         }
       }
     }
@@ -1259,13 +1297,6 @@
     draw_battery();
     draw_speaker();
     draw_contrast();
-
-    FILES = (char**)malloc(MAX_FILES * sizeof(void*));
-    for(int n = 0; n < MAX_FILES; n++) {
-      FILES[n] = (char*)malloc(MAX_LENGTH);
-    }
-
-  //{#pragma region Gamepad
     while (true) {
       /*
         Get Gamepad State
@@ -1485,7 +1516,7 @@
               draw_background();
               draw_systems();
               draw_text(16,16,EMULATORS[STEP],false,true);
-              get_files();
+              count_files();
             } else {
               LAUNCHER = true;
               odroid_settings_RomFilePath_set(file_to_load);
@@ -1518,7 +1549,7 @@
           draw_text(16,16,EMULATORS[STEP],false,true);
           if(FOLDER) {
             printf("\n------\nfolder_path:%s\n-----\n", folder_path);
-            get_files();
+            count_files();
           } else {
             STEP == 0 ? draw_settings() : draw_files();
           }
@@ -1529,7 +1560,7 @@
             ROMS.total = 0;
             PREVIOUS = 0;
             folder_path[0] = 0;
-            get_files();
+            count_files();
           }
           if(SETTINGS) {
             SETTINGS = false;
@@ -1551,6 +1582,5 @@
         debounce(ODROID_INPUT_MENU);
       }
     }
-  //}#pragma endregion GamePad
   }
 //}#pragma endregion Launcher

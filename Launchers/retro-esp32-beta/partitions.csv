@@ -1,0 +1,71 @@
+#########################################################
+# Name,     Type,   SubType,    Offset,     Size
+nvs,        data,   nvs,        0x9000,     0x4000
+otadata,    data,   ota,        0xd000,     0x2000
+phy_init,   data,   phy,        0xf000,     0x1000
+factory,    app,    factory,    0x10000,    0x80000
+storage,    data,   spiffs,     0x100000,   0x100000
+launcher,   0,      ota_0,      0x200000,   0x80000
+nes,        0,      ota_1,      0x280000,   0xc0000
+gb,         0,      ota_2,      0x340000,   0xb0000
+sms,        0,      ota_3,      0x3F0000,   0x160000
+spectrum,   0,      ota_4,      0x550000,   0x90000
+a26,        0,      ota_5,      0x5E0000,   0x1a0000
+a78,        0,      ota_6,      0x780000,   0xc0000
+lnx,        0,      ota_7,      0x840000,   0xe0000
+pce,        0,      ota_8,      0x920000,   0xc0000
+data_0,     0x40,   0x00,       0x9E0000,   0x400000
+#########################################################
+
+# spectrum = 447,712 = 524288 = 90000
+
+#   file size 0 kb            bytes 0           hex 0
+#   file size 64 kb           bytes 65536       hex 10000
+#   file size 128 kb          bytes 131072      hex 20000
+#   file size 192 kb          bytes 196608      hex 30000
+#   file size 256 kb          bytes 262144      hex 40000
+#   file size 320 kb          bytes 327680      hex 50000
+#   file size 384 kb          bytes 393216      hex 60000
+#   file size 448 kb          bytes 458752      hex 70000
+#   file size 512 kb          bytes 524288      hex 80000
+#   file size 576 kb          bytes 589824      hex 90000
+#   file size 640 kb          bytes 655360      hex a0000
+#   file size 704 kb          bytes 720896      hex b0000
+#   file size 768 kb          bytes 786432      hex c0000
+#   file size 832 kb          bytes 851968      hex d0000
+#   file size 896 kb          bytes 917504      hex e0000
+#   file size 960 kb          bytes 983040      hex f0000
+#   file size 1024 kb         bytes 1048576     hex 100000
+#   file size 1088 kb         bytes 1114112     hex 110000
+#   file size 1152 kb         bytes 1179648     hex 120000
+#   file size 1216 kb         bytes 1245184     hex 130000
+#   file size 1280 kb         bytes 1310720     hex 140000
+#   file size 1344 kb         bytes 1376256     hex 150000
+#   file size 1408 kb         bytes 1441792     hex 160000
+#   file size 1472 kb         bytes 1507328     hex 170000
+#   file size 1536 kb         bytes 1572864     hex 180000
+#   file size 1600 kb         bytes 1638400     hex 190000
+#   file size 1664 kb         bytes 1703936     hex 1a0000
+#   file size 1728 kb         bytes 1769472     hex 1b0000
+#   file size 1792 kb         bytes 1835008     hex 1c0000
+#   file size 1856 kb         bytes 1900544     hex 1d0000
+#   file size 1920 kb         bytes 1966080     hex 1e0000
+#   file size 1984 kb         bytes 2031616     hex 1f0000
+
+#   #########################################################
+#   # Name,     Type,   SubType,    Offset,     Size
+#   nvs,        data,   nvs,        0x9000,     0x4000
+#   otadata,    data,   ota,        0xd000,     0x2000
+#   phy_init,   data,   phy,        0xf000,     0x1000
+#   factory,    app,    factory,    0x10000,    0x100000
+#   storage,    data,   spiffs,     0x110000,   0x100000
+#   launcher,   0,      ota_0,      0x210000,   0x100000
+#   nes,        0,      ota_1,      0x310000,   0xc0000
+#   gb,         0,      ota_2,      0x3D0000,   0xb0000
+#   sms,        0,      ota_3,      0x480000,   0x160000
+#   a26,        0,      ota_4,      0x5E0000,   0x1a0000
+#   a78,        0,      ota_5,      0x780000,   0xc0000
+#   lnx,        0,      ota_6,      0x840000,   0xe0000
+#   pce,        0,      ota_7,      0x920000,   0xb0000
+#   data_0,     0x40,   0x00,       0x9D0000,   0x5D0000
+#   #########################################################
