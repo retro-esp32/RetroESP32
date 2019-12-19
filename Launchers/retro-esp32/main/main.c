@@ -15,7 +15,7 @@
   bool RESTART = false;
   bool LAUNCHER = false;
   bool FOLDER = false;
-  bool SPLASH = false;
+  bool SPLASH = true;
   bool SETTINGS = false;
 
   int8_t STEP = 0;
@@ -23,8 +23,8 @@
   int PREVIOUS = 0;
   int32_t VOLUME = 0;
   int32_t BRIGHTNESS = 0;
-  int32_t BRIGHTNESS_COUNT = 10;
-  int32_t BRIGHTNESS_LEVELS[10] = {10,20,30,40,50,60,70,80,90,100};
+  const int32_t BRIGHTNESS_COUNT = 10;
+  const int32_t BRIGHTNESS_LEVELS[10] = {10,20,30,40,50,60,70,80,90,100};
   int8_t USER;
   int8_t SETTING;
   int8_t COLOR;
@@ -907,7 +907,6 @@
 
     printf("\n----- %s -----", __func__);
     if(ROMS.total != 0) {
-      printf("\nprevious ROMS.total:%d", ROMS.total);
       while(ROMS.total--) {
         free(FILES[ROMS.total]);
         if(ROMS.total == 0){
@@ -915,7 +914,6 @@
           break;
         }
       }
-      printf("\ncurrent ROMS.total:%d", ROMS.total);
     }
     printf("\npath:%s", path);
 
@@ -925,17 +923,14 @@
       sprintf(message, "unable to open %s directory", DIRECTORIES[STEP]);
       int center = ceil((320/2)-((strlen(message)*5)/2));
       draw_text(center,134,message,false,false);
-      printf("\nopendir(%s):failed\nERR: %d\n", path, errno);
       return NULL;
     } else {
       if(directory == NULL) {
-        printf("\nno files found in:\t%s", path);
         draw_mask(0,132,320,10);
         sprintf(message, "%s directory not found", DIRECTORIES[STEP]);
         int center = ceil((320/2)-((strlen(message)*5)/2));
         draw_text(center,134,message,false,false);
       } else {
-        printf("\nfiles found in:\t%s", path);
         FILES = (char**)malloc(MAX_FILES * sizeof(void*));
         rewinddir(directory);
         struct dirent *file;
@@ -962,6 +957,7 @@
         }
         free(file);
         printf("\nnumber of files:\t%d", ROMS.total);
+        printf("\nfree space:0x%x (%#08x)", esp_get_free_heap_size(), heap_caps_get_free_size(MALLOC_CAP_DMA));
       }
       free(directory);
       closedir(directory);
@@ -971,7 +967,7 @@
       if(ROMS.offset > ROMS.total) { ROMS.offset = 0;}
       draw_mask(0,132,320,10);
       if(ROMS.total != 0) {
-        draw_files();
+        //draw_files();
       } else {
         sprintf(message, "no %s roms available", DIRECTORIES[STEP]);
         int center = ceil((320/2)-((strlen(message)*5)/2));
