@@ -962,6 +962,7 @@
         }
         free(file);
         printf("\nnumber of files:\t%d", ROMS.total);
+
       }
       free(directory);
       closedir(directory);
