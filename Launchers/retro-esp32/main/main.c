@@ -976,6 +976,7 @@
 
     printf("\npath:%s", path);
 
+
     free(FILES);
     FILES = (char**)malloc(ROMS.limit * sizeof(void*));
 
@@ -994,7 +995,7 @@
         draw_text(center,134,message,false,false, false);
       } else {
         rewinddir(directory);
-        seekdir(directory, ROMS.offset);
+        //seekdir(directory, ROMS.offset);
         struct dirent *file;
         int n =0;
         for(;;) {

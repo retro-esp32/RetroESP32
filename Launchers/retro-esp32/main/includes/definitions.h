@@ -36,3 +36,6 @@
 
 */
 #define BUILD "Version 1 Build 7 (v.1.7)"
+
+
+#define _GNU_SOURCE
