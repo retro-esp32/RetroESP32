@@ -19,6 +19,7 @@
   bool SETTINGS = false;
 
   int8_t STEP = 0;
+  int16_t SEEK[8] = {0,0,0,0,0,0,0,0};
   int OPTION = 0;
   int PREVIOUS = 0;
   int32_t VOLUME = 0;
@@ -906,6 +907,7 @@
 
   void count_files() {
     delete_numbers();
+    SEEK[0] = 0;
 
     printf("\n----- %s -----", __func__);
 
@@ -922,7 +924,13 @@
 
     printf("\npath:%s", path);
 
-    DIR *directory = opendir(path);
+    if(directory != NULL) {
+      printf("\npath:%s", path);
+      free(directory);
+      closedir(directory);
+    }
+
+    directory = opendir(path);
     if(!directory) {
       draw_mask(0,132,320,10);
       sprintf(message, "unable to open %s directory", DIRECTORIES[STEP]);
@@ -937,6 +945,7 @@
         draw_text(center,134,message,false,false, false);
       } else {
         rewinddir(directory);
+        seekdir(directory, SEEK[0]);
         struct dirent *file;
         while ((file = readdir(directory)) != NULL) {
           int rom_length = strlen(file->d_name);
@@ -950,8 +959,8 @@
         printf("\nnumber of files:\t%d", ROMS.total);
         printf("\nfree space:0x%x (%#08x)", esp_get_free_heap_size(), heap_caps_get_free_size(MALLOC_CAP_DMA));
       }
-      free(directory);
-      closedir(directory);
+      //free(directory);
+      //closedir(directory);
       printf("\n%s: freed & closed", path);
     }
 
@@ -980,7 +989,7 @@
     free(FILES);
     FILES = (char**)malloc(ROMS.limit * sizeof(void*));
 
-    DIR *directory = opendir(path);
+    //DIR *directory = opendir(path);
     if(!directory) {
       draw_mask(0,132,320,10);
       sprintf(message, "unable to open %s directory", DIRECTORIES[STEP]);
@@ -994,13 +1003,22 @@
         int center = ceil((320/2)-((strlen(message)*5)/2));
         draw_text(center,134,message,false,false, false);
       } else {
-        rewinddir(directory);
+        //rewinddir(directory);
         //seekdir(directory, ROMS.offset);
+        seekdir(directory, SEEK[0]);
         struct dirent *file;
         int n =0;
+        /*
+          NOTES:
+          - restore SEEK if scrolling back up;
+        */
         for(;;) {
           if(n == ROMS.limit || (ROMS.offset + n) == ROMS.total){break;}
-          file = readdir(directory);
+          if(!(file = readdir(directory))) {
+            SEEK[0] = 0;
+            seek_files();
+            break;
+          };
           int rom_length = strlen(file->d_name);
           int ext_length = strlen(EXTENSIONS[STEP]);
           bool extenstion = strcmp(&file->d_name[rom_length - ext_length], EXTENSIONS[STEP]) == 0 && file->d_name[0] != '.';
@@ -1017,14 +1035,18 @@
             } else {
               strcpy(FILES[n], file->d_name);
             }
+            printf("\ntelldir(directory):%ld", telldir(directory));
+            SEEK[n] = telldir(directory);
             n++;
           }
         }
+        printf("\nSEEK[0]:%d", SEEK[0]);
       }
-      free(directory);
-      closedir(directory);
+      //free(directory);
+      //closedir(directory);
       printf("\n%s: freed & closed", path);
     }
+    printf("\n---------------------\n");
     ROMS.pages = ROMS.total/ROMS.limit;
     if(ROMS.offset > ROMS.total) { ROMS.offset = 0;}
     if(ROMS.total != 0) {
@@ -1036,7 +1058,6 @@
       draw_mask(0,132,320,10);
       draw_text(center,134,message,false,false, false);
     }
-    printf("\n---------------------\n");
   }
 
   void get_files() {
