@@ -7,7 +7,7 @@ void debounce(int key);
  Text
 */
 int get_letter(char letter);
-void draw_text(short x, short y, char *string, bool ext, bool current);
+void draw_text(short x, short y, char *string, bool ext, bool current, bool remove);
 
 /*
  Mask
@@ -73,12 +73,15 @@ void draw_battery();
 void draw_speaker();
 void draw_contrast();
 void draw_numbers();
+void delete_numbers();
 void draw_launcher();
 void draw_launcher_options();
 
 /*
   Files
 */
+void count_files();
+void seek_files();
 void get_files();
 void sort_files(char** files);
 void draw_files();

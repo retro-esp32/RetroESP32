@@ -270,7 +270,7 @@
     return dx;
   }
 
-  void draw_text(short x, short y, char *string, bool ext, bool current) {
+  void draw_text(short x, short y, char *string, bool ext, bool current, bool remove) {
     int length = !ext ? strlen(string) : strlen(string)-(strlen(EXTENSIONS[STEP])+1);
     if(length > 64){length = 64;}
     int rows = 7;
@@ -281,8 +281,8 @@
       for(int r = 0; r < (rows); r++) {
         if(string[n] != ' ') {
           for(int c = dx; c < (dx+cols); c++) {
-            //buffer[i] = FONT_5x5[r][c] == 0 ? GUI.bg : current ? WHITE : GUI.fg;
             buffer[i] = FONT_5x7[r][c] == 0 ? GUI.bg : current ? WHITE : GUI.fg;
+            if(remove) {buffer[i] = GUI.bg;}
             i++;
           }
         }
@@ -317,22 +317,22 @@
     int y = POS.y + 46;
 
     draw_mask(x,y-1,100,17);
-    draw_text(x,y,"THEMES",false, SETTING == 0 ? true : false);
+    draw_text(x,y,"THEMES",false, SETTING == 0 ? true : false, false);
 
     y+=20;
     draw_mask(x,y-1,100,17);
-    draw_text(x,y,"COLORED ICONS",false, SETTING == 1 ? true : false);
+    draw_text(x,y,"COLORED ICONS",false, SETTING == 1 ? true : false, false);
     draw_toggle();
 
     y+=20;
     draw_mask(x,y-1,100,17);
-    draw_text(x,y,"VOLUME",false, SETTING == 2 ? true : false);
+    draw_text(x,y,"VOLUME",false, SETTING == 2 ? true : false, false);
 
     draw_volume();
 
     y+=20;
     draw_mask(x,y-1,100,17);
-    draw_text(x,y,"BRIGHTNESS",false, SETTING == 3 ? true : false);
+    draw_text(x,y,"BRIGHTNESS",false, SETTING == 3 ? true : false, false);
 
     draw_brightness();
 
@@ -343,7 +343,7 @@
     int width = strlen(message)*5;
     int center = ceil((320)-(width))-48;
     y = 225;
-    draw_text(center,y,message,false,false);
+    draw_text(center,y,message,false,false, false);
   }
 //}#pragma endregion Settings
 
@@ -515,7 +515,7 @@
     for(int n = USER; n < count; n++){
       if(filled < ROMS.limit) {
         draw_mask(x,y-1,100,17);
-        draw_text(x,y,THEMES[n].name,false, n == USER ? true : false);
+        draw_text(x,y,THEMES[n].name,false, n == USER ? true : false, false);
         y+=20;
         filled++;
       }
@@ -523,7 +523,7 @@
     int slots = (ROMS.limit - filled);
     for(int n = 0; n < slots; n++) {
       draw_mask(x,y-1,100,17);
-      draw_text(x,y,THEMES[n].name,false,false);
+      draw_text(x,y,THEMES[n].name,false,false, false);
       y+=20;
     }
   }
@@ -567,7 +567,7 @@
     draw_background();
     draw_mask(0,0,320,64);
     draw_systems();
-    draw_text(16,16,EMULATORS[STEP], false, true);
+    draw_text(16,16,EMULATORS[STEP], false, true, false);
     draw_themes();
   }
 //}#pragma endregion Theme
@@ -760,13 +760,24 @@
     sprintf(count, "(%d/%d)", (ROMS.offset+1), ROMS.total);
     w = strlen(count)*5;
     x -= w;
-    draw_mask(x-5,y,w+5,h);
-    draw_text(x,y,count,false,false);
+    draw_text(x,y,count,false,false, false);
+  }
+
+  void delete_numbers() {
+    int x = 296;
+    int y = POS.y + 48;
+    int h = 5;
+    int w = 0;
+    char count[10];
+    sprintf(count, "(%d/%d)", (ROMS.offset+1), ROMS.total);
+    w = strlen(count)*5;
+    x -= w;
+    draw_text(x,y,count,false,false, true);
   }
 
   void draw_launcher() {
     draw_background();
-    draw_text(16,16,EMULATORS[STEP], false, true);
+    draw_text(16,16,EMULATORS[STEP], false, true, false);
     int i = 0;
     int x = GAP/3;
     int y = POS.y;
@@ -810,7 +821,7 @@
         buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 0 ? WHITE : GUI.fg : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
-      draw_text(x+10,y,"Resume",false,OPTION == 0?true:false);
+      draw_text(x+10,y,"Resume",false,OPTION == 0?true:false, false);
       // restart
       i = 0;
       y+=20;
@@ -819,7 +830,7 @@
         buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 1 ? WHITE : GUI.fg : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
-      draw_text(x+10,y,"Restart",false,OPTION == 1?true:false);
+      draw_text(x+10,y,"Restart",false,OPTION == 1?true:false, false);
       // restart
       i = 0;
       y+=20;
@@ -828,7 +839,7 @@
         buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 2 ? WHITE : GUI.fg : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
-      draw_text(x+10,y,"Delete Save",false,OPTION == 2?true:false);
+      draw_text(x+10,y,"Delete Save",false,OPTION == 2?true:false, false);
     } else {
       // run
       i = 0;
@@ -837,7 +848,7 @@
         buffer[i] = icons[r+offset][c] == WHITE ? WHITE : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
-      draw_text(x+10,y,"Run",false,true);
+      draw_text(x+10,y,"Run",false,true, false);
     }
   }
 //}#pragma endregion GUI
@@ -893,12 +904,149 @@
     }
   //}#pragma endregion Sort
 
-  void get_files() {
+  void count_files() {
+    delete_numbers();
 
+    printf("\n----- %s -----", __func__);
+
+    ROMS.total = 0;
     char message[100];
     sprintf(message, "searching %s roms", DIRECTORIES[STEP]);
     int center = ceil((320/2)-((strlen(message)*5)/2));
-    draw_text(center,134,message,false,false);
+    draw_text(center,134,message,false,false, false);
+
+    char path[256] = "/sd/roms/";
+    strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
+    strcat(&path[strlen(path) - 1],folder_path);
+    strcpy(ROM.path, path);
+
+    printf("\npath:%s", path);
+
+    DIR *directory = opendir(path);
+    if(!directory) {
+      draw_mask(0,132,320,10);
+      sprintf(message, "unable to open %s directory", DIRECTORIES[STEP]);
+      int center = ceil((320/2)-((strlen(message)*5)/2));
+      draw_text(center,134,message,false,false, false);
+      return NULL;
+    } else {
+      if(directory == NULL) {
+        draw_mask(0,132,320,10);
+        sprintf(message, "%s directory not found", DIRECTORIES[STEP]);
+        int center = ceil((320/2)-((strlen(message)*5)/2));
+        draw_text(center,134,message,false,false, false);
+      } else {
+        rewinddir(directory);
+        struct dirent *file;
+        while ((file = readdir(directory)) != NULL) {
+          int rom_length = strlen(file->d_name);
+          int ext_length = strlen(EXTENSIONS[STEP]);
+          bool extenstion = strcmp(&file->d_name[rom_length - ext_length], EXTENSIONS[STEP]) == 0 && file->d_name[0] != '.';
+          if(extenstion || (file->d_type == 2)) {
+            ROMS.total++;
+          }
+        }
+        free(file);
+        printf("\nnumber of files:\t%d", ROMS.total);
+        printf("\nfree space:0x%x (%#08x)", esp_get_free_heap_size(), heap_caps_get_free_size(MALLOC_CAP_DMA));
+      }
+      free(directory);
+      closedir(directory);
+      printf("\n%s: freed & closed", path);
+    }
+
+    printf("\n---------------------\n");
+  }
+
+  void seek_files() {
+    delete_numbers();
+    printf("\n----- %s -----", __func__);
+    printf("\nROMS.offset:%d", ROMS.offset);
+    printf("\nROMS.limit:%d", ROMS.limit);
+    printf("\nROMS.total:%d", ROMS.total);
+    printf("\nROMS.page:%d", ROMS.page);
+    printf("\nROMS.pages:%d", ROMS.pages);
+
+    char message[100];
+
+    char path[256] = "/sd/roms/";
+    strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
+    strcat(&path[strlen(path) - 1],folder_path);
+    strcpy(ROM.path, path);
+
+    printf("\npath:%s", path);
+
+    free(FILES);
+    FILES = (char**)malloc(ROMS.limit * sizeof(void*));
+
+    DIR *directory = opendir(path);
+    if(!directory) {
+      draw_mask(0,132,320,10);
+      sprintf(message, "unable to open %s directory", DIRECTORIES[STEP]);
+      int center = ceil((320/2)-((strlen(message)*5)/2));
+      draw_text(center,134,message,false,false, false);
+      return NULL;
+    } else {
+      if(directory == NULL) {
+        draw_mask(0,132,320,10);
+        sprintf(message, "%s directory not found", DIRECTORIES[STEP]);
+        int center = ceil((320/2)-((strlen(message)*5)/2));
+        draw_text(center,134,message,false,false, false);
+      } else {
+        rewinddir(directory);
+        seekdir(directory, ROMS.offset);
+        struct dirent *file;
+        int n =0;
+        for(;;) {
+          if(n == ROMS.limit || (ROMS.offset + n) == ROMS.total){break;}
+          file = readdir(directory);
+          int rom_length = strlen(file->d_name);
+          int ext_length = strlen(EXTENSIONS[STEP]);
+          bool extenstion = strcmp(&file->d_name[rom_length - ext_length], EXTENSIONS[STEP]) == 0 && file->d_name[0] != '.';
+          if(extenstion || (file->d_type == 2)) {
+            size_t len = strlen(file->d_name);
+            FILES[n] = (file->d_type == 2) ? (char*)malloc(len + 5) : (char*)malloc(len + 1);
+            if((file->d_type == 2)) {
+              char dir[256];
+              strcpy(dir, file->d_name);
+              char dd[8];
+              sprintf(dd, "%s", ext_length == 2 ? "dir" : ".dir");
+              strcat(&dir[strlen(dir) - 1], dd);
+              strcpy(FILES[n], dir);
+            } else {
+              strcpy(FILES[n], file->d_name);
+            }
+            n++;
+          }
+        }
+      }
+      free(directory);
+      closedir(directory);
+      printf("\n%s: freed & closed", path);
+    }
+    ROMS.pages = ROMS.total/ROMS.limit;
+    if(ROMS.offset > ROMS.total) { ROMS.offset = 0;}
+    if(ROMS.total != 0) {
+      draw_files();
+    } else {
+      sprintf(message, "no %s roms available", DIRECTORIES[STEP]);
+      int center = ceil((320/2)-((strlen(message)*5)/2));
+      draw_mask(0,POS.y + 47,320,10);
+      draw_mask(0,132,320,10);
+      draw_text(center,134,message,false,false, false);
+    }
+    printf("\n---------------------\n");
+  }
+
+  void get_files() {
+    delete_numbers();
+    count_files();
+    seek_files();
+    /*
+    char message[100];
+    sprintf(message, "searching %s roms", DIRECTORIES[STEP]);
+    int center = ceil((320/2)-((strlen(message)*5)/2));
+    draw_text(center,134,message,false,false, false);
 
     char path[256] = "/sd/roms/";
     strcat(&path[strlen(path) - 1], DIRECTORIES[STEP]);
@@ -922,14 +1070,14 @@
       draw_mask(0,132,320,10);
       sprintf(message, "unable to open %s directory", DIRECTORIES[STEP]);
       int center = ceil((320/2)-((strlen(message)*5)/2));
-      draw_text(center,134,message,false,false);
+      draw_text(center,134,message,false,false, false);
       return NULL;
     } else {
       if(directory == NULL) {
         draw_mask(0,132,320,10);
         sprintf(message, "%s directory not found", DIRECTORIES[STEP]);
         int center = ceil((320/2)-((strlen(message)*5)/2));
-        draw_text(center,134,message,false,false);
+        draw_text(center,134,message,false,false, false);
       } else {
         FILES = (char**)malloc(MAX_FILES * sizeof(void*));
         rewinddir(directory);
@@ -967,49 +1115,47 @@
       if(ROMS.offset > ROMS.total) { ROMS.offset = 0;}
       draw_mask(0,132,320,10);
       if(ROMS.total != 0) {
-        //draw_files();
+        draw_files();
       } else {
         sprintf(message, "no %s roms available", DIRECTORIES[STEP]);
         int center = ceil((320/2)-((strlen(message)*5)/2));
-        draw_text(center,134,message,false,false);
+        draw_text(center,134,message,false,false, false);
       }
 
     }
 
     printf("\n---------------------\n");
+    */
   }
 
   void draw_files() {
-    //printf("\n");
+    printf("\n----- %s -----", __func__);
     int x = ORIGIN.x;
     int y = POS.y + 48;
     ROMS.page = ROMS.offset/ROMS.limit;
 
-    /*
-    printf("\nROMS.offset:%d", ROMS.offset);
-    printf("\nROMS.limit:%d", ROMS.limit);
-    printf("\nROMS.total:%d", ROMS.total);
-    printf("\nROMS.page:%d", ROMS.page);
-    printf("\nROMS.pages:%d", ROMS.pages);
-    */
-
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
+    //int limit = ROMS.total < ROMS.limit ? ROMS.total : ROMS.limit;
+    int limit = (ROMS.total - ROMS.offset) <  ROMS.limit ?
+      (ROMS.total - ROMS.offset) :
+      ROMS.limit;
 
-    int limit = (ROMS.offset + ROMS.limit) > ROMS.total ? ROMS.total : ROMS.offset + ROMS.limit;
-    for(int n = ROMS.offset; n < limit; n++) {
-      draw_text(x+24,y,FILES[n],true,n == ROMS.offset ? true : false);
-
-      bool is_directory = strcmp(&FILES[n][strlen(FILES[n]) - 3], "dir") == 0;
-      is_directory ?
-        draw_folder(x,y-6,n == ROMS.offset ? true : false) :
-        draw_media(x,y-6,n == ROMS.offset ? true : false);
-      if(n == ROMS.offset) {
+    printf("\nlimit:%d", limit);
+    for(int n = 0; n < limit; n++) {
+      printf("\n%d:%s", n, FILES[n]);
+      draw_text(x+24,y,FILES[n],true,n == 0 ? true : false, false);
+      bool directory = strcmp(&FILES[n][strlen(FILES[n]) - 3], "dir") == 0;
+      directory ?
+        draw_folder(x,y-6,n == 0 ? true : false) :
+        draw_media(x,y-6,n == 0 ? true : false);
+      if(n == 0) {
         strcpy(ROM.name, FILES[n]);
         ROM.ready = true;
       }
       y+=20;
     }
     draw_numbers();
+    printf("\n---------------------\n");
   }
 
   void has_save_file(char *save_name) {
@@ -1026,16 +1172,6 @@
     sprintf(save_file, "%s/%s", save_dir, save_name);
     strcat(&save_file[strlen(save_file) - 1], ".sav");
     printf("\nsave_file: %s", save_file);
-
-    if(ROMS.total != 0) {
-      while(ROMS.total--) {
-        free(FILES[ROMS.total]);
-        if(ROMS.total == 0){
-          free(FILES);
-          break;
-        }
-      }
-    }
 
     DIR *directory = opendir(save_dir);
     if(directory == NULL) {
@@ -1060,6 +1196,11 @@
 
 //{#pragma region Animations
   void animate(int dir) {
+    delete_numbers();
+    draw_mask(0,0,SCREEN.w - 56,32);
+    draw_text(16,16,EMULATORS[STEP], false, true, false);
+    draw_contrast();
+
     int y = POS.y + 46;
     for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
     int sx[4][13] = {
@@ -1081,13 +1222,9 @@
         }
       }
       draw_mask(0,32,320,32);
-
       draw_systems();
       usleep(20000);
     }
-    draw_mask(0,0,SCREEN.w - 56,32);
-    draw_text(16,16,EMULATORS[STEP], false, true);
-    draw_contrast();
     STEP == 0 ? draw_settings() : get_files();
     clean_up();
   }
@@ -1124,7 +1261,7 @@
 
     clean_up();
     draw_systems();
-    draw_text(16,16,EMULATORS[STEP],false,true);
+    draw_text(16,16,EMULATORS[STEP],false,true, false);
     STEP == 0 ? draw_settings() : get_files();
   }
 
@@ -1164,7 +1301,7 @@
     int width = strlen(message)*5;
     int center = ceil((320)-(width))-48;
     y = 225;
-    draw_text(center,y,message,false,false);
+    draw_text(center,y,message,false,false, false);
 
     sleep(2);
     draw_background();
@@ -1176,7 +1313,7 @@
     int width = strlen(message)*5;
     int center = ceil((320/2)-(width/2));
     int y = 118;
-    draw_text(center,y,message,false,false);
+    draw_text(center,y,message,false,false, false);
 
     y+=10;
     for(int n = 0; n < (width+10); n++) {
@@ -1196,7 +1333,7 @@
     int w = strlen(message)*h;
     int x = (SCREEN.w/2)-(w/2);
     int y = (SCREEN.h/2)-(h/2);
-    draw_text(x,y,message,false,false);
+    draw_text(x,y,message,false,false, false);
 
     y+=10;
     for(int n = 0; n < (w+10); n++) {
@@ -1223,7 +1360,7 @@
     int w = strlen(message)*h;
     int x = (SCREEN.w/2)-(w/2);
     int y = (SCREEN.h/2)-(h/2);
-    draw_text(x,y,message,false,false);
+    draw_text(x,y,message,false,false, false);
     y+=10;
     for(int n = 0; n < (w+10); n++) {
       for(int i = 0; i < 5; i++) {
@@ -1248,7 +1385,7 @@
     int w = strlen(message)*h;
     int x = (SCREEN.w/2)-(w/2);
     int y = (SCREEN.h/2)-(h/2);
-    draw_text(x,y,message,false,false);
+    draw_text(x,y,message,false,false, false);
     y+=10;
     for(int n = 0; n < (w+10); n++) {
       for(int i = 0; i < 5; i++) {
@@ -1269,7 +1406,7 @@
     int width = strlen(message)*5;
     int center = ceil((320/2)-(width/2));
     int y = 118;
-    draw_text(center,y,message,false,false);
+    draw_text(center,y,message,false,false, false);
 
     y+=10;
     for(int n = 0; n < (width+10); n++) {
@@ -1301,7 +1438,7 @@
           LAUNCHER = false;
           draw_background();
           draw_systems();
-          draw_text(16,16,EMULATORS[STEP],false,true);
+          draw_text(16,16,EMULATORS[STEP],false,true, false);
           STEP == 0 ? draw_themes() : get_files();
         }
       }
@@ -1424,7 +1561,9 @@
           if(STEP != 0) {
             ROMS.offset--;
             if( ROMS.offset < 0 ) { ROMS.offset = ROMS.total - 1; }
-            draw_files();
+            //draw_files();
+            delete_numbers();
+            seek_files();
           }
         } else {
           if(SAVED) {
@@ -1455,7 +1594,9 @@
           if(STEP != 0) {
             ROMS.offset++;
             if( ROMS.offset > ROMS.total - 1 ) { ROMS.offset = 0; }
-            draw_files();
+            //draw_files();
+            delete_numbers();
+            seek_files();
           }
         } else {
           if(SAVED) {
@@ -1482,7 +1623,9 @@
               ROMS.page++;
               if( ROMS.page > ROMS.pages ) { ROMS.page = 0; }
               ROMS.offset =  ROMS.page * ROMS.limit;
-              draw_files();
+              //draw_files();
+              delete_numbers();
+              seek_files();
             }
           }
           //debounce(ODROID_INPUT_START);
@@ -1497,7 +1640,9 @@
               ROMS.page--;
               if( ROMS.page < 0 ) { ROMS.page = ROMS.pages; };
               ROMS.offset =  ROMS.page * ROMS.limit;
-              draw_files();
+              //draw_files();
+              delete_numbers();
+              seek_files();
             }
           }
           //debounce(ODROID_INPUT_SELECT);
@@ -1517,7 +1662,7 @@
             draw_systems();
             switch(SETTING) {
               case 0:
-                draw_text(16,16,"THEMES",false,true);
+                draw_text(16,16,"THEMES",false,true, false);
                 draw_themes();
               break;
             }
@@ -1535,7 +1680,7 @@
             }
           }
         } else {
-          if (ROM.ready && !LAUNCHER) {
+          if (ROM.ready && !LAUNCHER && ROMS.total != 0) {
             OPTION = 0;
             char file_to_load[256] = "";
             sprintf(file_to_load, "%s/%s", ROM.path, ROM.name);
@@ -1550,7 +1695,7 @@
               folder_path[strlen(folder_path)-(strlen(EXTENSIONS[STEP]) == 3 ? 4 : 3)] = 0;
               draw_background();
               draw_systems();
-              draw_text(16,16,EMULATORS[STEP],false,true);
+              draw_text(16,16,EMULATORS[STEP],false,true, false);
               get_files();
             } else {
               LAUNCHER = true;
@@ -1558,16 +1703,18 @@
               draw_launcher();
             }
           } else {
-            switch(OPTION) {
-              case 0:
-                SAVED ? rom_resume() : rom_run(false);
-              break;
-              case 1:
-                rom_run(true);
-              break;
-              case 2:
-                rom_delete_save();
-              break;
+            if(ROMS.total != 0) {
+              switch(OPTION) {
+                case 0:
+                  SAVED ? rom_resume() : rom_run(false);
+                break;
+                case 1:
+                  rom_run(true);
+                break;
+                case 2:
+                  rom_delete_save();
+                break;
+              }
             }
           }
         }
@@ -1581,7 +1728,7 @@
           LAUNCHER = false;
           draw_background();
           draw_systems();
-          draw_text(16,16,EMULATORS[STEP],false,true);
+          draw_text(16,16,EMULATORS[STEP],false,true, false);
           if(FOLDER) {
             printf("\n------\nfolder_path:%s\n-----\n", folder_path);
             get_files();
@@ -1600,7 +1747,7 @@
             SETTINGS = false;
             draw_background();
             draw_systems();
-            draw_text(16,16,EMULATORS[STEP],false,true);
+            draw_text(16,16,EMULATORS[STEP],false,true, false);
             draw_settings();
           }
         }
