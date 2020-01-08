@@ -7,11 +7,14 @@ SRC_PATH=`pwd`
 REPO=$(dirname $PWD)
 
 #---------------------------------
-# EDIT SKECTH NAME
+# Styles
 #---------------------------------
-MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
-ARDUINO_PATH="$REPO/Arduino"
-SKETCH="Buttons" # <-- change the name and leave out .ino.bin
+source helpers/styles
+
+#---------------------------------
+# Paths
+#---------------------------------
+source helpers/paths
 
 
 #---------------------------------
@@ -19,12 +22,15 @@ SKETCH="Buttons" # <-- change the name and leave out .ino.bin
 #---------------------------------
 source helpers/styles
 
+ARDUINO_PATH="$REPO/Arduino"
+MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
+SKETCH="Buttons" # <-- change the name and leave out .ino.bin
 
+clear
 echo "--------------------------------------------------------------------------"
 echo -e "${pad}  ${green}Creating ${cyan}Arduino${nc} Firmware"
 echo "--------------------------------------------------------------------------"
 
-cd $SRC_PATH
 
 echo "Building mkfw"
 cd $MKFW_PATH
