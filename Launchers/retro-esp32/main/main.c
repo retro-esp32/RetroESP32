@@ -954,8 +954,8 @@
           int ext_length = strlen(EXTENSIONS[STEP]);
           bool extenstion = strcmp(&file->d_name[rom_length - ext_length], EXTENSIONS[STEP]) == 0 && file->d_name[0] != '.';
           if(extenstion || (file->d_type == 2)) {
-            SEEK[ROMS.total+1] = telldir(directory);                                                     
-            ROMS.total++;                          
+            SEEK[ROMS.total+1] = telldir(directory);
+            ROMS.total++;
           }
         }
         free(file);
@@ -967,7 +967,7 @@
      // printf("\n%s: freed & closed", path);
       for(int n = 0; n < ROMS.total; n++) {
        // printf("\nSEEK[%d]:%d ", n, SEEK[n]);
-      }      
+      }
     }
 
    // printf("\n---------------------\n");
@@ -1007,7 +1007,7 @@
         draw_text(center,134,message,false,false, false);
       } else {
        // printf("\nSEEK[%d]:%d", ROMS.offset, SEEK[ROMS.offset]);
-        rewinddir(directory);        
+        rewinddir(directory);
         seekdir(directory, SEEK[ROMS.offset]);
         struct dirent *file;
         int n =0;

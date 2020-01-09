@@ -161,7 +161,7 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     //Set Gamma
     {0xE0, {0x0F, 0x31, 0x2B, 0x0C, 0x0E, 0x08, 0x4E, 0xF1, 0x37, 0x07, 0x10, 0x03, 0x0E, 0x09, 0x00}, 15},
     {0XE1, {0x00, 0x0E, 0x14, 0x03, 0x11, 0x07, 0x31, 0xC1, 0x48, 0x08, 0x0F, 0x0C, 0x31, 0x36, 0x0F}, 15},
-    
+
     // ILI9342 Specific
     {0x36, {0x40|0x80|0x08}, 1}, // <-- ROTATE
     {0x21, {0}, 0x80}, // <-- INVERT COLORS
@@ -968,8 +968,8 @@ odroid_display_set_scale(int width, int height, float aspect)
 
     x_inc = SCREEN_WIDTH / x_scale;
     y_inc = SCREEN_HEIGHT / y_scale;
-    x_origin = (SCREEN_WIDTH - (width * x_scale)) / 2.f;
-    y_origin = (SCREEN_HEIGHT - (height * y_scale)) / 2.f;
+    x_origin = 0;//(SCREEN_WIDTH - (width * x_scale)) / 2.f;
+    y_origin = 0;//(SCREEN_HEIGHT - (height * y_scale)) / 2.f;
 
     printf("%dx%d@%.3f x_inc:%d y_inc:%d x_scale:%.3f y_scale:%.3f x_origin:%d y_origin:%d\n",
            width, height, aspect, x_inc, y_inc, x_scale, y_scale, x_origin, y_origin);

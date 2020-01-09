@@ -175,8 +175,8 @@ then
   make -j8
   cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
 
-  cd $GOPLAY_PATH
-
+  #cd $GOPLAY_PATH
+  cd $SUPER_GOPLAY_PATH
   clear
   echo "--------------------------------------------------------------------------"
   echo -e "${game}  ${green}Compiling ${cyan}nesemu-go${nc}"
@@ -187,11 +187,13 @@ then
   make -j8
   cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
 
+  cd $GOPLAY_PATH
   clear
   echo "--------------------------------------------------------------------------"
   echo -e "${game}  ${green}Compiling ${cyan}smsplusgx-go${nc}"
   echo "--------------------------------------------------------------------------"
-  cd ../smsplusgx-go
+  #cd ../smsplusgx-go
+  cd smsplusgx-go
   get_clean_option
   get_config_option
   make -j8
@@ -213,7 +215,7 @@ then
   echo "--------------------------------------------------------------------------"
   echo -e "${game}  ${green}Compiling ${cyan}stella-odroid-go${nc}"
   echo "--------------------------------------------------------------------------"
-  cd $EMULATOR_PATH  
+  cd $EMULATOR_PATH
   cd stella-odroid-go
   get_clean_option
   get_config_option
@@ -251,7 +253,7 @@ then
   get_clean_option
   get_config_option
   make -j8
-  cp ./build/spectrum.bin $FIRMWARE_PATH/Bins/  
+  cp ./build/spectrum.bin $FIRMWARE_PATH/Bins/
 fi
 
 cd $SRC_PATH
