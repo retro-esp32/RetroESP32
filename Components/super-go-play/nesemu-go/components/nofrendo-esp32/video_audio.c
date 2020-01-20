@@ -298,8 +298,8 @@ static void vidTaskCallback(void *arg) {
            ili9341_blank_screen();
            previous_scaling_enabled = scaling_enabled;
            if (scaling_enabled) {
-               odroid_display_set_scale(NES_SCREEN_WIDTH, NES_VISIBLE_HEIGHT,
-                                        (80.f/72.f));
+               //odroid_display_set_scale(NES_SCREEN_WIDTH, NES_VISIBLE_HEIGHT,(80.f/72.f));
+               odroid_display_set_scale(NES_SCREEN_WIDTH, NES_VISIBLE_HEIGHT,(8.f/7.f));
            } else {
                odroid_display_reset_scale(NES_SCREEN_WIDTH, NES_VISIBLE_HEIGHT);
            }
