@@ -3,6 +3,8 @@
   #include "includes/definitions.h"
   #include "includes/structures.h"
   #include "includes/declarations.h"
+
+  #include "scandir.c"
 //}#pragma endregion Includes
 
 //{#pragma region Odroid

@@ -16,6 +16,30 @@ BIN=""
 TILE=""
 NAME=""
 
+# set_nes_option
+set_nes_option() {
+  clear
+  SUPER="n"
+  OPTION="${bomb}  Would you like to use ${magenta}'Super Go Play'? ${nc}[y/${bold}N${nc}]"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${OPTION}"
+  echo "--------------------------------------------------------------------------"
+  read -n 1 -r response
+  if [[ "$response" = "y" ]]
+  then
+    SUPER="y"
+  fi
+  clear
+}
+
+# get_nes_option
+get_nes_option() {
+  if [[ "$SUPER" = "y" ]]
+  then
+    cd $SUPER_GOPLAY_PATH
+  fi
+}
+
 # set_config_option
 set_config_option() {
   clear
@@ -162,6 +186,7 @@ if [[ "$response" = "y" ]]
 then
   set_clean_option
   set_config_option
+  set_nes_option
 
   cd $SUPER_GOPLAY_PATH
 
@@ -177,6 +202,7 @@ then
 
   cd $GOPLAY_PATH
   #cd $SUPER_GOPLAY_PATH
+  get_nes_option
   clear
   echo "--------------------------------------------------------------------------"
   echo -e "${game}  ${green}Compiling ${cyan}nesemu-go${nc}"

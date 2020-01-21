@@ -5,7 +5,7 @@
 [submodule "Odroid/odroid-go-firmware"]
 	path = Odroid/odroid-go-firmware
 	url = git@github.com:OtherCrashOverride/odroid-go-firmware.git
-	branch = esp-idf-v3.2   
+	branch = esp-idf-v3.2
 [submodule "Launchers/emulator-launcher-odroid-go"]
 	path = Launchers/emulator-launcher-odroid-go
 	url = git@github.com:IlyaMZP/emulator-launcher-odroid-go.git
@@ -34,3 +34,7 @@
 	path = Emulators/odroid-go-spectrum-emulator
 	url = git@github.com:pelle7/odroid-go-spectrum-emulator.git
 	branch = feature/goemu
+[submodule "Emulators/odroid-go-handy"]
+	path = Emulators/odroid-go-handy
+	url = git@github.com:pelle7/odroid-go-handy.git
+	branch = develop
