@@ -74,6 +74,12 @@ then
   sleep 0.25
   clear
   echo "--------------------------------------------------------------------------"
+  echo -e "${dragon}  ${green}Replacing ${cyan}odroid-go-handy${nc} files"
+  echo "--------------------------------------------------------------------------"
+  cp -R $COMPONENTS/odroid-go-handy/* $EMULATORS/odroid-go-handy
+  sleep 0.25
+  clear  
+  echo "--------------------------------------------------------------------------"
   echo -e "${lion}  ${green}Replacing ${cyan}odroid-go-pcengine-huexpress${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $COMPONENTS/odroid-go-pcengine-huexpress/* $EMULATORS/odroid-go-pcengine-huexpress

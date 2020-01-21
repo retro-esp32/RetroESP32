@@ -7,6 +7,7 @@ RETRO_PATH="$REPO/Launchers/retro-esp32/"
 GENERIC_PATH="$REPO/Launchers/emulator-launcher-odroid-go/"
 GOPLAY_PATH="$REPO/Emulators/go-play/"
 SUPER_GOPLAY_PATH="$REPO/Emulators/super-go-play/"
+HANDY_PATH="$REPO/Emulators/odroid-go-handy/"
 EMULATOR_PATH="$REPO/Emulators/"
 
 MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
@@ -15,6 +16,30 @@ LAUNCHER=""
 BIN=""
 TILE=""
 NAME=""
+
+# set_handy_option
+set_handy_option() {
+  clear
+  HANDY="n"
+  OPTION="${bomb}  Would you like to use ${magenta}'Odroid Go Handy'? ${nc}[y/${bold}N${nc}]"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${OPTION}"
+  echo "--------------------------------------------------------------------------"
+  read -n 1 -r response
+  if [[ "$response" = "y" ]]
+  then
+    HANDY="y"
+  fi
+  clear
+}
+
+# get_handy_option
+get_handy_option() {
+  if [[ "$HANDY" = "y" ]]
+  then
+    cd $HANDY_PATH
+  fi
+}
 
 # set_nes_option
 set_nes_option() {
@@ -187,6 +212,7 @@ then
   set_clean_option
   set_config_option
   set_nes_option
+  set_handy_option
 
   cd $SUPER_GOPLAY_PATH
 
@@ -253,6 +279,7 @@ then
   echo -e "${game}  ${green}Compiling ${cyan}handy-go${nc}"
   echo "--------------------------------------------------------------------------"
   cd $EMULATOR_PATH
+  get_handy_option  
   cd handy-go
   get_clean_option
   get_config_option
