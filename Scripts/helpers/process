@@ -175,8 +175,8 @@ then
   make -j8
   cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
 
-  #cd $GOPLAY_PATH
-  cd $SUPER_GOPLAY_PATH
+  cd $GOPLAY_PATH
+  #cd $SUPER_GOPLAY_PATH
   clear
   echo "--------------------------------------------------------------------------"
   echo -e "${game}  ${green}Compiling ${cyan}nesemu-go${nc}"
