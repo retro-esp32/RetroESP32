@@ -132,9 +132,9 @@ static int osd_init_sound(void)
 
 #endif
 
-	audio_callback = NULL;
+   audio_callback = NULL;
 
-	return 0;
+   return 0;
 }
 
 void osd_getsoundinfo(sndinfo_t *info)
@@ -189,7 +189,7 @@ void osd_togglefullscreen(int code)
 /* initialise video */
 static int init(int width, int height)
 {
-	return 0;
+   return 0;
 }
 
 static void shutdown(void)
@@ -394,44 +394,44 @@ static int ConvertJoystickInput()
     odroid_gamepad_state state;
     odroid_input_gamepad_read(&state);
 
-	int result = 0;
+   int result = 0;
 
 
-	// A
-	if (!state.values[ODROID_INPUT_A])
-	{
-		result |= (1<<13);
-	}
+   // A
+   if (!state.values[ODROID_INPUT_A])
+   {
+      result |= (1<<13);
+   }
 
-	// B
-	if (!state.values[ODROID_INPUT_B])
-	{
-		result |= (1 << 14);
-	}
+   // B
+   if (!state.values[ODROID_INPUT_B])
+   {
+      result |= (1 << 14);
+   }
 
-	// select
-	if (!state.values[ODROID_INPUT_SELECT])
-		result |= (1 << 0);
+   // select
+   if (!state.values[ODROID_INPUT_SELECT])
+      result |= (1 << 0);
 
-	// start
-	if (!state.values[ODROID_INPUT_START])
-		result |= (1 << 3);
+   // start
+   if (!state.values[ODROID_INPUT_START])
+      result |= (1 << 3);
 
-	// right
-	if (!state.values[ODROID_INPUT_RIGHT])
-			result |= (1 << 5);
+   // right
+   if (!state.values[ODROID_INPUT_RIGHT])
+         result |= (1 << 5);
 
-	// left
-	if (!state.values[ODROID_INPUT_LEFT])
-			result |= (1 << 7);
+   // left
+   if (!state.values[ODROID_INPUT_LEFT])
+         result |= (1 << 7);
 
-	// up
-	if (!state.values[ODROID_INPUT_UP])
-			result |= (1 << 4);
+   // up
+   if (!state.values[ODROID_INPUT_UP])
+         result |= (1 << 4);
 
-	// down
-	if (!state.values[ODROID_INPUT_DOWN])
-			result |= (1 << 6);
+   // down
+   if (!state.values[ODROID_INPUT_DOWN])
+         result |= (1 << 6);
 
 
     if (!previousJoystickState.values[ODROID_INPUT_VOLUME] && state.values[ODROID_INPUT_VOLUME])
@@ -496,11 +496,12 @@ static int ConvertJoystickInput()
               case 4:
                   hud_progress("Saving...", true);
                   hud_deinit();
+                  
                   odroid_audio_terminate();
-                  xQueueSend(vidQueue, &arg, portMAX_DELAY);
-                  while(vidTaskIsRunning) {vTaskDelay(10);}
+                  // xQueueSend(vidQueue, &arg, portMAX_DELAY);
+                  // while(vidTaskIsRunning) {vTaskDelay(10);}
                   SaveState();
-                  ili9341_clear(0);
+                  // ili9341_clear(0);
                   esp_restart();
               break;
               case 5:
@@ -536,7 +537,7 @@ static int ConvertJoystickInput()
 
     previousJoystickState = state;
 
-	return result;
+   return result;
 }
 
 
@@ -545,25 +546,25 @@ extern nes6502_context cpu;
 
 void osd_getinput(void)
 {
-	const int ev[16]={
-			event_joypad1_select,0,0,event_joypad1_start,event_joypad1_up,event_joypad1_right,event_joypad1_down,event_joypad1_left,
-			0,0,0,0,event_soft_reset,event_joypad1_a,event_joypad1_b,event_hard_reset
-		};
-	static int oldb=0xffff;
-	int b=ConvertJoystickInput();
-	int chg=b^oldb;
-	int x;
-	oldb=b;
-	event_t evh;
-//	printf("Input: %x\n", b);
-	for (x=0; x<16; x++) {
-		if (chg&1) {
-			evh=event_get(ev[x]);
-			if (evh) evh((b&1)?INP_STATE_BREAK:INP_STATE_MAKE);
-		}
-		chg>>=1;
-		b>>=1;
-	}
+   const int ev[16]={
+         event_joypad1_select,0,0,event_joypad1_start,event_joypad1_up,event_joypad1_right,event_joypad1_down,event_joypad1_left,
+         0,0,0,0,event_soft_reset,event_joypad1_a,event_joypad1_b,event_hard_reset
+      };
+   static int oldb=0xffff;
+   int b=ConvertJoystickInput();
+   int chg=b^oldb;
+   int x;
+   oldb=b;
+   event_t evh;
+// printf("Input: %x\n", b);
+   for (x=0; x<16; x++) {
+      if (chg&1) {
+         evh=event_get(ev[x]);
+         if (evh) evh((b&1)?INP_STATE_BREAK:INP_STATE_MAKE);
+      }
+      chg>>=1;
+      b>>=1;
+   }
 }
 
 static void osd_freeinput(void)
@@ -581,8 +582,8 @@ void osd_getmouse(int *x, int *y, int *button)
 /* this is at the bottom, to eliminate warnings */
 void osd_shutdown()
 {
-	osd_stopsound();
-	osd_freeinput();
+   osd_stopsound();
+   osd_freeinput();
 }
 
 static int logprint(const char *string)
