@@ -35,7 +35,7 @@
 /*
 
 */
-#define BUILD "Version 1 Build 9 (v.1.9)"
+#define BUILD "Version 2 Build 0 (v.2.0)"
 
 
 #define _GNU_SOURCE

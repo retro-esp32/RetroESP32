@@ -545,10 +545,12 @@
       case ESP_OK:
         break;
       case ESP_ERR_NVS_NOT_FOUND:
-        USER = 0;
+        USER = 20;
+        set_theme(USER);
         break;
       default :
-        USER = 0;
+        USER = 20;
+        set_theme(USER);
     }
     nvs_close(handle);
   }
