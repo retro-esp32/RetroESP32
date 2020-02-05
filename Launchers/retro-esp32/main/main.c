@@ -757,7 +757,6 @@
   void draw_numbers() {
     int x = 296;
     int y = POS.y + 48;
-    int h = 5;
     int w = 0;
     char count[10];
     sprintf(count, "(%d/%d)", (ROMS.offset+1), ROMS.total);
@@ -769,7 +768,6 @@
   void delete_numbers() {
     int x = 296;
     int y = POS.y + 48;
-    int h = 5;
     int w = 0;
     char count[10];
     sprintf(count, "(%d/%d)", (ROMS.offset+1), ROMS.total);
@@ -853,6 +851,8 @@
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       draw_text(x+10,y,"Run",false,true, false);
     }
+
+    get_cover();
   }
 //}#pragma endregion GUI
 
@@ -1125,6 +1125,100 @@
     //printf("\n---------------------\n");
   }
 //}#pragma endregion Files
+
+//{#pragma region Cover
+  void get_cover() {
+    //debounce(ODROID_INPUT_A);
+    char file[256] = "";
+    sprintf(file, "%s/%s", ROM.path, ROM.name);
+
+    FILE *f = fopen(file, "rb");
+    ROM.crc = 0;
+    if (f) {
+      fseek(f, 0, SEEK_END);
+      int offset = 0;
+      if(strcmp(EXTENSIONS[STEP], "nes") == 0) {offset = 16;}
+      int size = ftell(f) - offset;
+      fseek(f, offset, SEEK_SET);
+      int buf_size = 32768; //4096;
+      unsigned char *cover = (unsigned char*)heap_caps_malloc(buf_size, MALLOC_CAP_SPIRAM);
+      if (cover)
+      {
+        uint32_t crc_tmp = 0;
+        bool abort = false;
+        while (true)
+        {
+          odroid_input_gamepad_read(&gamepad);
+          if (gamepad.values[ODROID_INPUT_A] ||
+              gamepad.values[ODROID_INPUT_START] ||
+              gamepad.values[ODROID_INPUT_SELECT] ||
+              gamepad.values[ODROID_INPUT_LEFT] ||
+              gamepad.values[ODROID_INPUT_RIGHT] ||
+              gamepad.values[ODROID_INPUT_UP] ||
+              gamepad.values[ODROID_INPUT_DOWN]) {
+              abort = true;
+              break;
+          }
+          int count = fread(cover, 1, buf_size, f);
+          crc_tmp = crc32_le(crc_tmp, (const uint8_t*)cover, count);
+          if (count != buf_size){break;}
+        }
+        heap_caps_free(cover);
+        fclose(f);
+        if (!abort) {
+          printf("%X  %s ; Size: %d\n", crc_tmp, file, size);
+          ROM.crc  = crc_tmp;
+        }
+      } else {
+        printf("Buffer alloc failed: Size: %d; File: %s\n",size, file);
+        fclose(f);
+        ROM.crc = 1;
+      }
+    } else {
+      printf("File not found: %s\n", file);
+      ROM.crc = 1;
+    }
+
+    if(ROM.crc > 1) {
+      draw_cover();
+    }
+  }
+
+  void draw_cover() {
+    char file[256] = "/sd/romart";
+    char crc[10];
+    sprintf(crc, "%X", ROM.crc);
+    sprintf(file, "%s/%s/%c/%s.art", file, EXTENSIONS[STEP], crc[0], crc);
+
+    printf("\n----- %s -----\n"
+    "ROM.name:%s\n"
+    "ROM.path:%s\n"
+    "ROM.crc:%X\n"
+    "file:%s\n"
+    , __func__,
+    ROM.name,
+    ROM.path,
+    ROM.crc,
+    file);
+
+    FILE *f = fopen(file, "rb");
+    if(f) {
+      uint16_t width, height;
+      fread(&width, 2, 1, f);
+      fread(&height, 2, 1, f);
+
+      if (width<=320 && height<=176) {
+        uint16_t *img = (uint16_t*)heap_caps_malloc(width*height*2, MALLOC_CAP_SPIRAM);
+        fread(img, 2, width*height, f);
+        ili9341_write_frame_rectangleLE(SCREEN.w-width-16,POS.y, width, height, img);
+        heap_caps_free(img);
+      }
+      fclose(f);
+    } else {
+      printf("FILE NOT FOUND");
+    }
+  }
+//}#pragma endregion Cover
 
 //{#pragma region Animations
   void animate(int dir) {

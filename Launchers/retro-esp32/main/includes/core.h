@@ -18,6 +18,11 @@
 #include "sdmmc_cmd.h"
 
 /*
+  CRC
+*/
+#include <rom/crc.h>
+
+/*
   ESP
 */
 #include "esp_heap_caps.h"

@@ -88,6 +88,12 @@ void draw_files();
 void has_save_file(char *save_name);
 
 /*
+  Cover
+*/
+void get_cover();
+void draw_cover();
+
+/*
   Animations
 */
 void animate(int dir);
