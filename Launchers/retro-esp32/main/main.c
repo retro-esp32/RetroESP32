@@ -29,6 +29,7 @@
   int8_t USER;
   int8_t SETTING;
   int8_t COLOR;
+  int8_t COVER;
   uint32_t currentDuty;
 
   char** FILES;
@@ -36,6 +37,7 @@
 
   DIR *directory;
   struct dirent *file;
+
 //}#pragma endregion Global
 
 //{#pragma region Emulator and Directories
@@ -176,6 +178,43 @@
     while (gamepad.values[key]) odroid_input_gamepad_read(&gamepad);
   }
 //}#pragma endregion Debounce
+
+char *remove_ext (char* myStr, char extSep, char pathSep) {
+    char *retStr, *lastExt, *lastPath;
+
+    // Error checks and allocate string.
+
+    if (myStr == NULL) return NULL;
+    if ((retStr = malloc (strlen (myStr) + 1)) == NULL) return NULL;
+
+    // Make a copy and find the relevant characters.
+
+    strcpy (retStr, myStr);
+    lastExt = strrchr (retStr, extSep);
+    lastPath = (pathSep == 0) ? NULL : strrchr (retStr, pathSep);
+
+    // If it has an extension separator.
+
+    if (lastExt != NULL) {
+        // and it's to the right of the path separator.
+
+        if (lastPath != NULL) {
+            if (lastPath < lastExt) {
+                // then remove it.
+
+                *lastExt = '\0';
+            }
+        } else {
+            // Has extension separator with no path separator.
+
+            *lastExt = '\0';
+        }
+    }
+
+    // Return the modified string.
+
+    return retStr;
+}
 
 //{#pragma region States
   void get_step_state() {
@@ -337,6 +376,12 @@
 
     draw_brightness();
 
+    y+=20;
+    draw_mask(x,y-1,100,17);
+    draw_text(x,y,"COVER ART",false, SETTING == 4 ? true : false, false);
+
+    draw_cover_toggle();
+
     /*
       BUILD
     */
@@ -394,6 +439,55 @@
         break;
       default :
         COLOR = false;
+    }
+    nvs_close(handle);
+  }
+
+  void draw_cover_toggle() {
+    get_cover_toggle();
+    int x = SCREEN.w - 38;
+    int y = POS.y + 126;
+    int w, h;
+
+    int i = 0;
+    for(h = 0; h < 9; h++) {
+      for(w = 0; w < 18; w++) {
+        buffer[i] = toggle[h + (COVER*9)][w] == 0 ? GUI.bg : toggle[h + (COVER*9)][w];
+        i++;
+      }
+    }
+    ili9341_write_frame_rectangleLE(x, y, 18, 9, buffer);
+  }
+
+  void set_cover_toggle() {
+    COVER = COVER == 0 ? 1 : 0;
+    nvs_handle handle;
+    nvs_open("storage", NVS_READWRITE, &handle);
+    nvs_set_i8(handle, "COVER", COVER);
+    nvs_commit(handle);
+    nvs_close(handle);
+  }
+
+  void get_cover_toggle() {
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK( err );
+
+    nvs_handle handle;
+    err = nvs_open("storage", NVS_READWRITE, &handle);
+
+    err = nvs_get_i8(handle, "COVER", &COVER);
+    switch (err) {
+      case ESP_OK:
+        break;
+      case ESP_ERR_NVS_NOT_FOUND:
+        COVER = false;
+        break;
+      default :
+        COVER = false;
     }
     nvs_close(handle);
   }
@@ -803,7 +897,8 @@
     y += 48;
     draw_media(x,y-6,true);
     draw_launcher_options();
-    get_cover();
+    get_cover_toggle();
+    if(COVER == 1){get_cover();}
   }
 
   void draw_launcher_options() {
@@ -1081,6 +1176,7 @@
         draw_media(x,y-6,n == 0 ? true : false);
       if(n == 0) {
         strcpy(ROM.name, FILES[n]);
+        strcpy(ROM.art, remove_ext(ROM.name, '.', '/'));
         ROM.ready = true;
       }
       y+=20;
@@ -1127,120 +1223,81 @@
 
 //{#pragma region Cover
   void get_cover() {
-
     preview_cover(false);
-
-    char file[256] = "";
-    sprintf(file, "%s/%s", ROM.path, ROM.name);
-
-    FILE *f = fopen(file, "rb");
-    ROM.crc = 0;
-    if (f) {
-      fseek(f, 0, SEEK_END);
-      int offset = 0;
-      if(strcmp(EXTENSIONS[STEP], "nes") == 0) {offset = 16;}
-      int size = ftell(f) - offset;
-      fseek(f, offset, SEEK_SET);
-      int buf_size = 32768; //4096;
-      unsigned char *cover = (unsigned char*)heap_caps_malloc(buf_size, MALLOC_CAP_SPIRAM);
-      if (cover)
-      {
-        uint32_t crc_tmp = 0;
-        bool abort = false;
-        while (true)
-        {
-          odroid_input_gamepad_read(&gamepad);
-          if (//gamepad.values[ODROID_INPUT_A] ||
-              gamepad.values[ODROID_INPUT_B] ||
-              gamepad.values[ODROID_INPUT_START] ||
-              gamepad.values[ODROID_INPUT_SELECT] ||
-              gamepad.values[ODROID_INPUT_LEFT] ||
-              gamepad.values[ODROID_INPUT_RIGHT] ||
-              gamepad.values[ODROID_INPUT_UP] ||
-              gamepad.values[ODROID_INPUT_DOWN]) {
-              abort = true;
-              break;
-              get_cover();
-          }
-          int count = fread(cover, 1, buf_size, f);
-          crc_tmp = crc32_le(crc_tmp, (const uint8_t*)cover, count);
-          if (count != buf_size){break;}
-        }
-        heap_caps_free(cover);
-        fclose(f);
-        if (!abort) {
-          printf("%X  %s ; Size: %d\n", crc_tmp, file, size);
-          ROM.crc  = crc_tmp;
-        }
-      } else {
-        printf("Buffer alloc failed: Size: %d; File: %s\n",size, file);
-        fclose(f);
-        ROM.crc = 1;
-      }
-    } else {
-      printf("File not found: %s\n", file);
-      ROM.crc = 1;
-    }
-
-    if(ROM.crc > 1) {
-      draw_cover();
-    } else {
-      preview_cover(true);      
-    }
   }
-
   void preview_cover(bool error) {
-    /*
-    */
+    ROM.crc = 0;
+
     int bw = 112;
-    int bh = 168;
+    int bh = 150;
     int i = 0;
 
-    printf("\n----- %s -----\n", __func__);
+    char file[256] = "/sd/romart";
+    sprintf(file, "%s/%s/%s.art", file, EXTENSIONS[STEP], ROM.art);
+
+    if(!error) {
+      FILE *f = fopen(file, "rb");
+      if(f) {
+        uint16_t width, height;
+        fread(&width, 2, 1, f);
+        fread(&height, 2, 1, f);
+        bw = width;
+        bh = height;
+        ROM.crc = 1;
+        fclose(f);
+      } else {
+        printf("FILE NOT FOUND");
+        error = true;
+      }
+    }
+
+    printf("\n----- %s -----\n%s\n", __func__, file);
     for(int h = 0; h < bh; h++) {
       for(int w = 0; w < bw; w++) {
         buffer[i] = (h == 0) || (h == bh -1) ? WHITE : (w == 0) ||  (w == bw -1) ? WHITE : GUI.bg;
         i++;
       }
     }
-    ili9341_write_frame_rectangleLE(SCREEN.w-bw-24, POS.y+8, bw, bh, buffer);   
-    draw_text(SCREEN.w-bw-24+32, POS.y+8+(168/2)-2, error ? "NO PREVIEW" : "PREVIEW", false, false, false); 
+    int x = SCREEN.w-24-bw;
+    int y = POS.y+8;
+    ili9341_write_frame_rectangleLE(x, y, bw, bh, buffer);
+
+    draw_text(x + (error ? 30 : 40), y + (bh/2), error ? "NO PREVIEW" : "PREVIEW", false, false, false);
+
+    if(ROM.crc == 1) {
+      usleep(20000);
+      draw_cover();
+    }
   }
-
   void draw_cover() {
+    printf("\n----- %s -----\n%s\n", __func__, "OPENNING");
     char file[256] = "/sd/romart";
-    char crc[10];
-    sprintf(crc, "%X", ROM.crc);
-    sprintf(file, "%s/%s/%c/%s.art", file, EXTENSIONS[STEP], crc[0], crc);
-
-    printf("\n----- %s -----\n"
-    "ROM.name:%s\n"
-    "ROM.path:%s\n"
-    "ROM.crc:%X\n"
-    "file:%s\n"
-    , __func__,
-    ROM.name,
-    ROM.path,
-    ROM.crc,
-    file);
+    sprintf(file, "%s/%s/%s.art", file, EXTENSIONS[STEP], ROM.art);
 
     FILE *f = fopen(file, "rb");
     if(f) {
+      printf("\n----- %s -----\n%s\n", __func__, "OPEN");
       uint16_t width, height;
       fread(&width, 2, 1, f);
       fread(&height, 2, 1, f);
 
-      if (width<=320 && height<=176) {
+      int x = SCREEN.w-24-width;
+      int y = POS.y+8;
+
+      if (width<=320 && height<=240) {
         uint16_t *img = (uint16_t*)heap_caps_malloc(width*height*2, MALLOC_CAP_SPIRAM);
         fread(img, 2, width*height, f);
-        ili9341_write_frame_rectangleLE(SCREEN.w-width-24,POS.y+8, width, height, img);
+        ili9341_write_frame_rectangleLE(x,y, width, height, img);
         heap_caps_free(img);
+      } else {
+        printf("\n----- %s -----\n%s\nwidth:%d height:%d\n", __func__, "ERROR", width, height);
+        preview_cover(true);
       }
+
       fclose(f);
-    } else {
-      printf("FILE NOT FOUND");
     }
   }
+
 //}#pragma endregion Cover
 
 //{#pragma region Animations
@@ -1513,7 +1570,7 @@
       */
       if(gamepad.values[ODROID_INPUT_LEFT]) {
         if(!LAUNCHER && !FOLDER) {
-          if(!SETTINGS && SETTING != 1 && SETTING != 2 && SETTING != 3) {
+          if(!SETTINGS && SETTING != 1 && SETTING != 2 && SETTING != 3 && SETTING != 4) {
             STEP--;
             if( STEP < 0 ) {
               STEP = COUNT - 1;
@@ -1545,6 +1602,14 @@
                 usleep(200000);
               }
             }
+            if(SETTING == 4) {
+              nvs_handle handle;
+              nvs_open("storage", NVS_READWRITE, &handle);
+              nvs_set_i8(handle, "COVER", 0);
+              nvs_commit(handle);
+              nvs_close(handle);
+              draw_cover_toggle();
+            }
           }
         }
         usleep(100000);
@@ -1555,7 +1620,7 @@
       */
       if(gamepad.values[ODROID_INPUT_RIGHT]) {
         if(!LAUNCHER && !FOLDER) {
-          if(!SETTINGS && SETTING != 1 && SETTING != 2 && SETTING != 3) {
+          if(!SETTINGS && SETTING != 1 && SETTING != 2 && SETTING != 3 && SETTING != 4) {
             STEP++;
             if( STEP > COUNT-1 ) {
               STEP = 0;
@@ -1586,6 +1651,14 @@
                 usleep(200000);
               }
             }
+            if(SETTING == 4) {
+              nvs_handle handle;
+              nvs_open("storage", NVS_READWRITE, &handle);
+              nvs_set_i8(handle, "COVER", 1);
+              nvs_commit(handle);
+              nvs_close(handle);
+              draw_cover_toggle();
+            }
           }
         }
         usleep(100000);
@@ -1599,7 +1672,7 @@
           if(STEP == 0) {
             if(!SETTINGS) {
               SETTING--;
-              if( SETTING < 0 ) { SETTING = 3; }
+              if( SETTING < 0 ) { SETTING = 4; }
               draw_settings();
             } else {
               USER--;
@@ -1632,7 +1705,7 @@
           if(STEP == 0) {
             if(!SETTINGS) {
               SETTING++;
-              if( SETTING > 3 ) { SETTING = 0; }
+              if( SETTING > 4 ) { SETTING = 0; }
               draw_settings();
             } else {
               USER++;
@@ -1725,6 +1798,10 @@
                 set_toggle();
                 draw_toggle();
                 draw_systems();
+              break;
+              case 4:
+                set_cover_toggle();
+                draw_cover_toggle();
               break;
             }
           }

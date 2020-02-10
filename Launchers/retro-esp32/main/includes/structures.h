@@ -29,6 +29,7 @@ LIST ROMS = {8, 0, 0, 0, 0};
 typedef struct{
   char name[256];
   char path[256];
+  char art[256];
   uint32_t crc;
   bool ready;
 } LOAD;

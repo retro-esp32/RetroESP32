@@ -26,6 +26,9 @@ void draw_settings();
 void draw_toggle();
 void get_toggle();
 void set_toggle();
+void draw_cover_toggle();
+void get_cover_toggle();
+void set_cover_toggle();
 
 /*
  Volume
@@ -90,6 +93,7 @@ void has_save_file(char *save_name);
 /*
   Cover
 */
+
 void get_cover();
 void preview_cover(bool error);
 void draw_cover();
