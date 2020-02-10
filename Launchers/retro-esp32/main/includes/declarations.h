@@ -91,6 +91,7 @@ void has_save_file(char *save_name);
   Cover
 */
 void get_cover();
+void preview_cover(bool error);
 void draw_cover();
 
 /*

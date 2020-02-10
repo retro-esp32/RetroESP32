@@ -803,6 +803,7 @@
     y += 48;
     draw_media(x,y-6,true);
     draw_launcher_options();
+    get_cover();
   }
 
   void draw_launcher_options() {
@@ -851,8 +852,6 @@
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       draw_text(x+10,y,"Run",false,true, false);
     }
-
-    get_cover();
   }
 //}#pragma endregion GUI
 
@@ -1128,7 +1127,9 @@
 
 //{#pragma region Cover
   void get_cover() {
-    //debounce(ODROID_INPUT_A);
+
+    preview_cover(false);
+
     char file[256] = "";
     sprintf(file, "%s/%s", ROM.path, ROM.name);
 
@@ -1149,7 +1150,8 @@
         while (true)
         {
           odroid_input_gamepad_read(&gamepad);
-          if (gamepad.values[ODROID_INPUT_A] ||
+          if (//gamepad.values[ODROID_INPUT_A] ||
+              gamepad.values[ODROID_INPUT_B] ||
               gamepad.values[ODROID_INPUT_START] ||
               gamepad.values[ODROID_INPUT_SELECT] ||
               gamepad.values[ODROID_INPUT_LEFT] ||
@@ -1158,6 +1160,7 @@
               gamepad.values[ODROID_INPUT_DOWN]) {
               abort = true;
               break;
+              get_cover();
           }
           int count = fread(cover, 1, buf_size, f);
           crc_tmp = crc32_le(crc_tmp, (const uint8_t*)cover, count);
@@ -1181,7 +1184,27 @@
 
     if(ROM.crc > 1) {
       draw_cover();
+    } else {
+      preview_cover(true);      
     }
+  }
+
+  void preview_cover(bool error) {
+    /*
+    */
+    int bw = 112;
+    int bh = 168;
+    int i = 0;
+
+    printf("\n----- %s -----\n", __func__);
+    for(int h = 0; h < bh; h++) {
+      for(int w = 0; w < bw; w++) {
+        buffer[i] = (h == 0) || (h == bh -1) ? WHITE : (w == 0) ||  (w == bw -1) ? WHITE : GUI.bg;
+        i++;
+      }
+    }
+    ili9341_write_frame_rectangleLE(SCREEN.w-bw-24, POS.y+8, bw, bh, buffer);   
+    draw_text(SCREEN.w-bw-24+32, POS.y+8+(168/2)-2, error ? "NO PREVIEW" : "PREVIEW", false, false, false); 
   }
 
   void draw_cover() {
@@ -1210,7 +1233,7 @@
       if (width<=320 && height<=176) {
         uint16_t *img = (uint16_t*)heap_caps_malloc(width*height*2, MALLOC_CAP_SPIRAM);
         fread(img, 2, width*height, f);
-        ili9341_write_frame_rectangleLE(SCREEN.w-width-16,POS.y, width, height, img);
+        ili9341_write_frame_rectangleLE(SCREEN.w-width-24,POS.y+8, width, height, img);
         heap_caps_free(img);
       }
       fclose(f);
