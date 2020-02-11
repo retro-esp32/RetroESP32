@@ -170,6 +170,46 @@
 /*
   METHODS
 */
+
+//{#pragma region Helpers
+  char *remove_ext (char* myStr, char extSep, char pathSep) {
+      char *retStr, *lastExt, *lastPath;
+
+      // Error checks and allocate string.
+
+      if (myStr == NULL) return NULL;
+      if ((retStr = malloc (strlen (myStr) + 1)) == NULL) return NULL;
+
+      // Make a copy and find the relevant characters.
+
+      strcpy (retStr, myStr);
+      lastExt = strrchr (retStr, extSep);
+      lastPath = (pathSep == 0) ? NULL : strrchr (retStr, pathSep);
+
+      // If it has an extension separator.
+
+      if (lastExt != NULL) {
+          // and it's to the right of the path separator.
+
+          if (lastPath != NULL) {
+              if (lastPath < lastExt) {
+                  // then remove it.
+
+                  *lastExt = '\0';
+              }
+          } else {
+              // Has extension separator with no path separator.
+
+              *lastExt = '\0';
+          }
+      }
+
+      // Return the modified string.
+
+      return retStr;
+  }
+//}#pragma endregion Helpers
+
 //{#pragma region Debounce
   void debounce(int key) {
     draw_battery();
@@ -178,43 +218,6 @@
     while (gamepad.values[key]) odroid_input_gamepad_read(&gamepad);
   }
 //}#pragma endregion Debounce
-
-char *remove_ext (char* myStr, char extSep, char pathSep) {
-    char *retStr, *lastExt, *lastPath;
-
-    // Error checks and allocate string.
-
-    if (myStr == NULL) return NULL;
-    if ((retStr = malloc (strlen (myStr) + 1)) == NULL) return NULL;
-
-    // Make a copy and find the relevant characters.
-
-    strcpy (retStr, myStr);
-    lastExt = strrchr (retStr, extSep);
-    lastPath = (pathSep == 0) ? NULL : strrchr (retStr, pathSep);
-
-    // If it has an extension separator.
-
-    if (lastExt != NULL) {
-        // and it's to the right of the path separator.
-
-        if (lastPath != NULL) {
-            if (lastPath < lastExt) {
-                // then remove it.
-
-                *lastExt = '\0';
-            }
-        } else {
-            // Has extension separator with no path separator.
-
-            *lastExt = '\0';
-        }
-    }
-
-    // Return the modified string.
-
-    return retStr;
-}
 
 //{#pragma region States
   void get_step_state() {
@@ -1225,6 +1228,7 @@ char *remove_ext (char* myStr, char extSep, char pathSep) {
   void get_cover() {
     preview_cover(false);
   }
+
   void preview_cover(bool error) {
     ROM.crc = 0;
 
@@ -1246,7 +1250,6 @@ char *remove_ext (char* myStr, char extSep, char pathSep) {
         ROM.crc = 1;
         fclose(f);
       } else {
-        printf("FILE NOT FOUND");
         error = true;
       }
     }
@@ -1262,13 +1265,17 @@ char *remove_ext (char* myStr, char extSep, char pathSep) {
     int y = POS.y+8;
     ili9341_write_frame_rectangleLE(x, y, bw, bh, buffer);
 
-    draw_text(x + (error ? 30 : 40), y + (bh/2), error ? "NO PREVIEW" : "PREVIEW", false, false, false);
+    int center = x + bw/2;
+    center -= error ? 30 : 22;
+
+    draw_text(center, y + (bh/2) - 3, error ? "NO PREVIEW" : "PREVIEW", false, false, false);
 
     if(ROM.crc == 1) {
       usleep(20000);
       draw_cover();
     }
   }
+
   void draw_cover() {
     printf("\n----- %s -----\n%s\n", __func__, "OPENNING");
     char file[256] = "/sd/romart";
@@ -1297,7 +1304,6 @@ char *remove_ext (char* myStr, char extSep, char pathSep) {
       fclose(f);
     }
   }
-
 //}#pragma endregion Cover
 
 //{#pragma region Animations

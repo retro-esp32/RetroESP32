@@ -1,4 +1,9 @@
 /*
+ Helpers
+*/
+char *remove_ext (char* myStr, char extSep, char pathSep);
+
+/*
  Debounce
 */
 void debounce(int key);
