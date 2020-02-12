@@ -8,6 +8,7 @@
 | Retro ESP32 In Action                              |        Summary                                                      |
 | ----------------------------- | ------------------------------------------------------------ |
 | <img src="Assets/animated.gif" alt="Teaser" width="560"> | ![Retro ESP32](Assets/logo.jpg)<br/><br/>**Retro ESP32** is the ultimate feature packed [Odroid Go](https://www.hardkernel.com/shop/odroid-go/) Launcher. <br/><br/>Includes color schemes and theming. <br/>Drawing inspiration from the popular [RetroArch](https://www.retroarch.com/) emulator front end of choice. <br/>We packed 11 (current count) prebundled emulators including ROM / Game manager. <br/>Additionally each emulator includes an in game menu for further management.<br/><br/>**[Get Your Copy Today](https://github.com/retro-esp32/RetroESP32/releases)** |
+| <img src="https://raw.githubusercontent.com/wiki/retro-esp32/RetroESP32/Assets/Tindie/PCB-000.jpg" alt="Retro ESP32 MGB-001" width="560"> | Looking for a Game Boy Pocket drop in solution?  [Get Yours Today](https://www.tindie.com/products/game-boy-pocket/retro-esp32/)<br/><br/> Exculsively at: <br/>[<img src="https://d2ss6ovg47m0r5.cloudfront.net/images/tindie-logo.png" alt="Tindie">](https://www.tindie.com/products/game-boy-pocket/retro-esp32/)|
 
 ## Preperation
 > Update Odroid Go Firmware
