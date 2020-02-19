@@ -38,3 +38,7 @@
 	path = Emulators/odroid-go-handy
 	url = git@github.com:pelle7/odroid-go-handy.git
 	branch = develop
+[submodule "Emulators/retro-go"]
+	path = Emulators/retro-go
+	url = git@github.com:ducalex/retro-go.git
+	branch = master
