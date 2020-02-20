@@ -4,7 +4,6 @@
 #
 
 PROJECT_NAME := nesemu-go
-EXTRA_COMPONENT_DIRS := ~/Desktop/github/RetroESP32/Public/Software/Emulators/retro-go/components
-#EXTRA_COMPONENT_DIRS := $(dirname "$PWD")/components
+EXTRA_COMPONENT_DIRS := $(dirname "$PWD")/components
 
 include $(IDF_PATH)/make/project.mk
