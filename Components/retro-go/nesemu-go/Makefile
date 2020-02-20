@@ -4,6 +4,11 @@
 #
 
 PROJECT_NAME := nesemu-go
-EXTRA_COMPONENT_DIRS := $(dirname "$PWD")/components
+
+CWD := $(shell cd ../ && (bash -c "dirs +0"))
+EXTRA_COMPONENT_DIRS := ~/Desktop/github/R32/Software/Emulators/retro-go/components
+
+$(info    CWD is $(CWD))
+$(info    EXTRA_COMPONENT_DIRS is $(EXTRA_COMPONENT_DIRS))
 
 include $(IDF_PATH)/make/project.mk

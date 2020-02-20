@@ -86,7 +86,10 @@ DRAM_ATTR static const ili_init_cmd_t ili_sleep_cmds[] = {
 };
 
 
-// 2.4" LCD
+/*
+ CONFIG_LCD_DRIVER_CHIP_ODROID_GO
+*/
+#ifdef CONFIG_LCD_DRIVER_CHIP_ODROID_GO
 DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     // VCI=2.8V
     //************* Start Initial Sequence **********//
@@ -104,7 +107,7 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     //{0x36, {(MADCTL_MV | MADCTL_MX | TFT_RGB_BGR)}, 1},    // Memory Access Control
     {0x36, {(MADCTL_MV | MADCTL_MY | TFT_RGB_BGR)}, 1},    // Memory Access Control
     {0x3A, {0x55}, 1},
-    {0xB1, {0x00, 0x10}, 2},  // Frame Rate Control (1B=70, 1F=61, 10=119)
+    {0xB1, {0x00, 0x1B}, 2},  // Frame Rate Control (1B=70, 1F=61, 10=119)
     {0xB6, {0x0A, 0xA2}, 2},    // Display Function Control
     {0xF6, {0x01, 0x30}, 2},
     {0xF2, {0x00}, 1},    // 3Gamma Function Disable
@@ -119,6 +122,45 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
 
     {0, {0}, 0xff}
 };
+#endif
+/*
+ CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
+*/
+#ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
+DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
+    // VCI=2.8V
+    //************* Start Initial Sequence **********//
+    {TFT_CMD_SWRESET, {0}, 0x80},
+    {0xCF, {0x00, 0xc3, 0x30}, 3},
+    {0xED, {0x64, 0x03, 0x12, 0x81}, 4},
+    {0xE8, {0x85, 0x00, 0x78}, 3},
+    {0xCB, {0x39, 0x2c, 0x00, 0x34, 0x02}, 5},
+    {0xF7, {0x20}, 1},
+    {0xEA, {0x00, 0x00}, 2},
+    {0xC0, {0x1B}, 1},    //Power control   //VRH[5:0]
+    {0xC1, {0x12}, 1},    //Power control   //SAP[2:0];BT[3:0]
+    {0xC5, {0x32, 0x3C}, 2},    //VCM control
+    {0x36, {(MADCTL_MV | MADCTL_MY | TFT_RGB_BGR)}, 1},    // Memory Access Control
+    {0x3A, {0x55}, 1},
+    {0xB1, {0x00, 0x1B}, 2},  // Frame Rate Control (1B=70, 1F=61, 10=119)
+    {0xB6, {0x0A, 0xA2}, 2},    // Display Function Control
+    {0xF6, {0x01, 0x30}, 2},
+    {0xF2, {0x00}, 1},    // 3Gamma Function Disable
+    {0x26, {0x01}, 1},     //Gamma curve selected
+
+    //Set Gamma
+    {0xE0, {0x0F, 0x31, 0x2B, 0x0C, 0x0E, 0x08, 0x4E, 0xF1, 0x37, 0x07, 0x10, 0x03, 0x0E, 0x09, 0x00}, 15},
+    {0XE1, {0x00, 0x0E, 0x14, 0x03, 0x11, 0x07, 0x31, 0xC1, 0x48, 0x08, 0x0F, 0x0C, 0x31, 0x36, 0x0F}, 15},
+
+    // ILI9342 Specific
+    {0x36, {0x40|0x80|0x08}, 1}, // <-- ROTATE
+    {0x21, {0}, 0x80}, // <-- INVERT COLORS
+
+    {0x11, {0}, 0x80},    //Exit Sleep
+    {0x29, {0}, 0x80},    //Display on
+    {0, {0}, 0xff}
+};
+#endif
 
 
 static inline uint16_t* line_buffer_get()
