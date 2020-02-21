@@ -305,7 +305,31 @@ void osd_getinput(void)
    odroid_input_gamepad_read(&joystick);
 
    if (joystick.values[ODROID_INPUT_MENU]) {
-      odroid_overlay_game_menu();
+      #ifdef CONFIG_IN_GAME_MENU_YES
+         odroid_display_lock();
+         hud_menu();
+         printf("\nACTION:%d", ACTION);
+         void* arg = 1;
+         switch(ACTION) {
+           case 3:
+           case 4:
+               hud_progress("Saving...", true);
+               hud_deinit();
+               save_sram();
+               esp_restart();
+           break;
+           case 5:
+               printf("\nDELETE ROM\n");
+           break;
+         }
+         odroid_display_unlock();
+
+        ili9341_write_frame_scaled(currentUpdate->buffer, NULL,
+                                   NES_SCREEN_WIDTH, NES_VISIBLE_HEIGHT, currentUpdate->stride,
+                                   1, PIXEL_MASK, myPalette);       
+      #else
+         odroid_overlay_game_menu();
+      #endif
    }
    else if (joystick.values[ODROID_INPUT_VOLUME]) {
       odroid_overlay_game_settings_menu(NULL, 0);
@@ -390,7 +414,7 @@ void osd_shutdown()
 
 void SaveState()
 {
-    printf("Saving state.\n");
+    printf("\n%s\n", __func__);
 
     odroid_input_battery_monitor_enabled_set(0);
     odroid_system_led_set(1);
@@ -400,41 +424,34 @@ void SaveState()
     odroid_system_led_set(0);
     odroid_input_battery_monitor_enabled_set(1);
 
-    printf("Saving state OK.\n");
+    printf("\n%s OK\n", __func__);
 }
 
 void QuitEmulator(bool save)
 {
-  #ifdef CONFIG_IN_GAME_MENU_YES
-    odroid_display_lock();
-    hud_menu();
-    printf("\n%s -> ACTION:%d", __func__, ACTION);
-    odroid_display_unlock();
-  #else
-    printf("QuitEmulator: stopping tasks.\n");
+ printf("QuitEmulator: stopping tasks.\n");
 
-    void *exitVideoTask = NULL;
-    xQueueSend(videoTaskQueue, &exitVideoTask, portMAX_DELAY);
-    while (videoTaskQueue) vTaskDelay(1);
+ void *exitVideoTask = NULL;
+ xQueueSend(videoTaskQueue, &exitVideoTask, portMAX_DELAY);
+ while (videoTaskQueue) vTaskDelay(1);
 
-    odroid_audio_terminate();
-    ili9341_blank_screen();
+ odroid_audio_terminate();
+ ili9341_blank_screen();
 
-    odroid_display_lock();
-    odroid_display_show_hourglass();
-    odroid_display_unlock();
+ odroid_display_lock();
+ odroid_display_show_hourglass();
+ odroid_display_unlock();
 
-    if (save) {
-      printf("QuitEmulator: Saving state.\n");
-      SaveState();
-    }
+ if (save) {
+   printf("QuitEmulator: Saving state.\n");
+   SaveState();
+ }
 
-    // Set menu application
-    odroid_system_application_set(0);
+ // Set menu application
+ odroid_system_application_set(0);
 
-    // Reset
-    esp_restart();
-  #endif
+ // Reset
+ esp_restart();
 }
 
 
@@ -468,8 +485,14 @@ void app_main(void)
       odroid_system_halt();
    }
 
+   #ifdef CONFIG_IN_GAME_MENU_YES
+      printf("\n\n%s\n%s\n\n", __func__, romPath);
+      char* save_name = odroid_sdcard_get_filename(romPath);      
+      hud_check_saves(odroid_sdcard_get_filename(romPath));
+   #endif      
+
    printf("NoFrendo start!\n");
-   char* args[1] = { odroid_sdcard_get_filename(romPath) };
+   char* args[1] = { odroid_sdcard_get_filename(romPath) };   
    nofrendo_main(1, args);
 
    printf("NoFrendo died.\n");

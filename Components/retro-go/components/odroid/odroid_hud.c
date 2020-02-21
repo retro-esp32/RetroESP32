@@ -510,7 +510,7 @@ const uint16_t FONT_5x7[7][250] = {
         ACTION = STATE.action;
         switch(ACTION) {
           case 0: // "Resume Game"
-            ili9341_clear(0);
+            //ili9341_blank_screen();
             return 0;
           break;
           case 1: // "Restart Game"
@@ -523,13 +523,12 @@ const uint16_t FONT_5x7[7][250] = {
           break;
           case 3: // "Save Game"
           case 4: // "Overwrite Game"
-            ili9341_clear(0);
             return 0;
           break;
           case 5: // "Delete Save"
             hud_progress("Deleting...", true);
             hud_prepare_delete(1);
-            ili9341_clear(0);
+            ili9341_blank_screen();
             esp_restart();       
             //return 0;
           break;

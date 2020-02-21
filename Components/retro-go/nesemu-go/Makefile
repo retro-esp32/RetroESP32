@@ -6,7 +6,7 @@
 PROJECT_NAME := nesemu-go
 
 CWD := $(shell cd ../ && (bash -c "dirs +0"))
-EXTRA_COMPONENT_DIRS := ~/Desktop/github/R32/Software/Emulators/retro-go/components
+EXTRA_COMPONENT_DIRS := $(CWD)/components
 
 $(info    CWD is $(CWD))
 $(info    EXTRA_COMPONENT_DIRS is $(EXTRA_COMPONENT_DIRS))
