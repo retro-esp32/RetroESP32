@@ -25,6 +25,8 @@
     int ACTION;
 #endif
 
+static odroid_gamepad_state previousJoystickState;
+
 #define AUDIO_SAMPLERATE   32000
 #define AUDIO_FRAGSIZE     (AUDIO_SAMPLERATE/NES_REFRESH_RATE)
 
@@ -304,6 +306,7 @@ void osd_getinput(void)
    odroid_gamepad_state joystick;
    odroid_input_gamepad_read(&joystick);
 
+
    if (joystick.values[ODROID_INPUT_MENU]) {
       #ifdef CONFIG_IN_GAME_MENU_YES
          odroid_display_lock();
@@ -334,6 +337,23 @@ void osd_getinput(void)
    else if (joystick.values[ODROID_INPUT_VOLUME]) {
       odroid_overlay_game_settings_menu(NULL, 0);
    }
+
+    // Scaling
+    if (joystick.values[ODROID_INPUT_START] && !previousJoystickState.values[ODROID_INPUT_RIGHT] && joystick.values[ODROID_INPUT_RIGHT])
+    {
+       uint8_t level = odroid_settings_Scaling_get();
+       uint8_t max = 2;
+
+       printf("\n CHANGE SCALE: %d \n", level);
+
+       level++;
+       if(level > max) {level = 0;}
+
+       scalingMode = level;  
+       odroid_settings_Scaling_set(level);
+        //scaling_enabled = !scaling_enabled;
+        //odroid_settings_ScaleDisabled_set(ODROID_SCALE_DISABLE_NES, scaling_enabled ? 0 : 1);
+    }       
 
   // A
   if (!joystick.values[ODROID_INPUT_A])
@@ -377,6 +397,9 @@ void osd_getinput(void)
     changed >>= 1;
     b >>= 1;
   }
+   
+   previousJoystickState = joystick;
+
 }
 
 void osd_getmouse(int *x, int *y, int *button)
@@ -387,12 +410,13 @@ void osd_getmouse(int *x, int *y, int *button)
 /**
  * Init/Shutdown
  */
-
 int osd_init()
 {
    log_chain_logfunc(osd_logprint);
 
    osd_init_sound();
+
+   previousJoystickState = odroid_input_read_raw();
 
    xTaskCreatePinnedToCore(&videoTask, "videoTask", 2048, NULL, 5, NULL, 1);
 
