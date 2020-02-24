@@ -693,6 +693,9 @@ void odroid_display_reset_scale(short width, short height)
     x_inc = SCREEN_WIDTH;
     y_inc = SCREEN_HEIGHT;
     x_origin = (SCREEN_WIDTH - width) / 2;
+    #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
+        x_origin -= 7;
+    #endif
     y_origin = (SCREEN_HEIGHT - height) / 2;
     x_scale = y_scale = 1.f;
 }
@@ -714,6 +717,11 @@ void odroid_display_set_scale(short width, short height, float aspect)
     y_inc = SCREEN_HEIGHT / y_scale;
     x_origin = (SCREEN_WIDTH - (width * x_scale)) / 2.f;
     y_origin = (SCREEN_HEIGHT - (height * y_scale)) / 2.f;
+
+    #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
+        if(x_origin == 3) {x_origin = 0;}
+        if(x_origin == 22) {x_origin = 14;}    
+    #endif
 
     printf("%dx%d@%.3f x_inc:%d y_inc:%d x_scale:%.3f y_scale:%.3f x_origin:%d y_origin:%d\n",
            width, height, aspect, x_inc, y_inc, x_scale, y_scale, x_origin, y_origin);

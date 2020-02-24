@@ -1008,7 +1008,7 @@
     delete_numbers();
     SEEK[0] = 0;
 
-   // printf("\n----- %s -----", __func__);
+    printf("\n----- %s -----", __func__);
 
     ROMS.total = 0;
     char message[100];
@@ -1021,7 +1021,7 @@
     strcat(&path[strlen(path) - 1],folder_path);
     strcpy(ROM.path, path);
 
-   // printf("\npath:%s", path);
+    printf("\npath:%s", path);
 
     if(directory != NULL) {
      // printf("\npath:%s", path);
