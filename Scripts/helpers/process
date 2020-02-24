@@ -290,7 +290,6 @@ then
   echo -e "${game}  ${green}Compiling ${cyan}handy-go${nc}"
   echo "--------------------------------------------------------------------------"
   cd $HANDY_OPTION_PATH
-  cd handy-go
   get_clean_option
   get_config_option
   make -j8 -s
