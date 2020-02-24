@@ -464,6 +464,9 @@
 //{#pragma region Menu
   void hud_menu(void) {
     int volume = odroid_audio_volume_get();
+    #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
+      volume = 4;
+    #endif
     odroid_audio_terminate();
     hud_init();
     hud_debug("HUD - MENU");
