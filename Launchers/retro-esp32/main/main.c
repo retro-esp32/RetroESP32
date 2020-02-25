@@ -1240,22 +1240,7 @@ void handle_line(char *line) {
       f = fopen(file, "wb");
       fprintf(f, "Favorites List");
     } else {
-      int size = 1024, pos;
-      int c;
-      char *buffer = (char *)malloc(size);
-      do { // read all lines in file
-        pos = 0;
-        do{ // read one line
-          c = fgetc(f);
-          if(c != EOF) buffer[pos++] = (char)c;
-          if(pos >= size - 1) { // increase buffer length - leave room for 0
-            size *=2;
-            buffer = (char*)realloc(buffer, size);
-          }
-        } while(c != EOF && c != '\n');
-        buffer[pos] = 0;
-        handle_line(buffer);
-      } while(c != EOF);
+
     }
     fclose(f);
   }
