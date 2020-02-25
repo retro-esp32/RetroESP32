@@ -96,6 +96,12 @@ void draw_files();
 void has_save_file(char *save_name);
 
 /*
+  Favorites
+*/
+void has_fav_file();
+
+
+/*
   Cover
 */
 

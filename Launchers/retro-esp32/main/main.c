@@ -130,6 +130,7 @@
 
     // SD
     odroid_sdcard_open("/sd");
+    has_fav_file();
 
     // Theme
     get_theme();
@@ -930,7 +931,7 @@
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       draw_text(x+10,y,"Restart",false,OPTION == 1?true:false, false);
-      // restart
+      // delete
       i = 0;
       y+=20;
       offset = 20;
@@ -1222,6 +1223,43 @@
     //printf("\n---------------------\n");
   }
 //}#pragma endregion Files
+
+//{#pragma region Favorites
+void handle_line(char *line) {
+  printf("\n%s\n", line);
+}
+
+  void has_fav_file() {
+    printf("\n----- %s -----\n", __func__);
+    char file[256] = "/sd/odroid/data";
+    sprintf(file, "%s/%s", file, "retro_esp32.txt");
+
+    FILE *f;
+    f = fopen(file, "rb");
+    if(f == NULL) {
+      f = fopen(file, "wb");
+      fprintf(f, "Favorites List");
+    } else {
+      int size = 1024, pos;
+      int c;
+      char *buffer = (char *)malloc(size);
+      do { // read all lines in file
+        pos = 0;
+        do{ // read one line
+          c = fgetc(f);
+          if(c != EOF) buffer[pos++] = (char)c;
+          if(pos >= size - 1) { // increase buffer length - leave room for 0
+            size *=2;
+            buffer = (char*)realloc(buffer, size);
+          }
+        } while(c != EOF && c != '\n');
+        buffer[pos] = 0;
+        handle_line(buffer);
+      } while(c != EOF);
+    }
+    fclose(f);
+  }
+//}#pragma endregion Favorites
 
 //{#pragma region Cover
   void get_cover() {
