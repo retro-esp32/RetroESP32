@@ -141,7 +141,7 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     //Set Gamma
     {0xE0, {0x0F, 0x31, 0x2B, 0x0C, 0x0E, 0x08, 0x4E, 0xF1, 0x37, 0x07, 0x10, 0x03, 0x0E, 0x09, 0x00}, 15},
     {0XE1, {0x00, 0x0E, 0x14, 0x03, 0x11, 0x07, 0x31, 0xC1, 0x48, 0x08, 0x0F, 0x0C, 0x31, 0x36, 0x0F}, 15},
-    
+
     // ILI9342 Specific
     {0x36, {0x40|0x80|0x08}, 1}, // <-- ROTATE
     {0x21, {0}, 0x80}, // <-- INVERT COLORS
@@ -401,7 +401,7 @@ void send_continue_line(uint16_t *line, int width, int lineCount)
 
 static void backlight_init()
 {
-     /*
+     ///*
     // Note: In esp-idf v3.0, settings flash speed to 80Mhz causes the LCD controller
     // to malfunction after a soft-reset.
 
@@ -451,7 +451,7 @@ static void backlight_init()
     ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_NO_WAIT);
 
     isBackLightIntialized = true;
-    */
+    //*/
 }
 
 #if 1

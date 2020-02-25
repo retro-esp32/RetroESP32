@@ -37,7 +37,6 @@
 
   DIR *directory;
   struct dirent *file;
-
 //}#pragma endregion Global
 
 //{#pragma region Emulator and Directories
@@ -1237,7 +1236,8 @@
     int i = 0;
 
     char file[256] = "/sd/romart";
-    sprintf(file, "%s/%s/%s.art", file, EXTENSIONS[STEP], ROM.art);
+
+    sprintf(file, "%s/%s/%s.art", file, DIRECTORIES[STEP], ROM.art);
 
     if(!error) {
       FILE *f = fopen(file, "rb");
@@ -1279,7 +1279,7 @@
   void draw_cover() {
     printf("\n----- %s -----\n%s\n", __func__, "OPENNING");
     char file[256] = "/sd/romart";
-    sprintf(file, "%s/%s/%s.art", file, EXTENSIONS[STEP], ROM.art);
+    sprintf(file, "%s/%s/%s.art", file, DIRECTORIES[STEP], ROM.art);
 
     FILE *f = fopen(file, "rb");
     if(f) {
