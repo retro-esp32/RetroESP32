@@ -4,6 +4,7 @@
 char *remove_ext (char* myStr, char extSep, char pathSep);
 char *get_filename (char* myStr);
 char *get_ext (char* myStr);
+int get_application (char* ext);
 
 /*
  Debounce

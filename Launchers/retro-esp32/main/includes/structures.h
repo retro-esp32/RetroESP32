@@ -30,6 +30,7 @@ typedef struct{
   char name[256];
   char path[256];
   char art[256];
+  char ext[256];
   uint32_t crc;
   bool ready;
   bool favorite;
