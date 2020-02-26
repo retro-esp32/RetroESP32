@@ -32,6 +32,7 @@ typedef struct{
   char art[256];
   uint32_t crc;
   bool ready;
+  bool favorite;
 } LOAD;
 LOAD ROM;
 

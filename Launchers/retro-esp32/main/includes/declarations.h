@@ -98,7 +98,11 @@ void has_save_file(char *save_name);
 /*
   Favorites
 */
-void has_fav_file();
+void create_favorites();
+void read_favorites();
+void add_favorite(char *string);
+void delete_favorite(char *favorite);
+void is_favorite(char *string);
 
 
 /*

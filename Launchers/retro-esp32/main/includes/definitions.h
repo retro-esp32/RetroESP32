@@ -35,6 +35,11 @@
 /*
 
 */
+#define FAVFILE "retro-esp32.txt"
+
+/*
+
+*/
 #define BUILD "Version 2 Build 1 (v.2.1)"
 
 

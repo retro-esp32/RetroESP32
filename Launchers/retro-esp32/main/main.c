@@ -33,6 +33,9 @@
   uint32_t currentDuty;
 
   char** FILES;
+  char** FAVORITES;
+  char FAVORITE[256] = "";
+
   char folder_path[256] = "";
 
   DIR *directory;
@@ -130,7 +133,7 @@
 
     // SD
     odroid_sdcard_open("/sd");
-    has_fav_file();
+    create_favorites();
 
     // Theme
     get_theme();
@@ -906,7 +909,7 @@
 
   void draw_launcher_options() {
     has_save_file(ROM.name);
-
+    is_favorite(ROM.name);
     int x = GAP/3 + 32;
     int y = POS.y + 48;
     int w = 5;
@@ -945,11 +948,22 @@
       i = 0;
       offset = 0;
       for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
-        buffer[i] = icons[r+offset][c] == WHITE ? WHITE : GUI.bg;i++;
+        buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 0 ? WHITE : GUI.fg : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
-      draw_text(x+10,y,"Run",false,true, false);
+      draw_text(x+10,y,"Run",false,OPTION == 0?true:false, false);
     }
+
+    // favorites
+    y+=20;
+    i = 0;
+    offset = ROM.favorite?40:35;
+    int option = SAVED ? 3 : 1;
+    for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
+      buffer[i] = icons[r+offset][c] == WHITE ? OPTION == option ? WHITE : GUI.fg : GUI.bg;i++;
+    }}
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+    draw_text(x+10,y,ROM.favorite?"Unfavorite":"Favorite",false,OPTION == option?true:false, false);
   }
 //}#pragma endregion GUI
 
@@ -1225,24 +1239,94 @@
 //}#pragma endregion Files
 
 //{#pragma region Favorites
-void handle_line(char *line) {
-  printf("\n%s\n", line);
-}
 
-  void has_fav_file() {
-    printf("\n----- %s -----\n", __func__);
+  void create_favorites() {
+    printf("\n----- %s START -----", __func__);
     char file[256] = "/sd/odroid/data";
-    sprintf(file, "%s/%s", file, "retro_esp32.txt");
+    sprintf(file, "%s/%s", file, FAVFILE);
 
     FILE *f;
     f = fopen(file, "rb");
     if(f == NULL) {
-      f = fopen(file, "wb");
-      fprintf(f, "Favorites List");
+      f = fopen(file, "w+");
+      printf("\nCREATING: %s", file);
+      /*
+        Castlevania Adventure, The (U).gb
+        Legend of Zelda, The - Oracle of Seasons (USA).gbc
+        Mega Man 2 (USA).nes
+      */      
     } else {
+      read_favorites();
+    }
+    printf("\nCLOSING: %s", file);
+    fclose(f);
+    printf("\n----- %s END -----\n", __func__);
+  }
 
+  void read_favorites() {
+    printf("\n----- %s START -----", __func__);
+
+    char file[256] = "/sd/odroid/data";
+    sprintf(file, "%s/%s", file, FAVFILE);
+
+    FILE *f;
+    f = fopen(file, "rb");
+    if(f) {
+      printf("\nREADING: %s\n", file);      
+      char line[256];
+      while (fgets(line, sizeof(line), f)) {
+        printf("%s", line); 
+      }   
     }
     fclose(f);
+            
+    printf("\n----- %s END -----\n", __func__);
+  }
+
+  void add_favorite(char *favorite) {
+    printf("\n----- %s START -----", __func__);
+    char file[256] = "/sd/odroid/data";
+    sprintf(file, "%s/%s", file, FAVFILE);  
+
+    FILE *f;
+    f = fopen(file, "a+");  
+    if(f) {
+      printf("\nADDING: %s to %s", favorite, file);             
+      fprintf(f, "%s\n", favorite);     
+    }
+    fclose(f);    
+    printf("\n----- %s END -----\n", __func__);
+  }
+
+  void delete_favorite(char *favorite) {
+    printf("\n----- %s START -----", __func__);
+    printf("\n----- %s END -----\n", __func__);
+  }
+
+  void is_favorite(char *favorite) {
+    printf("\n----- %s START -----", __func__);
+    ROM.favorite = false;
+
+    char file[256] = "/sd/odroid/data";
+    sprintf(file, "%s/%s", file, FAVFILE);
+
+
+    FILE *f;
+    f = fopen(file, "rb");
+    if(f) {
+      printf("\nCHECKING: %s\n", favorite);      
+      char line[256];
+      while (fgets(line, sizeof(line), f)) {  
+        char *ep = &line[strlen(line)-1];
+        while (*ep == '\n' || *ep == '\r'){*ep-- = '\0';}        
+        printf("\nfavorite:%s line:%s match:%d", favorite, line, strcmp(favorite, line));                                               
+        if(strcmp(favorite, line) == 0) { 
+          ROM.favorite = true;
+        }
+      }   
+    }
+    fclose(f);
+    printf("\n----- %s END -----\n", __func__);                                    
   }
 //}#pragma endregion Favorites
 
@@ -1717,9 +1801,10 @@ void handle_line(char *line) {
             seek_files();
           }
         } else {
+          int min = SAVED ? 3 : 1;                  
           if(SAVED) {
             OPTION--;
-            if( OPTION < 0 ) { OPTION = 2; }
+            if( OPTION < 0 ) { OPTION = min; }
             draw_launcher_options();
           }
         }
@@ -1750,11 +1835,10 @@ void handle_line(char *line) {
             seek_files();
           }
         } else {
-          if(SAVED) {
-            OPTION++;
-            if( OPTION > 2 ) { OPTION = 0; }
-            draw_launcher_options();
-          }
+          int max = SAVED ? 3 : 1;
+          OPTION++;
+          if( OPTION > max ) { OPTION = 0; }
+          draw_launcher_options();
         }
 
         usleep(200000);
@@ -1864,11 +1948,16 @@ void handle_line(char *line) {
                   SAVED ? rom_resume() : rom_run(false);
                 break;
                 case 1:
-                  rom_run(true);
+                  SAVED ? rom_run(true) : add_favorite(ROM.name);
+                  if(!SAVED) {draw_launcher_options();}
                 break;
                 case 2:
                   rom_delete_save();
                 break;
+                case 3:
+                  add_favorite(ROM.name);
+                  draw_launcher_options();
+                break;                
               }
             }
           }
