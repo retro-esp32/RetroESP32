@@ -959,9 +959,10 @@
     i = 0;
     offset = ROM.favorite?40:35;
     int option = SAVED ? 3 : 1;
+    draw_mask(x,y-1,80,9);    
     for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
       buffer[i] = icons[r+offset][c] == WHITE ? OPTION == option ? WHITE : GUI.fg : GUI.bg;i++;
-    }}
+    }}    
     ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
     draw_text(x+10,y,ROM.favorite?"Unfavorite":"Favorite",false,OPTION == option?true:false, false);
   }
@@ -1249,12 +1250,7 @@
     f = fopen(file, "rb");
     if(f == NULL) {
       f = fopen(file, "w+");
-      printf("\nCREATING: %s", file);
-      /*
-        Castlevania Adventure, The (U).gb
-        Legend of Zelda, The - Oracle of Seasons (USA).gbc
-        Mega Man 2 (USA).nes
-      */      
+      printf("\nCREATING: %s", file);     
     } else {
       read_favorites();
     }
@@ -1300,6 +1296,49 @@
 
   void delete_favorite(char *favorite) {
     printf("\n----- %s START -----", __func__);
+
+    int n = 0;
+    int count = 0;
+
+    free(FAVORITES);   
+    FAVORITES = (char**)malloc(50 * sizeof(void*));   
+
+    char file[256] = "/sd/odroid/data";
+    sprintf(file, "%s/%s", file, FAVFILE);
+
+    FILE *f;
+    f = fopen(file, "rb");
+    if(f) {
+      printf("\nCHECKING: %s\n", favorite);      
+      char line[256];
+      while (fgets(line, sizeof(line), f)) {  
+        char *ep = &line[strlen(line)-1];
+        while (*ep == '\n' || *ep == '\r'){*ep-- = '\0';}        
+        if(strcmp(favorite, line) != 0) { 
+          size_t len = strlen(line);
+          FAVORITES[n] = (char*)malloc(len + 1);
+          strcpy(FAVORITES[n], line);
+          n++;
+          count++;          
+        }
+      }
+    }
+    fclose(f);   
+    struct stat st;
+    if (stat(file, &st) == 0) {
+      unlink(file);
+      create_favorites();
+      for(n = 0; n < count; n++) {
+        size_t len = strlen(FAVORITES[n]);
+        if(len > 0) {
+          add_favorite(FAVORITES[n]);                       
+          printf("\n%s - %d" , FAVORITES[n], len);                            
+        }
+      }      
+    } else {
+      printf("\nUNABLE TO UNLINK\n");
+    }
+
     printf("\n----- %s END -----\n", __func__);
   }
 
@@ -1319,7 +1358,6 @@
       while (fgets(line, sizeof(line), f)) {  
         char *ep = &line[strlen(line)-1];
         while (*ep == '\n' || *ep == '\r'){*ep-- = '\0';}        
-        printf("\nfavorite:%s line:%s match:%d", favorite, line, strcmp(favorite, line));                                               
         if(strcmp(favorite, line) == 0) { 
           ROM.favorite = true;
         }
@@ -1948,14 +1986,14 @@
                   SAVED ? rom_resume() : rom_run(false);
                 break;
                 case 1:
-                  SAVED ? rom_run(true) : add_favorite(ROM.name);
+                  SAVED ? rom_run(true) : ROM.favorite ? delete_favorite(ROM.name) : add_favorite(ROM.name);
                   if(!SAVED) {draw_launcher_options();}
                 break;
                 case 2:
                   rom_delete_save();
                 break;
                 case 3:
-                  add_favorite(ROM.name);
+                  ROM.favorite ? delete_favorite(ROM.name) : add_favorite(ROM.name);
                   draw_launcher_options();
                 break;                
               }
