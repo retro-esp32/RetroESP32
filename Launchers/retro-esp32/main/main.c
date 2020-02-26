@@ -1391,6 +1391,7 @@
       if(strcmp(extension, "lnx") == 0) {offset = 9*16;}
       if(strcmp(extension, "pce") == 0) {offset = 10*16;}
 
+      /*
       printf("\n\nentry %d:"
         "\n- full ->\t%s"
         "\n- trimmed ->\t%s"
@@ -1400,7 +1401,7 @@
         "\n- length ->\t%d"
         "\n- offset ->\t%d",
         n, full, trimmed, favorite, extension, path, length, offset);
-
+      */
 
 
       draw_text(x+24,y,favorite,false,n == 0 ? true : false, false);
@@ -2048,13 +2049,17 @@
         */
         if (gamepad.values[ODROID_INPUT_START] && !gamepad.values[ODROID_INPUT_SELECT]) {
           if(!LAUNCHER) {
-            if(STEP != 0 && STEP != 1) {
+            if(STEP != 0) {
               ROMS.page++;
               if( ROMS.page > ROMS.pages ) { ROMS.page = 0; }
               ROMS.offset =  ROMS.page * ROMS.limit;
-              //draw_files();
-              delete_numbers();
-              seek_files();
+              if(STEP != 1) {
+                //draw_files();
+                delete_numbers();
+                seek_files();
+              } else {
+                process_favorites();
+              }
             }
           }
           //debounce(ODROID_INPUT_START);
@@ -2065,13 +2070,17 @@
         */
         if (!gamepad.values[ODROID_INPUT_START] && gamepad.values[ODROID_INPUT_SELECT]) {
           if(!LAUNCHER) {
-            if(STEP != 0 && STEP != 1) {
+            if(STEP != 0) {
               ROMS.page--;
               if( ROMS.page < 0 ) { ROMS.page = ROMS.pages; };
               ROMS.offset =  ROMS.page * ROMS.limit;
-              //draw_files();
-              delete_numbers();
-              seek_files();
+              if(STEP != 1) {
+                //draw_files();
+                delete_numbers();
+                seek_files();
+              } else {
+                process_favorites();
+              }
             }
           }
           //debounce(ODROID_INPUT_SELECT);
