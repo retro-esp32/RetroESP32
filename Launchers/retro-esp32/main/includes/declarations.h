@@ -100,9 +100,9 @@ void has_save_file(char *save_name);
 */
 void create_favorites();
 void read_favorites();
-void add_favorite(char *string);
+void add_favorite(char *favorite);
 void delete_favorite(char *favorite);
-void is_favorite(char *string);
+void is_favorite(char *favorite);
 
 
 /*
