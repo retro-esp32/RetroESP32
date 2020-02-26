@@ -2,6 +2,8 @@
  Helpers
 */
 char *remove_ext (char* myStr, char extSep, char pathSep);
+char *get_filename (char* myStr);
+char *get_ext (char* myStr);
 
 /*
  Debounce
@@ -75,7 +77,7 @@ void get_restore_states();
  GUI
 */
 void draw_systems();
-void draw_media(int x, int y, bool current);
+void draw_media(int x, int y, bool current, int offset);
 void draw_folder(int x, int y, bool current);
 void draw_battery();
 void draw_speaker();
@@ -103,6 +105,9 @@ void read_favorites();
 void add_favorite(char *favorite);
 void delete_favorite(char *favorite);
 void is_favorite(char *favorite);
+void get_favorites();
+void process_favorites();
+void draw_favorites();
 
 
 /*

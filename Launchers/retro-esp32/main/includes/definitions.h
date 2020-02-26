@@ -22,9 +22,9 @@
 #define BLACK 0
 
 /*
-  Emulator Count + 1 for Theme
+  Emulator Count + 2 for Theme and Favorites
 */
-#define COUNT 12
+#define COUNT 13
 
 /*
 
