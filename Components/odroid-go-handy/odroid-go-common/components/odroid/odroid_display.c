@@ -57,7 +57,7 @@ typedef struct {
     uint8_t databytes; //No of data in data; bit 7 = delay after set; 0xFF = end of cmds.
 } ili_init_cmd_t;
 
-#define TFT_CMD_SWRESET	0x01
+#define TFT_CMD_SWRESET 0x01
 #define TFT_CMD_SLEEP 0x10
 #define TFT_CMD_DISPLAY_OFF 0x28
 
@@ -141,7 +141,7 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     //Set Gamma
     {0xE0, {0x0F, 0x31, 0x2B, 0x0C, 0x0E, 0x08, 0x4E, 0xF1, 0x37, 0x07, 0x10, 0x03, 0x0E, 0x09, 0x00}, 15},
     {0XE1, {0x00, 0x0E, 0x14, 0x03, 0x11, 0x07, 0x31, 0xC1, 0x48, 0x08, 0x0F, 0x0C, 0x31, 0x36, 0x0F}, 15},
-
+    
     // ILI9342 Specific
     {0x36, {0x40|0x80|0x08}, 1}, // <-- ROTATE
     {0x21, {0}, 0x80}, // <-- INVERT COLORS
@@ -401,7 +401,6 @@ void send_continue_line(uint16_t *line, int width, int lineCount)
 
 static void backlight_init()
 {
-     ///*
     // Note: In esp-idf v3.0, settings flash speed to 80Mhz causes the LCD controller
     // to malfunction after a soft-reset.
 
@@ -451,7 +450,6 @@ static void backlight_init()
     ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_NO_WAIT);
 
     isBackLightIntialized = true;
-    //*/
 }
 
 #if 1
@@ -534,7 +532,7 @@ void ili9341_init()
     esp_err_t ret;
     //spi_device_handle_t spi;
     spi_bus_config_t buscfg;
-		memset(&buscfg, 0, sizeof(buscfg));
+        memset(&buscfg, 0, sizeof(buscfg));
 
     buscfg.miso_io_num = SPI_PIN_NUM_MISO;
     buscfg.mosi_io_num = SPI_PIN_NUM_MOSI;
@@ -543,7 +541,7 @@ void ili9341_init()
     buscfg.quadhd_io_num=-1;
 
     spi_device_interface_config_t devcfg;
-		memset(&devcfg, 0, sizeof(devcfg));
+        memset(&devcfg, 0, sizeof(devcfg));
 
     devcfg.clock_speed_hz = LCD_SPI_CLOCK_RATE;
     devcfg.mode = 0;                                //SPI mode 0
@@ -565,10 +563,10 @@ void ili9341_init()
 
 
     //Initialize the LCD
-	printf("LCD: calling ili_init.\n");
+    printf("LCD: calling ili_init.\n");
     ili_init();
 
-	printf("LCD: calling backlight_init.\n");
+    printf("LCD: calling backlight_init.\n");
     backlight_init();
 
     printf("LCD Initialized (%d Hz).\n", LCD_SPI_CLOCK_RATE);

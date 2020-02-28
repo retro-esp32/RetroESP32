@@ -1852,9 +1852,9 @@
     struct dirent *file;
     char path[256] = "/sd/odroid/data/";
 
-    STEP != 1 ? sprintf(&path[strlen(path) - 1], DIRECTORIES[STEP]) : sprintf(path, "%s", ROM.ext);
+    STEP != 1 ? sprintf(&path[strlen(path)], DIRECTORIES[STEP]) : sprintf(&path[strlen(path)], ROM.ext);
 
-  //  printf("\n----- %s -----\n%s\n", __func__, path);
+    printf("\n----- %s -----\n%s\n", __func__, path);
 
     directory = opendir(path);
     gets(ROM.name);
@@ -1874,7 +1874,7 @@
           draw_background();
           draw_systems();
           draw_text(16,16,EMULATORS[STEP],false,true, false);
-          STEP == 0 ? draw_themes() : get_files();
+          STEP == 0 ? draw_settings() : STEP == 1 ? get_favorites() : get_files();
         }
       }
     }
@@ -2022,11 +2022,9 @@
           }
         } else {
           int min = SAVED ? 3 : 1;
-          if(SAVED) {
-            OPTION--;
-            if( OPTION < 0 ) { OPTION = min; }
-            draw_launcher_options();
-          }
+          OPTION--;
+          if( OPTION < 0 ) { OPTION = min; }
+          draw_launcher_options();
         }
         usleep(200000);
         //debounce(ODROID_INPUT_UP);
