@@ -10,6 +10,7 @@
   odroid_battery_state battery_state;
 //}#pragma endregion Odroid
 
+
 //{#pragma region Global
   bool SAVED = false;
   bool RESTART = false;
