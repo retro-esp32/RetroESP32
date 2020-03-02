@@ -216,7 +216,7 @@
       return retStr;
   }
 
-  char *get_filename (char* myStr) {
+  const char *get_filename (char* myStr) {
     int ext = '/';
     const char* extension = NULL;
     extension = strrchr(myStr, ext) + 1;
@@ -224,7 +224,7 @@
     return extension;
   }
 
-  char *get_ext (char* myStr) {
+  const char *get_ext (char* myStr) {
     int ext = '.';
     const char* extension = NULL;
     extension = strrchr(myStr, ext) + 1;
