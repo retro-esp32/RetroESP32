@@ -15,7 +15,7 @@ void debounce(int key);
  Text
 */
 int get_letter(char letter);
-void draw_text(short x, short y, char *string, bool ext, bool current, bool remove);
+void draw_text(short x, short y, const char *string, bool ext, bool current, bool remove);
 
 /*
  Mask

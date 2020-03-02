@@ -7,44 +7,44 @@
 
 //{#pragma region Odroid
   static odroid_gamepad_state gamepad;
-  odroid_battery_state battery_state;
+  static odroid_battery_state battery_state;
 //}#pragma endregion Odroid
 
 
 //{#pragma region Global
-  bool SAVED = false;
-  bool RESTART = false;
-  bool LAUNCHER = false;
-  bool FOLDER = false;
-  bool SPLASH = true;
-  bool SETTINGS = false;
+  static bool SAVED = false;
+  static bool RESTART = false;
+  static bool LAUNCHER = false;
+  static bool FOLDER = false;
+  static bool SPLASH = true;
+  static bool SETTINGS = false;
 
-  int8_t STEP = 0;
-  int16_t SEEK[MAX_FILES];
-  int OPTION = 0;
-  int PREVIOUS = 0;
-  int32_t VOLUME = 0;
-  int32_t BRIGHTNESS = 0;
-  const int32_t BRIGHTNESS_COUNT = 10;
-  const int32_t BRIGHTNESS_LEVELS[10] = {10,20,30,40,50,60,70,80,90,100};
-  int8_t USER;
-  int8_t SETTING;
-  int8_t COLOR;
-  int8_t COVER;
-  uint32_t currentDuty;
+  static int8_t STEP = 0;
+  static int16_t SEEK[MAX_FILES];
+  static int OPTION = 0;
+  static int PREVIOUS = 0;
+  static int32_t VOLUME = 0;
+  static int32_t BRIGHTNESS = 0;
+  static const int32_t BRIGHTNESS_COUNT = 10;
+  static const int32_t BRIGHTNESS_LEVELS[10] = {10,20,30,40,50,60,70,80,90,100};
+  static int8_t USER;
+  static int8_t SETTING;
+  static int8_t COLOR;
+  static int8_t COVER;
+  static uint32_t currentDuty;
 
-  char** FILES;
-  char** FAVORITES;
-  char FAVORITE[256] = "";
+  static char** FILES;
+  static char** FAVORITES;
+  //static char FAVORITE[256] = "";
 
-  char folder_path[256] = "";
+  static char folder_path[256] = "";
 
-  DIR *directory;
-  struct dirent *file;
+  static DIR *directory;
+  //static struct dirent *file;
 //}#pragma endregion Global
 
 //{#pragma region Emulator and Directories
-  char EMULATORS[COUNT][30] = {
+  static const char EMULATORS[COUNT][30] = {
     "SETTINGS",
     "FAVORITES",
     "NINTENDO ENTERTAINMENT SYSTEM",
@@ -60,7 +60,7 @@
     "PC ENGINE"
   };
 
-  char DIRECTORIES[COUNT][10] = {
+  static const char DIRECTORIES[COUNT][10] = {
     "",
     "",
     "nes",      // 1
@@ -76,7 +76,7 @@
     "pce"       // 8
   };
 
-  char EXTENSIONS[COUNT][10] = {
+  static const char EXTENSIONS[COUNT][10] = {
     "",
     "",
     "nes",      // 1
@@ -92,12 +92,12 @@
     "pce",      // 8
   };
 
-  int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 4, 5, 6, 7, 8, 9};
-  int LIMIT = 6;
+  static const int PROGRAMS[COUNT] = {1, 2, 2, 3, 3, 3, 4, 5, 6, 7, 8, 9};
+  static const int LIMIT = 6;
 //}#pragma endregion Emulator and Directories
 
 //{#pragma region Buffer
-  unsigned short buffer[40000];
+  static unsigned short buffer[40000];
 //}#pragma endregion Buffer
 
 /*
@@ -352,7 +352,7 @@
     return dx;
   }
 
-  void draw_text(short x, short y, char *string, bool ext, bool current, bool remove) {
+  void draw_text(short x, short y, const char *string, bool ext, bool current, bool remove) {
     int length = !ext ? strlen(string) : strlen(string)-(strlen(EXTENSIONS[STEP])+1);
     if(length > 64){length = 64;}
     int rows = 7;
