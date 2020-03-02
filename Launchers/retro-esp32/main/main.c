@@ -179,7 +179,7 @@
 */
 
 //{#pragma region Helpers
-  char *remove_ext (char* myStr, char extSep, char pathSep) {
+  static char *remove_ext (char* myStr, char extSep, char pathSep) {
       char *retStr, *lastExt, *lastPath;
 
       // Error checks and allocate string.
@@ -216,7 +216,7 @@
       return retStr;
   }
 
-  const char *get_filename (char* myStr) {
+  static const char *get_filename (char* myStr) {
     int ext = '/';
     const char* extension = NULL;
     extension = strrchr(myStr, ext) + 1;
@@ -224,7 +224,7 @@
     return extension;
   }
 
-  const char *get_ext (char* myStr) {
+  static const char *get_ext (char* myStr) {
     int ext = '.';
     const char* extension = NULL;
     extension = strrchr(myStr, ext) + 1;
@@ -232,7 +232,7 @@
     return extension;
   }
 
-  int get_application (char* ext) {
+  static int get_application (char* ext) {
     int application = 0;
     if(strcmp(ext, "nes") == 0) {application = 1;}
     if(strcmp(ext, "gb") == 0) {application = 2;}
@@ -250,7 +250,7 @@
 //}#pragma endregion Helpers
 
 //{#pragma region Debounce
-  void debounce(int key) {
+  static void debounce(int key) {
     draw_battery();
     draw_speaker();
     draw_contrast();
@@ -259,7 +259,7 @@
 //}#pragma endregion Debounce
 
 //{#pragma region States
-  void get_step_state() {
+  static void get_step_state() {
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
         ESP_ERROR_CHECK(nvs_flash_erase());
@@ -284,7 +284,7 @@
     //printf("\nGet nvs_get_i8:%d\n", STEP);
   }
 
-  void set_step_state() {
+  static void set_step_state() {
     //printf("\nGet nvs_set_i8:%d\n", STEP);
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
@@ -293,7 +293,7 @@
     nvs_close(handle);
   }
 
-  void get_list_state() {
+  static void get_list_state() {
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
         ESP_ERROR_CHECK(nvs_flash_erase());
@@ -317,7 +317,7 @@
     //printf("\nGet nvs_get_i16:%d\n", ROMS.offset);
   }
 
-  void set_list_state() {
+  static void set_list_state() {
     //printf("\nSet nvs_set_i16:%d", ROMS.offset);
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
@@ -327,19 +327,19 @@
     get_list_state();
   }
 
-  void set_restore_states() {
+  static void set_restore_states() {
     set_step_state();
     set_list_state();
   }
 
-  void get_restore_states() {
+  static void get_restore_states() {
     get_step_state();
     get_list_state();
   }
 //}#pragma endregion States
 
 //{#pragma region Text
-  int get_letter(char letter) {
+  static int get_letter(char letter) {
     int dx = 0;
     char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!-'&?.,/()[] ";
     char lower[] = "abcdefghijklmnopqrstuvwxyz0123456789!-'&?.,/()[] ";
@@ -352,7 +352,7 @@
     return dx;
   }
 
-  void draw_text(short x, short y, const char *string, bool ext, bool current, bool remove) {
+  static void draw_text(short x, short y, const char *string, bool ext, bool current, bool remove) {
     int length = !ext ? strlen(string) : strlen(string)-(strlen(EXTENSIONS[STEP])+1);
     if(length > 64){length = 64;}
     int rows = 7;
@@ -378,12 +378,12 @@
 //}#pragma endregion Text
 
 //{#pragma region Mask
-  void draw_mask(int x, int y, int w, int h){
+  static void draw_mask(int x, int y, int w, int h){
     for (int i = 0; i < w * h; i++) buffer[i] = GUI.bg;
     ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
   }
 
-  void draw_background() {
+  static void draw_background() {
     int w = 320;
     int h = 60;
     for (int i = 0; i < 4; i++) draw_mask(0, i*h, w, h);
@@ -394,7 +394,7 @@
 //}#pragma endregion Mask
 
 //{#pragma region Settings
-  void draw_settings() {
+  static void draw_settings() {
     int x = ORIGIN.x;
     int y = POS.y + 46;
 
@@ -436,7 +436,7 @@
 //}#pragma endregion Settings
 
 //{#pragma region Toggle
-  void draw_toggle() {
+  static void draw_toggle() {
     get_toggle();
     int x = SCREEN.w - 38;
     int y = POS.y + 66;
@@ -452,7 +452,7 @@
     ili9341_write_frame_rectangleLE(x, y, 18, 9, buffer);
   }
 
-  void set_toggle() {
+  static void set_toggle() {
     COLOR = COLOR == 0 ? 1 : 0;
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
@@ -461,7 +461,7 @@
     nvs_close(handle);
   }
 
-  void get_toggle() {
+  static void get_toggle() {
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
         ESP_ERROR_CHECK(nvs_flash_erase());
@@ -485,7 +485,7 @@
     nvs_close(handle);
   }
 
-  void draw_cover_toggle() {
+  static void draw_cover_toggle() {
     get_cover_toggle();
     int x = SCREEN.w - 38;
     int y = POS.y + 126;
@@ -501,7 +501,7 @@
     ili9341_write_frame_rectangleLE(x, y, 18, 9, buffer);
   }
 
-  void set_cover_toggle() {
+  static void set_cover_toggle() {
     COVER = COVER == 0 ? 1 : 0;
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
@@ -510,7 +510,7 @@
     nvs_close(handle);
   }
 
-  void get_cover_toggle() {
+  static void get_cover_toggle() {
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
         ESP_ERROR_CHECK(nvs_flash_erase());
@@ -536,7 +536,7 @@
 //}#pragma endregion Toggle
 
 //{#pragma region Volume
-  void draw_volume() {
+  static void draw_volume() {
     int32_t volume = get_volume();
     int x = SCREEN.w - 120;
     int y = POS.y + 86;
@@ -579,7 +579,7 @@
 //}#pragma endregion Volume
 
 //{#pragma region Brightness
-  void draw_brightness() {
+  static void draw_brightness() {
     int x = SCREEN.w - 120;
     int y = POS.y + 106;
     int w, h;
@@ -609,15 +609,15 @@
     //}
     draw_contrast();
   }
-  int32_t get_brightness() {
+  static int32_t get_brightness() {
     return odroid_settings_Backlight_get();
   }
-  void set_brightness() {
+  static void set_brightness() {
     odroid_settings_Backlight_set(BRIGHTNESS);
     draw_brightness();
     apply_brightness();
   }
-  void apply_brightness() {
+  static void apply_brightness() {
     const int DUTY_MAX = 0x1fff;
     //BRIGHTNESS = get_brightness();
     int duty = DUTY_MAX * (BRIGHTNESS_LEVELS[BRIGHTNESS] * 0.01f);
@@ -644,7 +644,7 @@
 //}#pragma endregion Brightness
 
 //{#pragma region Theme
-  void draw_themes() {
+  static void draw_themes() {
     int x = ORIGIN.x;
     int y = POS.y + 46;
     int filled = 0;
@@ -665,7 +665,7 @@
     }
   }
 
-  void get_theme() {
+  static void get_theme() {
     esp_err_t err = nvs_flash_init();
     if (err == ESP_ERR_NVS_NO_FREE_PAGES) {
         ESP_ERROR_CHECK(nvs_flash_erase());
@@ -691,7 +691,7 @@
     nvs_close(handle);
   }
 
-  void set_theme(int8_t i) {
+  static void set_theme(int8_t i) {
     nvs_handle handle;
     nvs_open("storage", NVS_READWRITE, &handle);
     nvs_set_i8(handle, "USER", i);
@@ -700,7 +700,7 @@
     get_theme();
   }
 
-  void update_theme() {
+  static void update_theme() {
     GUI = THEMES[USER];
     set_theme(USER);
     draw_background();
@@ -712,7 +712,7 @@
 //}#pragma endregion Theme
 
 //{#pragma region GUI
-  void draw_systems() {
+  static void draw_systems() {
     for(int e = 0; e < COUNT; e++) {
       int i = 0;
       int x = SYSTEMS[e].x;
@@ -739,7 +739,7 @@
     }
   }
 
-  void draw_folder(int x, int y, bool current) {
+  static void draw_folder(int x, int y, bool current) {
     int i = 0;
     for(int h = 0; h < 16; h++) {
       for(int w = 0; w < 16; w++) {
@@ -750,7 +750,7 @@
     ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
   }
 
-  void draw_media(int x, int y, bool current, int offset) {
+  static void draw_media(int x, int y, bool current, int offset) {
     if(offset == -1) {offset = (STEP-2) * 16;}
     int i = 0;
     for(int h = 0; h < 16; h++) {
@@ -775,7 +775,7 @@
     ili9341_write_frame_rectangleLE(x, y, 16, 16, buffer);
   }
 
-  void draw_battery() {
+  static void draw_battery() {
     #ifdef BATTERY
       odroid_input_battery_level_read(&battery_state);
 
@@ -829,7 +829,7 @@
     #endif
   }
 
-  void draw_speaker() {
+  static void draw_speaker() {
     int32_t volume = get_volume();
 
     int i = 0;
@@ -850,7 +850,7 @@
     ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
   }
 
-  void draw_contrast() {
+  static void draw_contrast() {
     int32_t dy = 0;
     switch(BRIGHTNESS) {
       case 10:
@@ -890,7 +890,7 @@
     ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
   }
 
-  void draw_numbers() {
+  static void draw_numbers() {
     int x = 296;
     int y = POS.y + 48;
     int w = 0;
@@ -901,7 +901,7 @@
     draw_text(x,y,count,false,false, false);
   }
 
-  void delete_numbers() {
+  static void delete_numbers() {
     int x = 296;
     int y = POS.y + 48;
     int w = 0;
@@ -912,7 +912,7 @@
     draw_text(x,y,count,false,false, true);
   }
 
-  void draw_launcher() {
+  static void draw_launcher() {
     draw_background();
     draw_text(16,16,EMULATORS[STEP], false, true, false);
     int i = 0;
@@ -943,7 +943,7 @@
     if(COVER == 1){get_cover();}
   }
 
-  void draw_launcher_options() {
+  static void draw_launcher_options() {
     has_save_file(ROM.name);
 
     char favorite[256] = "";
@@ -1015,50 +1015,50 @@
         *b = t;
     }
 
-    static int strcicmp(char const *a, char const *b) {
-        for (;; a++, b++)
-        {
-            int d = tolower((int)*a) - tolower((int)*b);
-            if (d != 0 || !*a) return d;
-        }
-    }
+//    static int strcicmp(char const *a, char const *b) {
+//        for (;; a++, b++)
+//        {
+//            int d = tolower((int)*a) - tolower((int)*b);
+//            if (d != 0 || !*a) return d;
+//        }
+//    }
 
-    static int partition (char** arr, int low, int high) {
-        char* pivot = arr[high];
-        int i = (low - 1);
+//    static int partition (char** arr, int low, int high) {
+//        char* pivot = arr[high];
+//        int i = (low - 1);
 
-        for (int j = low; j <= high- 1; j++)
-        {
-            if (strcicmp(arr[j], pivot) < 0)
-            {
-                i++;
-                swap(&arr[i], &arr[j]);
-            }
-        }
-        swap(&arr[i + 1], &arr[high]);
-        return (i + 1);
-    }
+//        for (int j = low; j <= high- 1; j++)
+//        {
+//            if (strcicmp(arr[j], pivot) < 0)
+//            {
+//                i++;
+//                swap(&arr[i], &arr[j]);
+//            }
+//        }
+//        swap(&arr[i + 1], &arr[high]);
+//        return (i + 1);
+//    }
 
-    void quick_sort(char** arr, int low, int high) {
-        if (low < high)
-        {
-            int pi = partition(arr, low, high);
+//    static void quick_sort(char** arr, int low, int high) {
+//        if (low < high)
+//        {
+//            int pi = partition(arr, low, high);
 
-            quick_sort(arr, low, pi - 1);
-            quick_sort(arr, pi + 1, high);
-        }
-    }
+//            quick_sort(arr, low, pi - 1);
+//            quick_sort(arr, pi + 1, high);
+//        }
+//    }
 
-    void sort_files(char** files)
-    {
-        if (ROMS.total > 1)
-        {
-            quick_sort(files, 0, ROMS.total - 1);
-        }
-    }
+//    void sort_files(char** files)
+//    {
+//        if (ROMS.total > 1)
+//        {
+//            quick_sort(files, 0, ROMS.total - 1);
+//        }
+//    }
   //}#pragma endregion Sort
 
-  void count_files() {
+  static void count_files() {
     delete_numbers();
     SEEK[0] = 0;
 
@@ -1126,7 +1126,7 @@
   //  printf("\n---------------------\n");
   }
 
-  void seek_files() {
+  static void seek_files() {
     delete_numbers();
   //  printf("\n----- %s -----", __func__);
   //  printf("\nROMS.offset:%d", ROMS.offset);
@@ -1205,13 +1205,13 @@
     }
   }
 
-  void get_files() {
+  static void get_files() {
     delete_numbers();
     count_files();
     seek_files();
   }
 
-  void draw_files() {
+  static void draw_files() {
     //printf("\n----- %s -----", __func__);
     int x = ORIGIN.x;
     int y = POS.y + 48;
@@ -1242,7 +1242,7 @@
     //printf("\n---------------------\n");
   }
 
-  void has_save_file(char *save_name) {
+  static void has_save_file(char *save_name) {
     SAVED = false;
 
   //  printf("\n----- %s -----", __func__);
@@ -1280,7 +1280,7 @@
 
 //{#pragma region Favorites
 
-  void create_favorites() {
+  static void create_favorites() {
   //  printf("\n----- %s START -----", __func__);
     char file[256] = "/sd/odroid/data";
     sprintf(file, "%s/%s", file, FAVFILE);
@@ -1300,7 +1300,7 @@
   //  printf("\n----- %s END -----\n", __func__);
   }
 
-  void read_favorites() {
+  static void read_favorites() {
   //  printf("\n----- %s START -----", __func__);
 
     int n = 0;
@@ -1333,7 +1333,7 @@
   //  printf("\n----- %s END -----\n", __func__);
   }
 
-  void get_favorites() {
+  static void get_favorites() {
   //  printf("\n----- %s START -----", __func__);
     char message[100];
     sprintf(message, "loading favorites");
@@ -1346,7 +1346,7 @@
   //  printf("\n----- %s END -----", __func__);
   }
 
-  void process_favorites() {
+  static void process_favorites() {
   //  printf("\n----- %s START -----", __func__);
 
     char message[100];
@@ -1367,7 +1367,7 @@
   //  printf("\n----- %s END -----", __func__);
   }
 
-  void draw_favorites() {
+  static void draw_favorites() {
   //  printf("\n----- %s START -----", __func__);
     int x = ORIGIN.x;
     int y = POS.y + 48;
@@ -1450,7 +1450,7 @@
   // printf("\n----- %s END -----", __func__);
   }
 
-  void add_favorite(char *favorite) {
+  static void add_favorite(char *favorite) {
   //  printf("\n----- %s START -----", __func__);
     char file[256] = "/sd/odroid/data";
     sprintf(file, "%s/%s", file, FAVFILE);
@@ -1464,7 +1464,7 @@
   //  printf("\n----- %s END -----\n", __func__);
   }
 
-  void delete_favorite(char *favorite) {
+  static void delete_favorite(char *favorite) {
   //  printf("\n----- %s START -----", __func__);
 
     int n = 0;
@@ -1512,7 +1512,7 @@
   //  printf("\n----- %s END -----\n", __func__);
   }
 
-  void is_favorite(char *favorite) {
+  static void is_favorite(char *favorite) {
   //  printf("\n----- %s START -----", __func__);
     ROM.favorite = false;
 
@@ -1539,11 +1539,11 @@
 //}#pragma endregion Favorites
 
 //{#pragma region Cover
-  void get_cover() {
+  static void get_cover() {
     preview_cover(false);
   }
 
-  void preview_cover(bool error) {
+  static void preview_cover(bool error) {
     ROM.crc = 0;
 
     int bw = 112;
@@ -1592,7 +1592,7 @@
     }
   }
 
-  void draw_cover() {
+  static void draw_cover() {
   //  printf("\n----- %s -----\n%s\n", __func__, "OPENNING");
     char file[256] = "/sd/romart";
     char ext[10];
@@ -1625,7 +1625,7 @@
 //}#pragma endregion Cover
 
 //{#pragma region Animations
-  void animate(int dir) {
+  static void animate(int dir) {
     delete_numbers();
     draw_mask(0,0,SCREEN.w - 56,32);
     draw_text(16,16,EMULATORS[STEP], false, true, false);
@@ -1659,7 +1659,7 @@
     clean_up();
   }
 
-  void restore_layout() {
+  static void restore_layout() {
 
     SYSTEMS[0].x = GAP/3;
     for(int n = 1; n < COUNT; n++) {
@@ -1695,7 +1695,7 @@
     STEP == 0 ? draw_settings() : STEP == 1 ? get_favorites() : get_files();
   }
 
-  void clean_up() {
+  static void clean_up() {
     int MAX = 784;
     for(int n = 0; n < COUNT; n++) {
       if(SYSTEMS[n].x > 560) {
@@ -1709,7 +1709,7 @@
 //}#pragma endregion Animations
 
 //{#pragma region Boot Screens
-  void splash() {
+  static void splash() {
     draw_background();
     int w = 128;
     int h = 18;
@@ -1737,25 +1737,25 @@
     draw_background();
   }
 
-  void boot() {
-    draw_background();
-    char message[100] = "retro esp32";
-    int width = strlen(message)*5;
-    int center = ceil((320/2)-(width/2));
-    int y = 118;
-    draw_text(center,y,message,false,false, false);
+//  void boot() {
+//    draw_background();
+//    char message[100] = "retro esp32";
+//    int width = strlen(message)*5;
+//    int center = ceil((320/2)-(width/2));
+//    int y = 118;
+//    draw_text(center,y,message,false,false, false);
 
-    y+=10;
-    for(int n = 0; n < (width+10); n++) {
-      for(int i = 0; i < 5; i++) {
-        buffer[i] = GUI.fg;
-      }
-      ili9341_write_frame_rectangleLE(center+n, y, 1, 5, buffer);
-      usleep(10000);
-    }
-  }
+//    y+=10;
+//    for(int n = 0; n < (width+10); n++) {
+//      for(int i = 0; i < 5; i++) {
+//        buffer[i] = GUI.fg;
+//      }
+//      ili9341_write_frame_rectangleLE(center+n, y, 1, 5, buffer);
+//      usleep(10000);
+//    }
+//  }
 
-  void restart() {
+  static void restart() {
     draw_background();
 
     char message[100] = "restarting";
@@ -1779,7 +1779,7 @@
 //}#pragma endregion Boot Screens
 
 //{#pragma region ROM Options
-  void rom_run(bool resume) {
+  static void rom_run(bool resume) {
 
     set_restore_states();
 
@@ -1806,7 +1806,7 @@
     esp_restart();
   }
 
-  void rom_resume() {
+  static void rom_resume() {
     set_restore_states();
 
     draw_background();
@@ -1831,7 +1831,7 @@
     esp_restart();
   }
 
-  void rom_delete_save() {
+  static void rom_delete_save() {
     draw_background();
     char message[100] = "deleting...";
     int width = strlen(message)*5;
