@@ -724,11 +724,11 @@
           for(int c = 0; c < 32; c++) {
             switch(COLOR) {
               case 0:
-                buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
+                buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? WHITE : GUI.bg;
               break;
               case 1:
-                //buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
-                buffer[i] = SYSTEMS[e].color[r][c] == 0 ? GUI.bg : SYSTEMS[e].color[r][c];
+                //buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? WHITE : GUI.bg;
+                buffer[i] = (*SYSTEMS[e].color)[r][c] == 0 ? GUI.bg : (*SYSTEMS[e].color)[r][c];
               break;
             }
             i++;
@@ -924,11 +924,11 @@
       for(int c = 0; c < 32; c++) {
         switch(COLOR) {
           case 0:
-            buffer[i] = SYSTEMS[STEP].system[r][c] == WHITE ? WHITE : GUI.bg;
+            buffer[i] = (*SYSTEMS[STEP].system)[r][c] == WHITE ? WHITE : GUI.bg;
           break;
           case 1:
-            //buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
-            buffer[i] = SYSTEMS[STEP].color[r][c] == 0 ? GUI.bg : SYSTEMS[STEP].color[r][c];
+            //buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? WHITE : GUI.bg;
+            buffer[i] = (*SYSTEMS[STEP].color)[r][c] == 0 ? GUI.bg : (*SYSTEMS[STEP].color)[r][c];
           break;
         }
         i++;
