@@ -69,3 +69,4 @@
 #include "../sprites/media.h"
 #include "../sprites/speaker.h"
 #include "../sprites/toggle.h"
+#include "../sprites/systems.h"
