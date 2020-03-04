@@ -47,6 +47,7 @@
   char EMULATORS[COUNT][30] = {
     "SETTINGS",
     "FAVORITES",
+    "RECENTLY PLAYED",
     "NINTENDO ENTERTAINMENT SYSTEM",
     "NINTENDO GAME BOY",
     "NINTENDO GAME BOY COLOR",
@@ -63,6 +64,7 @@
   char DIRECTORIES[COUNT][10] = {
     "",
     "",
+    "",
     "nes",      // 1
     "gb",       // 2
     "gbc",      // 2
@@ -77,6 +79,7 @@
   };
 
   char EXTENSIONS[COUNT][10] = {
+    "",
     "",
     "",
     "nes",      // 1
@@ -218,7 +221,7 @@
 
   char *get_filename (char* myStr) {
     int ext = '/';
-    char* extension = NULL;
+    const char* extension = NULL;
     extension = strrchr(myStr, ext) + 1;
 
     return extension;
@@ -226,7 +229,7 @@
 
   char *get_ext (char* myStr) {
     int ext = '.';
-    char* extension = NULL;
+    const char* extension = NULL;
     extension = strrchr(myStr, ext) + 1;
 
     return extension;
@@ -724,11 +727,11 @@
           for(int c = 0; c < 32; c++) {
             switch(COLOR) {
               case 0:
-                buffer[i] = (int)SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
+                buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? WHITE : GUI.bg;
               break;
               case 1:
-                //buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
-                buffer[i] = (int)SYSTEMS[e].color[r][c] == 0 ? GUI.bg : (int)SYSTEMS[e].color[r][c];
+                //buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? WHITE : GUI.bg;
+                buffer[i] = (*SYSTEMS[e].color)[r][c] == 0 ? GUI.bg : (*SYSTEMS[e].color)[r][c];
               break;
             }
             i++;
@@ -751,7 +754,7 @@
   }
 
   void draw_media(int x, int y, bool current, int offset) {
-    if(offset == -1) {offset = (STEP-2) * 16;}
+    if(offset == -1) {offset = (STEP-3) * 16;}
     int i = 0;
     for(int h = 0; h < 16; h++) {
       for(int w = offset; w < (offset+16); w++) {
@@ -924,11 +927,11 @@
       for(int c = 0; c < 32; c++) {
         switch(COLOR) {
           case 0:
-            buffer[i] = (int)SYSTEMS[STEP].system[r][c] == WHITE ? WHITE : GUI.bg;
+            buffer[i] = (*SYSTEMS[STEP].system)[r][c] == WHITE ? WHITE : GUI.bg;
           break;
           case 1:
-            //buffer[i] = SYSTEMS[e].system[r][c] == WHITE ? WHITE : GUI.bg;
-            buffer[i] = (int)SYSTEMS[STEP].color[r][c] == 0 ? GUI.bg : (int)SYSTEMS[STEP].color[r][c];
+            //buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? WHITE : GUI.bg;
+            buffer[i] = (*SYSTEMS[STEP].color)[r][c] == 0 ? GUI.bg : (*SYSTEMS[STEP].color)[r][c];
           break;
         }
         i++;
@@ -1249,7 +1252,7 @@
     //printf("\nsave_name: %s", save_name);
 
     char save_dir[256] = "/sd/odroid/data/";
-    STEP != 1 ? strcat(&save_dir[strlen(save_dir) - 1], DIRECTORIES[STEP]) : strcat(&save_dir[strlen(save_dir) - 1], ROM.ext);
+    STEP != 1 && STEP != 2? strcat(&save_dir[strlen(save_dir) - 1], DIRECTORIES[STEP]) : strcat(&save_dir[strlen(save_dir) - 1], ROM.ext);
   //  printf("\nsave_dir: %s", save_dir);
 
     char save_file[256] = "";
@@ -1552,7 +1555,7 @@
 
     char file[256] = "/sd/romart";
     char ext[10];
-    STEP != 1 ? sprintf(ext, "%s", DIRECTORIES[STEP]) : sprintf(ext, "%s", ROM.ext);
+    STEP != 1 && STEP != 2? sprintf(ext, "%s", DIRECTORIES[STEP]) : sprintf(ext, "%s", ROM.ext);
     sprintf(file, "%s/%s/%s.art", file, ext, ROM.art);
 
     if(!error) {
@@ -1596,7 +1599,7 @@
   //  printf("\n----- %s -----\n%s\n", __func__, "OPENNING");
     char file[256] = "/sd/romart";
     char ext[10];
-    STEP != 1 ? sprintf(ext, "%s", DIRECTORIES[STEP]) : sprintf(ext, "%s", ROM.ext);
+    STEP != 1 && STEP != 2? sprintf(ext, "%s", DIRECTORIES[STEP]) : sprintf(ext, "%s", ROM.ext);
     sprintf(file, "%s/%s/%s.art", file, ext, ROM.art);
 
     FILE *f = fopen(file, "rb");
@@ -1800,7 +1803,7 @@
       usleep(10000);
     }
 
-    int application = STEP != 1 ? PROGRAMS[STEP-2] : get_application(ROM.ext);
+    int application = STEP != 1 && STEP != 2? PROGRAMS[STEP-3] : get_application(ROM.ext);
     odroid_system_application_set(application);
     usleep(10000);
     esp_restart();
@@ -1825,7 +1828,7 @@
       usleep(10000);
     }
 
-    int application = STEP != 1 ? PROGRAMS[STEP-2] : get_application(ROM.ext);
+    int application = STEP != 1 && STEP != 2? PROGRAMS[STEP-3] : get_application(ROM.ext);
     odroid_system_application_set(application);
     usleep(10000);
     esp_restart();
@@ -1852,7 +1855,7 @@
     struct dirent *file;
     char path[256] = "/sd/odroid/data/";
 
-    STEP != 1 ? sprintf(&path[strlen(path)], DIRECTORIES[STEP]) : sprintf(&path[strlen(path)], ROM.ext);
+    STEP != 1 && STEP != 2? sprintf(&path[strlen(path)], DIRECTORIES[STEP]) : sprintf(&path[strlen(path)], ROM.ext);
 
     printf("\n----- %s -----\n%s\n", __func__, path);
 

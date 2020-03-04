@@ -24,7 +24,7 @@
 /*
   Emulator Count + 2 for Theme and Favorites
 */
-#define COUNT 13
+#define COUNT 14
 
 /*
 
@@ -40,7 +40,7 @@
 /*
 
 */
-#define BUILD "Version 2 Build 2 (v.2.2)"
+#define BUILD "Version 2 Build 3 (v.2.3)"
 
 
 #define _GNU_SOURCE

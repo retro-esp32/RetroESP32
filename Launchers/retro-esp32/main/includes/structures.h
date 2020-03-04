@@ -40,12 +40,13 @@ LOAD ROM;
 // SYSTEM
 typedef struct SYSTEM_T{
   int x;
-  const uint16_t (*system)[32][32];
-  const uint16_t (*color)[32][32];
+  uint16_t (*system)[32][32];
+  uint16_t (*color)[32][32];
 } SYSTEM;
 SYSTEM SYSTEMS[COUNT] = {
   /* OPTIONS */{0, &settings,&settings_color},
   /* FAVORITES */{0, &fav,&fav_color},
+  /* RECENT */{0, &recent,&recent_color},
   /* NINTENDO ENTERTAINMENT SYSTEM */{0, &nes,&nes_color},
   /* NINTENDO GAME BOY */{0, &gb,&gb_color},
   /* NINTENDO GAME BOY COLOR */{0, &gbc,&gbc_color},
