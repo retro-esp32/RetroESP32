@@ -40,8 +40,8 @@ LOAD ROM;
 // SYSTEM
 typedef struct SYSTEM_T{
   int x;
-  uint16_t (*system)[32][32];
-  uint16_t (*color)[32][32];
+  const uint16_t (*system)[32][32];
+  const uint16_t (*color)[32][32];
 } SYSTEM;
 SYSTEM SYSTEMS[COUNT] = {
   /* OPTIONS */{0, &settings,&settings_color},
