@@ -44,20 +44,20 @@ typedef struct SYSTEM_T{
   uint16_t (*color)[32][32];
 } SYSTEM;
 SYSTEM SYSTEMS[COUNT] = {
-  /* OPTIONS */{0, &settings,&settings_color},
-  /* FAVORITES */{0, &fav,&fav_color},
-  /* RECENT */{0, &recent,&recent_color},
-  /* NINTENDO ENTERTAINMENT SYSTEM */{0, &nes,&nes_color},
-  /* NINTENDO GAME BOY */{0, &gb,&gb_color},
-  /* NINTENDO GAME BOY COLOR */{0, &gbc,&gbc_color},
-  /* SEGA MASTER SYSTEM */{0, &sms,&sms_color},
-  /* SEGA GAME GEAR */{0, &gg,&gg_color},
-  /* COLECOVISION */{0, &col,&col_color},
-  /* SINCLAIR ZX SPECTRUM 48K */{0, &zx,&zx_color},
-  /* ATARI 2600 */{0, &a26,&a26_color},
-  /* ATARI 7800 */{0, &a78,&a78_color},
-  /* ATARI LYNX */{0, &lnx,&lnx_color},
-  /* PC ENGINE */{0, &pce,&pce_color},
+  /* OPTIONS */{0, &settings ,&settings_color},
+  /* FAVORITES */{0, &fav ,&fav_color},
+  /* RECENT */{0, &recent ,&recent_color},
+  /* NINTENDO ENTERTAINMENT SYSTEM */{0, &nes ,&nes_color},
+  /* NINTENDO GAME BOY */{0, &gb ,&gb_color},
+  /* NINTENDO GAME BOY COLOR */{0, &gbc ,&gbc_color},
+  /* SEGA MASTER SYSTEM */{0, &sms ,&sms_color},
+  /* SEGA GAME GEAR */{0, &gg ,&gg_color},
+  /* COLECOVISION */{0, &col ,&col_color},
+  /* SINCLAIR ZX SPECTRUM 48K */{0, &zx ,&zx_color},
+  /* ATARI 2600 */{0, &a26 ,&a26_color},
+  /* ATARI 7800 */{0, &a78 ,&a78_color},
+  /* ATARI LYNX */{0, &lnx ,&lnx_color},
+  /* PC ENGINE */{0, &pce ,&pce_color},
 };
 
 // THEME

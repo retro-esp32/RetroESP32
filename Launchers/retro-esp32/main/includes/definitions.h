@@ -35,7 +35,9 @@
 /*
 
 */
-#define FAVFILE "retro-esp32.txt"
+#define RETROESP_FOLDER "RetroESP32"
+#define FAVORITE_FILE "favorites.txt"
+#define RECENT_FILE "recent.txt"
 
 /*
 

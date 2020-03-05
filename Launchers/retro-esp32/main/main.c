@@ -37,6 +37,9 @@
   char** FAVORITES;
   char FAVORITE[256] = "";
 
+  char** RECENTS;
+  char RECENT[256] = "";  
+
   char folder_path[256] = "";
 
   DIR *directory;
@@ -107,8 +110,7 @@
   APPLICATION
 */
 //{#pragma region Main
-  void app_main(void)
-  {
+  void app_main(void) {
     nvs_flash_init();
     odroid_system_init();
 
@@ -140,7 +142,7 @@
 
     // SD
     odroid_sdcard_open("/sd");
-    create_favorites();
+    create_settings();
 
     // Theme
     get_theme();
@@ -397,6 +399,37 @@
 //}#pragma endregion Mask
 
 //{#pragma region Settings
+  void create_settings() {
+    //  printf("\n----- %s START -----", __func__);
+
+    char path[256] = "/sd/odroid/data";
+    sprintf(path, "%s/%s", path, RETROESP_FOLDER);
+
+    //  printf("\npath:%s", path);
+
+    /*
+    if(directory != NULL) {
+      free(directory);
+      closedir(directory);
+    }
+    */
+
+    struct stat st;
+    if (stat(path, &st) == -1) {mkdir(path, 0777);}
+    create_favorites();
+    create_recents();
+    /*
+    directory = opendir(path);
+    if(directory) {
+      create_favorites();
+      create_recents();
+      free(directory);
+      closedir(directory);
+    }
+    */
+    // printf("\n----- %s END -----", __func__);
+  }
+
   void draw_settings() {
     int x = ORIGIN.x;
     int y = POS.y + 46;
@@ -1065,7 +1098,7 @@
     delete_numbers();
     SEEK[0] = 0;
 
-  //  printf("\n----- %s -----", __func__);
+    //  printf("\n----- %s -----", __func__);
 
     ROMS.total = 0;
     char message[100];
@@ -1078,7 +1111,7 @@
     strcat(&path[strlen(path) - 1],folder_path);
     strcpy(ROM.path, path);
 
-  //  printf("\npath:%s", path);
+    //  printf("\npath:%s", path);
 
     if(directory != NULL) {
     //  printf("\npath:%s", path);
@@ -1126,17 +1159,17 @@
       }
     }
 
-  //  printf("\n---------------------\n");
+    //  printf("\n---------------------\n");
   }
 
   void seek_files() {
     delete_numbers();
-  //  printf("\n----- %s -----", __func__);
-  //  printf("\nROMS.offset:%d", ROMS.offset);
-  //  printf("\nROMS.limit:%d", ROMS.limit);
-  //  printf("\nROMS.total:%d", ROMS.total);
-  //  printf("\nROMS.page:%d", ROMS.page);
-  //  printf("\nROMS.pages:%d", ROMS.pages);
+    //  printf("\n----- %s -----", __func__);
+    //  printf("\nROMS.offset:%d", ROMS.offset);
+    //  printf("\nROMS.limit:%d", ROMS.limit);
+    //  printf("\nROMS.total:%d", ROMS.total);
+    //  printf("\nROMS.page:%d", ROMS.page);
+    //  printf("\nROMS.pages:%d", ROMS.pages);
 
     char message[100];
 
@@ -1194,7 +1227,7 @@
         }
       }
     }
-  //  printf("\n---------------------\n");
+    //  printf("\n---------------------\n");
     ROMS.pages = ROMS.total/ROMS.limit;
     if(ROMS.offset > ROMS.total) { ROMS.offset = 0;}
     if(ROMS.total != 0) {
@@ -1248,12 +1281,12 @@
   void has_save_file(char *save_name) {
     SAVED = false;
 
-  //  printf("\n----- %s -----", __func__);
+    //  printf("\n----- %s -----", __func__);
     //printf("\nsave_name: %s", save_name);
 
     char save_dir[256] = "/sd/odroid/data/";
     STEP != 1 && STEP != 2? strcat(&save_dir[strlen(save_dir) - 1], DIRECTORIES[STEP]) : strcat(&save_dir[strlen(save_dir) - 1], ROM.ext);
-  //  printf("\nsave_dir: %s", save_dir);
+    //  printf("\nsave_dir: %s", save_dir);
 
     char save_file[256] = "";
     sprintf(save_file, "%s/%s", save_dir, save_name);
@@ -1282,11 +1315,11 @@
 //}#pragma endregion Files
 
 //{#pragma region Favorites
-
   void create_favorites() {
-  //  printf("\n----- %s START -----", __func__);
+    //  printf("\n----- %s START -----", __func__);
     char file[256] = "/sd/odroid/data";
-    sprintf(file, "%s/%s", file, FAVFILE);
+    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
+    sprintf(file, "%s/%s", file, FAVORITE_FILE);
 
     //struct stat st; if (stat(file, &st) == 0) {unlink(file);}
 
@@ -1298,13 +1331,13 @@
     } else {
       read_favorites();
     }
-  //  printf("\nCLOSING: %s", file);
+    //  printf("\nCLOSING: %s", file);
     fclose(f);
-  //  printf("\n----- %s END -----\n", __func__);
+    //  printf("\n----- %s END -----\n", __func__);
   }
 
   void read_favorites() {
-  //  printf("\n----- %s START -----", __func__);
+    //  printf("\n----- %s START -----", __func__);
 
     int n = 0;
     ROMS.total = 0;
@@ -1313,7 +1346,8 @@
     FAVORITES = (char**)malloc((50) * sizeof(void*));
 
     char file[256] = "/sd/odroid/data";
-    sprintf(file, "%s/%s", file, FAVFILE);
+    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
+    sprintf(file, "%s/%s", file, FAVORITE_FILE);
 
     FILE *f;
     f = fopen(file, "rb");
@@ -1333,11 +1367,11 @@
     }
     fclose(f);
 
-  //  printf("\n----- %s END -----\n", __func__);
+    //  printf("\n----- %s END -----\n", __func__);
   }
 
   void get_favorites() {
-  //  printf("\n----- %s START -----", __func__);
+    //  printf("\n----- %s START -----", __func__);
     char message[100];
     sprintf(message, "loading favorites");
     int center = ceil((320/2)-((strlen(message)*5)/2));
@@ -1346,11 +1380,11 @@
     read_favorites();
     process_favorites();
 
-  //  printf("\n----- %s END -----", __func__);
+    //  printf("\n----- %s END -----", __func__);
   }
 
   void process_favorites() {
-  //  printf("\n----- %s START -----", __func__);
+    //  printf("\n----- %s START -----", __func__);
 
     char message[100];
     delete_numbers();
@@ -1367,11 +1401,11 @@
       draw_text(center,134,message,false,false, false);
     }
 
-  //  printf("\n----- %s END -----", __func__);
+    //  printf("\n----- %s END -----", __func__);
   }
 
   void draw_favorites() {
-  //  printf("\n----- %s START -----", __func__);
+    //  printf("\n----- %s START -----", __func__);
     int x = ORIGIN.x;
     int y = POS.y + 48;
     ROMS.page = ROMS.offset/ROMS.limit;
@@ -1381,7 +1415,7 @@
       (ROMS.total - ROMS.offset) :
       ROMS.limit;
 
-  //  printf("\nROMS.limit:%d ROMS.offset:%d ROMS.total:%d limit:%d\n", ROMS.limit, ROMS.offset, ROMS.total, limit);
+    //  printf("\nROMS.limit:%d ROMS.offset:%d ROMS.total:%d limit:%d\n", ROMS.limit, ROMS.offset, ROMS.total, limit);
 
     for(int n = ROMS.offset; n < (ROMS.offset+limit); n++) {
       char full[512];
@@ -1450,13 +1484,14 @@
       "\n***********\n\n",
       ROM.name, ROM.art, ROM.path, ROM.ext, ROM.ready);
     */
-  // printf("\n----- %s END -----", __func__);
+    // printf("\n----- %s END -----", __func__);
   }
 
   void add_favorite(char *favorite) {
-  //  printf("\n----- %s START -----", __func__);
+    //  printf("\n----- %s START -----", __func__);
     char file[256] = "/sd/odroid/data";
-    sprintf(file, "%s/%s", file, FAVFILE);
+    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
+    sprintf(file, "%s/%s", file, FAVORITE_FILE);
     FILE *f;
     f = fopen(file, "a+");
     if(f) {
@@ -1464,11 +1499,11 @@
       fprintf(f, "%s\n", favorite);
     }
     fclose(f);
-  //  printf("\n----- %s END -----\n", __func__);
+    //  printf("\n----- %s END -----\n", __func__);
   }
 
   void delete_favorite(char *favorite) {
-  //  printf("\n----- %s START -----", __func__);
+    //  printf("\n----- %s START -----", __func__);
 
     int n = 0;
     int count = 0;
@@ -1477,7 +1512,8 @@
     FAVORITES = (char**)malloc(50 * sizeof(void*));
 
     char file[256] = "/sd/odroid/data";
-    sprintf(file, "%s/%s", file, FAVFILE);
+    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
+    sprintf(file, "%s/%s", file, FAVORITE_FILE);
 
     FILE *f;
     f = fopen(file, "rb");
@@ -1512,15 +1548,16 @@
     //  printf("\nUNABLE TO UNLINK\n");
     }
 
-  //  printf("\n----- %s END -----\n", __func__);
+    //  printf("\n----- %s END -----\n", __func__);
   }
 
   void is_favorite(char *favorite) {
-  //  printf("\n----- %s START -----", __func__);
+    //  printf("\n----- %s START -----", __func__);
     ROM.favorite = false;
 
     char file[256] = "/sd/odroid/data";
-    sprintf(file, "%s/%s", file, FAVFILE);
+    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
+    sprintf(file, "%s/%s", file, FAVORITE_FILE);
 
 
     FILE *f;
@@ -1537,9 +1574,202 @@
       }
     }
     fclose(f);
-  //  printf("\n----- %s END -----\n", __func__);
+    //  printf("\n----- %s END -----\n", __func__);
   }
 //}#pragma endregion Favorites
+
+//{#pragma region Recents
+  void create_recents() {
+    //  printf("\n----- %s START -----", __func__);
+    char file[256] = "/sd/odroid/data";
+    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
+    sprintf(file, "%s/%s", file, RECENT_FILE);
+
+    //struct stat st; if (stat(file, &st) == 0) {unlink(file);}
+
+    FILE *f;
+    f = fopen(file, "rb");
+    if(f == NULL) {
+      f = fopen(file, "w+");
+    //  printf("\nCREATING: %s", file);
+    } else {
+      read_recents();
+    }
+    //  printf("\nCLOSING: %s", file);
+    fclose(f);
+    //  printf("\n----- %s END -----\n", __func__);
+  }
+
+  void read_recents() {
+    //  printf("\n----- %s START -----", __func__);
+
+    int n = 0;
+    ROMS.total = 0;
+
+    free(RECENTS);
+    RECENTS = (char**)malloc((50) * sizeof(void*));
+
+    char file[256] = "/sd/odroid/data";
+    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
+    sprintf(file, "%s/%s", file, RECENT_FILE);
+
+    FILE *f;
+    f = fopen(file, "rb");
+    if(f) {
+    //  printf("\nREADING: %s\n", file);
+      char line[256];
+      while (fgets(line, sizeof(line), f)) {
+        char *ep = &line[strlen(line)-1];
+        while (*ep == '\n' || *ep == '\r'){*ep-- = '\0';}
+      //  printf("\n%s", line);
+        size_t len = strlen(line);
+        RECENTS[n] = (char*)malloc(len + 1);
+        strcpy(RECENTS[n], line);
+        n++;
+        ROMS.total++;
+      }
+    }
+    fclose(f);
+
+    //  printf("\n----- %s END -----\n", __func__);
+  }
+
+  void add_recent(char *recent) {
+    //  printf("\n----- %s START -----", __func__);
+    char file[256] = "/sd/odroid/data";
+    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
+    sprintf(file, "%s/%s", file, RECENT_FILE);
+    FILE *f;
+    f = fopen(file, "a+");
+    if(f) {
+    //  printf("\nADDING: %s to %s", favorite, file);
+      fprintf(f, "%s\n", recent);
+    }
+    fclose(f);
+    //  printf("\n----- %s END -----\n", __func__);
+  }
+
+  void delete_recent(char *recent) {
+
+  }
+
+  void get_recents() {
+    //  printf("\n----- %s START -----", __func__);
+    char message[100];
+    sprintf(message, "loading recents");
+    int center = ceil((320/2)-((strlen(message)*5)/2));
+    draw_text(center,134,message,false,false, false);
+
+    read_recents();
+    process_recents();
+
+    //  printf("\n----- %s END -----", __func__);
+  }
+
+  void process_recents() {
+    //  printf("\n----- %s START -----", __func__);
+
+    char message[100];
+    delete_numbers();
+
+    ROMS.pages = ROMS.total/ROMS.limit;
+    if(ROMS.offset > ROMS.total) { ROMS.offset = 0;}
+    if(ROMS.total != 0) {
+      draw_recents();
+    } else {
+      sprintf(message, "no recents available");
+      int center = ceil((320/2)-((strlen(message)*5)/2));
+      draw_mask(0,POS.y + 47,320,10);
+      draw_mask(0,132,320,10);
+      draw_text(center,134,message,false,false, false);
+    }
+
+    //  printf("\n----- %s END -----", __func__);
+  }
+
+  void draw_recents() {
+//  printf("\n----- %s START -----", __func__);
+    int x = ORIGIN.x;
+    int y = POS.y + 48;
+    ROMS.page = ROMS.offset/ROMS.limit;
+
+    for (int i = 0; i < 4; i++) draw_mask(0, y+(i*40)-6, 320, 40);
+    int limit = (ROMS.total - ROMS.offset) <  ROMS.limit ?
+      (ROMS.total - ROMS.offset) :
+      ROMS.limit;
+
+    //  printf("\nROMS.limit:%d ROMS.offset:%d ROMS.total:%d limit:%d\n", ROMS.limit, ROMS.offset, ROMS.total, limit);
+
+    for(int n = ROMS.offset; n < (ROMS.offset+limit); n++) {
+      char full[512];
+      char trimmed[512];
+      char favorite[256];
+      char extension[10];
+      char path[256];
+
+      strcpy(full, RECENTS[n]);
+      strcpy(trimmed, remove_ext(full, '.', '/'));
+      strcpy(favorite, get_filename(trimmed));
+      strcpy(extension, get_ext(full));
+
+      int length = (strlen(trimmed) - strlen(favorite)) - 1;
+      memset(path, '\0', 256);
+      strncpy(path, full, length);
+
+      int offset = -1;
+      if(strcmp(extension, "nes") == 0) {offset = 0*16;}
+      if(strcmp(extension, "gb") == 0) {offset = 1*16;}
+      if(strcmp(extension, "gbc") == 0) {offset = 2*16;}
+      if(strcmp(extension, "sms") == 0) {offset = 3*16;}
+      if(strcmp(extension, "gg") == 0) {offset = 4*16;}
+      if(strcmp(extension, "col") == 0) {offset = 5*16;}
+      if(strcmp(extension, "z80") == 0) {offset = 6*16;}
+      if(strcmp(extension, "a26") == 0) {offset = 7*16;}
+      if(strcmp(extension, "a78") == 0) {offset = 8*16;}
+      if(strcmp(extension, "lnx") == 0) {offset = 9*16;}
+      if(strcmp(extension, "pce") == 0) {offset = 10*16;}
+
+      /*
+      printf("\n\nentry %d:"
+        "\n- full ->\t%s"
+        "\n- trimmed ->\t%s"
+        "\n- favorite ->\t%s"
+        "\n- extension ->\t%s"
+        "\n- path ->\t%s"
+        "\n- length ->\t%d"
+        "\n- offset ->\t%d",
+        n, full, trimmed, favorite, extension, path, length, offset);
+      */
+
+
+      draw_text(x+24,y,favorite,false,n == ROMS.offset ? true : false, false);
+      draw_media(x,y-6,n == ROMS.offset ? true : false, offset);
+      if(n == ROMS.offset) {
+        sprintf(favorite, "%s.%s", favorite, extension);
+        strcpy(ROM.name, favorite);
+        strcpy(ROM.art, remove_ext(ROM.name, '.', '/'));
+        strcpy(ROM.path, path);
+        strcpy(ROM.ext, extension);
+        ROM.ready = true;
+      }
+      y+=20;
+    }
+    draw_numbers();
+
+    /*
+    printf("\n\n***********"
+      "\nROM details"
+      "\n- ROM.name ->\t%s"
+      "\n- ROM.art ->\t%s"
+      "\n- ROM.path ->\t%s"
+      "\n- ROM.ext ->\t%s"
+      "\n- ROM.ready ->\t%d"
+      "\n***********\n\n",
+      ROM.name, ROM.art, ROM.path, ROM.ext, ROM.ready);
+    */
+    // printf("\n----- %s END -----", __func__);
+  }
+//}#pragma endregion Recents
 
 //{#pragma region Cover
   void get_cover() {
@@ -1573,7 +1803,7 @@
       }
     }
 
-  //  printf("\n----- %s -----\n%s\n", __func__, file);
+    //  printf("\n----- %s -----\n%s\n", __func__, file);
     for(int h = 0; h < bh; h++) {
       for(int w = 0; w < bw; w++) {
         buffer[i] = (h == 0) || (h == bh -1) ? WHITE : (w == 0) ||  (w == bw -1) ? WHITE : GUI.bg;
@@ -1596,7 +1826,7 @@
   }
 
   void draw_cover() {
-  //  printf("\n----- %s -----\n%s\n", __func__, "OPENNING");
+    //  printf("\n----- %s -----\n%s\n", __func__, "OPENNING");
     char file[256] = "/sd/romart";
     char ext[10];
     STEP != 1 && STEP != 2? sprintf(ext, "%s", DIRECTORIES[STEP]) : sprintf(ext, "%s", ROM.ext);
@@ -1658,7 +1888,10 @@
       draw_systems();
       usleep(20000);
     }
-    STEP == 0 ? draw_settings() : STEP == 1 ? get_favorites() : get_files();
+    STEP == 0 ? draw_settings() : 
+      STEP == 1 ? get_favorites() : 
+      STEP == 2 ? get_recents() : 
+      get_files();
     clean_up();
   }
 
@@ -1695,16 +1928,19 @@
     clean_up();
     draw_systems();
     draw_text(16,16,EMULATORS[STEP],false,true, false);
-    STEP == 0 ? draw_settings() : STEP == 1 ? get_favorites() : get_files();
+    STEP == 0 ? draw_settings() : 
+      STEP == 1 ? get_favorites() : 
+      STEP == 2 ? get_recents() : 
+      get_files();
   }
 
   void clean_up() {
-    int MAX = 784;
+    int MAX = 832;
     for(int n = 0; n < COUNT; n++) {
-      if(SYSTEMS[n].x > 560) {
+      if(SYSTEMS[n].x > 608) {
         SYSTEMS[n].x -= MAX;
       }
-      if(SYSTEMS[n].x <= -320) {
+      if(SYSTEMS[n].x <= -368) {
         SYSTEMS[n].x += MAX;
       }
     }
@@ -1877,7 +2113,10 @@
           draw_background();
           draw_systems();
           draw_text(16,16,EMULATORS[STEP],false,true, false);
-          STEP == 0 ? draw_settings() : STEP == 1 ? get_favorites() : get_files();
+          STEP == 0 ? draw_settings() : 
+            STEP == 1 ? get_favorites() : 
+            STEP == 2 ? get_recents() : 
+            get_files();
         }
       }
     }
@@ -2015,12 +2254,12 @@
           if(STEP != 0) {
             ROMS.offset--;
             if( ROMS.offset < 0 ) { ROMS.offset = ROMS.total - 1; }
-            if(STEP != 1) {
+            if(STEP != 1 && STEP != 2) {
               //draw_files();
               delete_numbers();
               seek_files();
             } else {
-              process_favorites();
+              STEP == 1 ? process_favorites() : process_recents();
             }
           }
         } else {
@@ -2051,12 +2290,12 @@
           if(STEP != 0) {
             ROMS.offset++;
             if( ROMS.offset > ROMS.total - 1 ) { ROMS.offset = 0; }
-            if(STEP != 1) {
+            if(STEP != 1 && STEP != 2) {
               //draw_files();
               delete_numbers();
               seek_files();
             } else {
-              process_favorites();
+              STEP == 1 ? process_favorites() : process_recents();
             }
           }
         } else {
@@ -2176,21 +2415,22 @@
             }
           } else {
             if(ROMS.total != 0) {
-              char favorite[256] = "";
-              sprintf(favorite, "%s/%s", ROM.path, ROM.name);
+              char path[256] = "";
+              sprintf(path, "%s/%s", ROM.path, ROM.name);
               switch(OPTION) {
                 case 0:
+                  add_recent(path);
                   SAVED ? rom_resume() : rom_run(false);
                 break;
                 case 1:
-                  SAVED ? rom_run(true) : ROM.favorite ? delete_favorite(favorite) : add_favorite(favorite);
+                  SAVED ? rom_run(true) : ROM.favorite ? delete_favorite(path) : add_favorite(path);
                   if(!SAVED) {draw_launcher_options();}
                 break;
                 case 2:
                   rom_delete_save();
                 break;
                 case 3:
-                  ROM.favorite ? delete_favorite(favorite) : add_favorite(favorite);
+                  ROM.favorite ? delete_favorite(path) : add_favorite(path);
                   draw_launcher_options();
                 break;
               }
@@ -2212,7 +2452,10 @@
           //  printf("\n------\nfolder_path:%s\n-----\n", folder_path);
             get_files();
           } else {
-            STEP == 0 ? draw_settings() : STEP == 1 ? get_favorites() : get_files();
+            STEP == 0 ? draw_settings() : 
+              STEP == 1 ? get_favorites() : 
+              STEP == 2 ? get_recents() : 
+              get_files();
           }
         } else {
           if(FOLDER) {

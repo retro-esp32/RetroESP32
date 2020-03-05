@@ -26,6 +26,7 @@ void draw_background();
 /*
  Settings
 */
+void create_settings();
 void draw_settings();
 
 /*
@@ -109,6 +110,17 @@ void is_favorite(char *favorite);
 void get_favorites();
 void process_favorites();
 void draw_favorites();
+
+/*
+  Recent
+*/
+void create_recents();
+void read_recents();
+void add_recent(char *recent);
+void delete_recent(char *recent);
+void get_recents();
+void process_recents();
+void draw_recents();
 
 
 /*
