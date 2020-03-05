@@ -1639,11 +1639,23 @@
     char file[256] = "/sd/odroid/data";
     sprintf(file, "%s/%s", file, RETROESP_FOLDER);
     sprintf(file, "%s/%s", file, RECENT_FILE);
+
+    bool duplicate = false;
     FILE *f;
     f = fopen(file, "a+");
     if(f) {
-    //  printf("\nADDING: %s to %s", favorite, file);
-      fprintf(f, "%s\n", recent);
+      printf("\nCHECKING: %s\n", recent);
+      char line[256];
+      while (fgets(line, sizeof(line), f)) {
+        char *ep = &line[strlen(line)-1];
+        while (*ep == '\n' || *ep == '\r'){*ep-- = '\0';}
+        if(strcmp(recent, line) == 0) {
+          duplicate = true;
+        }
+      }
+    }
+    if(!duplicate) {
+      fprintf(f, "%s\n", recent);                
     }
     fclose(f);
     //  printf("\n----- %s END -----\n", __func__);
