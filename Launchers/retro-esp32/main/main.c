@@ -1367,6 +1367,26 @@
     }
     fclose(f);
 
+    // printf("\nROMS.total:%d\n", ROMS.total);
+    char** TEMP = (char**)malloc((ROMS.total+1) * sizeof(void*));
+    for(int n = ROMS.total-1; n >= 0; n--) {
+      int i = (ROMS.total-1-n);
+      size_t len = strlen(FAVORITES[n]);                                               
+      TEMP[i] = (char*)malloc(len + 1);
+      strcpy(TEMP[i], FAVORITES[n]);
+    } 
+
+    free(FAVORITES);
+    FAVORITES = (char**)malloc((50) * sizeof(void*));
+
+    for(int n = 0; n < ROMS.total; n++) {
+      size_t len = strlen(TEMP[n]);                                               
+      FAVORITES[n] = (char*)malloc(len + 1);
+      strcpy(FAVORITES[n], TEMP[n]);
+    } 
+
+    free(TEMP);    
+
     //  printf("\n----- %s END -----\n", __func__);
   }
 
@@ -1595,13 +1615,14 @@
     } else {
       read_recents();
     }
+    //  f = fopen(file, "w+");
     //  printf("\nCLOSING: %s", file);
     fclose(f);
     //  printf("\n----- %s END -----\n", __func__);
   }
 
   void read_recents() {
-    //  printf("\n----- %s START -----", __func__);
+    // printf("\n----- %s START -----", __func__);
 
     int n = 0;
     ROMS.total = 0;
@@ -1616,13 +1637,13 @@
     FILE *f;
     f = fopen(file, "rb");
     if(f) {
-    //  printf("\nREADING: %s\n", file);
+      //  printf("\nREADING: %s\n", file);
       char line[256];
+
       while (fgets(line, sizeof(line), f)) {
         char *ep = &line[strlen(line)-1];
         while (*ep == '\n' || *ep == '\r'){*ep-- = '\0';}
-      //  printf("\n%s", line);
-        size_t len = strlen(line);
+        size_t len = strlen(line); 
         RECENTS[n] = (char*)malloc(len + 1);
         strcpy(RECENTS[n], line);
         n++;
@@ -1631,34 +1652,86 @@
     }
     fclose(f);
 
-    //  printf("\n----- %s END -----\n", __func__);
+    // printf("\nROMS.total:%d\n", ROMS.total);
+    char** TEMP = (char**)malloc((ROMS.total+1) * sizeof(void*));
+    for(int n = ROMS.total-1; n >= 0; n--) {
+      int i = (ROMS.total-1-n);
+      size_t len = strlen(RECENTS[n]);                                               
+      TEMP[i] = (char*)malloc(len + 1);
+      strcpy(TEMP[i], RECENTS[n]);
+    } 
+
+    free(RECENTS);
+    RECENTS = (char**)malloc((50) * sizeof(void*));
+
+    for(int n = 0; n < ROMS.total; n++) {
+      size_t len = strlen(TEMP[n]);                                               
+      RECENTS[n] = (char*)malloc(len + 1);
+      strcpy(RECENTS[n], TEMP[n]);
+    } 
+
+    free(TEMP);
+
+    // printf("\n----- %s END -----\n", __func__);
   }
 
   void add_recent(char *recent) {
     //  printf("\n----- %s START -----", __func__);
+
+    int n = 0;
+    int count = 0;
+
+    free(RECENTS);
+    RECENTS = (char**)malloc(50 * sizeof(void*));
+
     char file[256] = "/sd/odroid/data";
     sprintf(file, "%s/%s", file, RETROESP_FOLDER);
     sprintf(file, "%s/%s", file, RECENT_FILE);
 
-    bool duplicate = false;
     FILE *f;
-    f = fopen(file, "a+");
+    f = fopen(file, "rb");
     if(f) {
-      printf("\nCHECKING: %s\n", recent);
+      //  printf("\nCHECKING: %s\n", recent);
       char line[256];
       while (fgets(line, sizeof(line), f)) {
         char *ep = &line[strlen(line)-1];
         while (*ep == '\n' || *ep == '\r'){*ep-- = '\0';}
-        if(strcmp(recent, line) == 0) {
-          duplicate = true;
+        if(strcmp(recent, line) != 0) {
+          size_t len = strlen(line);
+          RECENTS[n] = (char*)malloc(len + 1);
+          strcpy(RECENTS[n], line);
+          n++;
+          count++;
         }
       }
     }
-    if(!duplicate) {
-      fprintf(f, "%s\n", recent);                
-    }
     fclose(f);
-    //  printf("\n----- %s END -----\n", __func__);
+
+    struct stat st;
+    if (stat(file, &st) == 0) {
+      unlink(file);
+      create_recents();
+
+      f = fopen(file, "a+");
+      if(f) {
+
+      }
+      for(n = 0; n < count; n++) {
+        size_t len = strlen(RECENTS[n]);
+        if(len > 0) {
+          //printf("\n%s - %d" ,RECENTS[n], len);
+          fprintf(f, "%s\n",RECENTS[n]);
+        }
+      }
+      //  printf("\nADDING: %s\n", recent);                        
+      fprintf(f, "%s\n", recent);
+    } else {
+    //  printf("\nUNABLE TO UNLINK\n");
+    }
+
+    fclose(f);
+
+    //  printf("\n----- %s END -----\n", __func__); 
   }
 
   void delete_recent(char *recent) {
@@ -1700,7 +1773,7 @@
   }
 
   void draw_recents() {
-//  printf("\n----- %s START -----", __func__);
+    //  printf("\n----- %s START -----", __func__);
     int x = ORIGIN.x;
     int y = POS.y + 48;
     ROMS.page = ROMS.offset/ROMS.limit;
@@ -2424,6 +2497,12 @@
               LAUNCHER = true;
               odroid_settings_RomFilePath_set(file_to_load);
               draw_launcher();
+
+              /*
+              char path[256] = "";
+              sprintf(path, "%s/%s", ROM.path, ROM.name);
+              add_recent(path);              
+              */
             }
           } else {
             if(ROMS.total != 0) {
