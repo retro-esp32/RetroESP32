@@ -14,6 +14,11 @@ source helpers/styles
 source helpers/paths
 
 #---------------------------------
+# VERSIONS
+#---------------------------------
+source helpers/version
+
+#---------------------------------
 # PROCESS
 #---------------------------------
 source helpers/process
@@ -41,7 +46,7 @@ $MKFW_PATH/mkfw "${NAME}" $FIRMWARE_PATH/Assets/${TILE}.raw \
 0 23 1507328 handy-go $FIRMWARE_PATH/Bins/handy-go.bin \
 0 24 720896 pcengine-go $FIRMWARE_PATH/Bins/pcengine-go.bin
 
-mv firmware.fw "$FIRMWARE_PATH/Releases/${NAME}.fw"
+mv firmware.fw "$FIRMWARE_PATH/Releases/${VERSION}/${NAME}.fw"
 
 #---------------------------------
 # Goodbye

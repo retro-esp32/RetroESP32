@@ -465,7 +465,7 @@ const uint16_t FONT_5x7[7][250] = {
   void hud_menu(void) {
     int volume = odroid_audio_volume_get();
     #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-      volume = 4;
+      volume = 8;
     #endif
     odroid_audio_terminate();
     hud_init();
@@ -501,6 +501,11 @@ const uint16_t FONT_5x7[7][250] = {
       */
       if (gamepad.values[ODROID_INPUT_B]) {
         ACTION = 0;
+        odroid_audio_volume_set(volume);
+
+        int sink = odroid_settings_AudioSink_get();
+        odroid_settings_AudioSink_set(sink);
+        odroid_audio_set_sink(sink);          
         debounce(ODROID_INPUT_B);
         return 0;
       }
@@ -509,6 +514,11 @@ const uint16_t FONT_5x7[7][250] = {
       */
       if (gamepad.values[ODROID_INPUT_A]) {
         odroid_audio_volume_set(volume);
+
+        int sink = odroid_settings_AudioSink_get();
+        odroid_settings_AudioSink_set(sink);
+        odroid_audio_set_sink(sink);       
+
         hud_debug(STATE.label);
         ACTION = STATE.action;
         switch(ACTION) {

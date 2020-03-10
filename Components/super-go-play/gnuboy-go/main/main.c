@@ -694,7 +694,8 @@ void app_main(void)
 
         if (!lastJoysticState.values[ODROID_INPUT_VOLUME] && joystick.values[ODROID_INPUT_VOLUME])
         {
-            odroid_audio_volume_mute();
+            //odroid_audio_volume_mute();
+            odroid_audio_volume_change();
             printf("main: Volume=%d\n", odroid_audio_volume_get());
         }
 

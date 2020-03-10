@@ -485,7 +485,7 @@
   void hud_menu(void) {
     int volume = odroid_audio_volume_get();
     #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-      volume = 4;
+      volume = 8;
     #endif
     odroid_audio_terminate();
     hud_init();

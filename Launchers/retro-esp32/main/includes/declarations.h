@@ -121,12 +121,12 @@ void delete_recent(char *recent);
 void get_recents();
 void process_recents();
 void draw_recents();
+void delete_recents();
 
 
 /*
   Cover
 */
-
 void get_cover();
 void preview_cover(bool error);
 void draw_cover();

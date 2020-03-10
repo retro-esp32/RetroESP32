@@ -125,40 +125,49 @@ get_clean_option() {
   fi
 }
 
-OPTION="${pad}  ${red}Please Select a ${cyan}Launcher? ${nc}"
-echo "--------------------------------------------------------------------------"
-echo -e "${OPTION}"
-echo "--------------------------------------------------------------------------"
-select launcher in "RetroESP32" "GoGo" "Generic" "Exit"; do
-  case $launcher in
-    GoGo )
-      LAUNCHER="GoGo"
-      LAUNCHER_PATH=${GOGO_PATH}
-      BIN="gogo"
-      TILE="gogo"
-      NAME="GoGo"
-    break;;
-    RetroESP32 )
-      LAUNCHER="RetroESP32"
-      LAUNCHER_PATH=${RETRO_PATH}
-      BIN="retro-esp32"
-      TILE="retro-esp32"
-      NAME="Retro ESP32"
-    break;;
-    Generic )
-      LAUNCHER="Generic"
-      LAUNCHER_PATH=${GENERIC_PATH}
-      BIN="emulator-launcher-odroid-go"
-      TILE="generic"
-      NAME="Emulator"
-    break;;
-    Exit )
-      exit
-    break;;
-    * ) echo -e "${OPTION}";;
-  esac
-done
-clear
+options() {
+  OPTION="${pad}  ${red}Please Select a ${cyan}Launcher? ${nc}"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${OPTION}"
+  echo "--------------------------------------------------------------------------"
+  select launcher in "RetroESP32" "GoGo" "Generic" "Exit"; do
+    case $launcher in
+      GoGo )
+        LAUNCHER="GoGo"
+        LAUNCHER_PATH=${GOGO_PATH}
+        BIN="gogo"
+        TILE="gogo"
+        NAME="GoGo"
+      break;;
+      RetroESP32 )
+        LAUNCHER="RetroESP32"
+        LAUNCHER_PATH=${RETRO_PATH}
+        BIN="retro-esp32"
+        TILE="retro-esp32"
+        NAME="Retro ESP32"
+      break;;
+      Generic )
+        LAUNCHER="Generic"
+        LAUNCHER_PATH=${GENERIC_PATH}
+        BIN="emulator-launcher-odroid-go"
+        TILE="generic"
+        NAME="Emulator"
+      break;;
+      Exit )
+        exit
+      break;;
+      * ) echo -e "${OPTION}";;
+    esac
+  done
+  clear             
+}
+
+# DEFUALT
+LAUNCHER="RetroESP32"
+LAUNCHER_PATH=${RETRO_PATH}
+BIN="retro-esp32"
+TILE="retro-esp32"
+NAME="Retro ESP32"
 
 echo "--------------------------------------------------------------------------"
 echo -e "${wrench}  ${red}Recompile ${cyan}Launcher? ${nc}[y/${bold}N${nc}]"
@@ -228,7 +237,6 @@ then
   set_handy_path
 
   cd $SUPER_GOPLAY_PATH
-
   clear
   echo "--------------------------------------------------------------------------"
   echo -e "${game}  ${green}Compiling ${cyan}gnuboy-go${nc}"
@@ -250,7 +258,7 @@ then
   make -j8 -s
   cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
 
-  cd $GOPLAY_PATH
+  cd $SUPER_GOPLAY_PATH
   clear
   echo "--------------------------------------------------------------------------"
   echo -e "${game}  ${green}Compiling ${cyan}smsplusgx-go${nc}"

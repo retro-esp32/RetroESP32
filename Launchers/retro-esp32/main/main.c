@@ -460,6 +460,12 @@
 
     draw_cover_toggle();
 
+    y+=20;
+    draw_mask(x,y-1,100,17);
+    draw_text(x,y,(char *)"CLEAR RECENTS",false, SETTING == 5 ? true : false, false);
+
+    draw_cover_toggle();    
+
     /*
       BUILD
     */
@@ -591,7 +597,7 @@
     if(volume > 0) {
       i = 0;
       for(h = 0; h < 7; h++) {
-        for(w = 0; w < (25 * volume); w++) {
+        for(w = 0; w < (12.5 * volume); w++) {
           if(SETTING == 2) {
             buffer[i] = WHITE;
           } else {
@@ -600,7 +606,7 @@
           i++;
         }
       }
-      ili9341_write_frame_rectangleLE(x, y, (25 * volume), 7, buffer);
+      ili9341_write_frame_rectangleLE(x, y, (12.5 * volume), 7, buffer);
     }
 
     draw_speaker();
@@ -876,7 +882,14 @@
 
     draw_mask(x,y,16,16);
 
-    int dh = 64 - (volume*16);
+    int dh = 0;
+    switch(volume) {
+      case 0:dh = 64;break;
+      case 1:case 2:case 3:dh = 48;break;
+      case 4:case 5:dh = 32;break;
+      case 6:case 7:dh = 16;break;
+      case 9:dh = 0;break;
+    }
     for(h = 0; h < 16; h++) {
       for(w = 0; w < 16; w++) {
         buffer[i] = speaker[dh+h][w] == WHITE ? WHITE : GUI.bg;
@@ -973,7 +986,21 @@
     ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
 
     y += 48;
-    draw_media(x,y-6,true,-1);
+    int offset = -1;
+    if(STEP == 1 || STEP == 2) {
+      if(strcmp(ROM.ext, "nes") == 0) {offset = 0*16;}
+      if(strcmp(ROM.ext, "gb") == 0) {offset = 1*16;}
+      if(strcmp(ROM.ext, "gbc") == 0) {offset = 2*16;}
+      if(strcmp(ROM.ext, "sms") == 0) {offset = 3*16;}
+      if(strcmp(ROM.ext, "gg") == 0) {offset = 4*16;}
+      if(strcmp(ROM.ext, "col") == 0) {offset = 5*16;}
+      if(strcmp(ROM.ext, "z80") == 0) {offset = 6*16;}
+      if(strcmp(ROM.ext, "a26") == 0) {offset = 7*16;}
+      if(strcmp(ROM.ext, "a78") == 0) {offset = 8*16;}
+      if(strcmp(ROM.ext, "lnx") == 0) {offset = 9*16;}
+      if(strcmp(ROM.ext, "pce") == 0) {offset = 10*16;}
+    }
+    draw_media(x,y-6,true,offset);
     draw_launcher_options();
     get_cover_toggle();
     if(COVER == 1){get_cover();}
@@ -1343,7 +1370,7 @@
     ROMS.total = 0;
 
     free(FAVORITES);
-    FAVORITES = (char**)malloc((50) * sizeof(void*));
+    FAVORITES = (char**)malloc((100) * sizeof(void*));
 
     char file[256] = "/sd/odroid/data";
     sprintf(file, "%s/%s", file, RETROESP_FOLDER);
@@ -1377,7 +1404,7 @@
     } 
 
     free(FAVORITES);
-    FAVORITES = (char**)malloc((50) * sizeof(void*));
+    FAVORITES = (char**)malloc((100) * sizeof(void*));
 
     for(int n = 0; n < ROMS.total; n++) {
       size_t len = strlen(TEMP[n]);                                               
@@ -1628,7 +1655,7 @@
     ROMS.total = 0;
 
     free(RECENTS);
-    RECENTS = (char**)malloc((50) * sizeof(void*));
+    RECENTS = (char**)malloc((100) * sizeof(void*));
 
     char file[256] = "/sd/odroid/data";
     sprintf(file, "%s/%s", file, RETROESP_FOLDER);
@@ -1662,7 +1689,7 @@
     } 
 
     free(RECENTS);
-    RECENTS = (char**)malloc((50) * sizeof(void*));
+    RECENTS = (char**)malloc((100) * sizeof(void*));
 
     for(int n = 0; n < ROMS.total; n++) {
       size_t len = strlen(TEMP[n]);                                               
@@ -1854,6 +1881,41 @@
     */
     // printf("\n----- %s END -----", __func__);
   }
+
+  void delete_recents() {
+    //  printf("\n----- %s START -----", __func__);
+    char file[256] = "/sd/odroid/data";
+    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
+    sprintf(file, "%s/%s", file, RECENT_FILE);
+
+    FILE *f;
+    f = fopen(file, "w+");
+    //  printf("\nCLOSING: %s", file);
+    fclose(f);
+    //  printf("\n----- %s END -----\n", __func__);
+
+    draw_background();
+    char message[100] = "deleting...";
+    int width = strlen(message)*5;
+    int center = ceil((320/2)-(width/2));
+    int y = 118;
+    draw_text(center,y,message,false,false, false);
+
+    y+=10;
+    for(int n = 0; n < (width+10); n++) {
+      for(int i = 0; i < 5; i++) {
+        buffer[i] = GUI.fg;
+      }
+      ili9341_write_frame_rectangleLE(center+n, y, 1, 5, buffer);
+      usleep(10000);
+    }
+
+    draw_background();
+    draw_systems();
+    draw_text(16,16,EMULATORS[STEP],false,true, false);
+    draw_settings();
+
+  }  
 //}#pragma endregion Recents
 
 //{#pragma region Cover
@@ -2020,12 +2082,12 @@
   }
 
   void clean_up() {
-    int MAX = 832;
+    int MAX = 160+(COUNT*GAP);
     for(int n = 0; n < COUNT; n++) {
-      if(SYSTEMS[n].x > 608) {
+      if(SYSTEMS[n].x > COUNT*GAP-64) {
         SYSTEMS[n].x -= MAX;
       }
-      if(SYSTEMS[n].x <= -368) {
+      if(SYSTEMS[n].x <= (-32 - (COUNT/2) * 48)) {//-32 - ((14/2)*48)
         SYSTEMS[n].x += MAX;
       }
     }
@@ -2294,7 +2356,7 @@
               draw_systems();
             }
             if(SETTING == 2) {
-              if(VOLUME < 4) {
+              if(VOLUME < 8) {
                 VOLUME++;
                 set_volume();
                 usleep(200000);
@@ -2328,7 +2390,7 @@
           if(STEP == 0) {
             if(!SETTINGS) {
               SETTING--;
-              if( SETTING < 0 ) { SETTING = 4; }
+              if( SETTING < 0 ) { SETTING = 5; }
               draw_settings();
             } else {
               USER--;
@@ -2364,7 +2426,7 @@
           if(STEP == 0) {
             if(!SETTINGS) {
               SETTING++;
-              if( SETTING > 4 ) { SETTING = 0; }
+              if( SETTING > 5 ) { SETTING = 0; }
               draw_settings();
             } else {
               USER++;
@@ -2472,6 +2534,9 @@
               case 4:
                 set_cover_toggle();
                 draw_cover_toggle();
+              break;
+              case 5:
+                delete_recents();
               break;
             }
           }

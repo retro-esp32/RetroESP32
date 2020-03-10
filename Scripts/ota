@@ -14,6 +14,11 @@ source helpers/styles
 source helpers/paths
 
 #---------------------------------
+# VERSIONS
+#---------------------------------
+source helpers/version
+
+#---------------------------------
 # PROCESS
 #---------------------------------
 source helpers/process
