@@ -19,6 +19,35 @@ NAME=""
 
 HANDY_OPTION_PATH=""
 NES_OPTION_PATH=""
+GB_OPTION_PATH=""
+
+# set_nes_path
+set_gb_path() {
+  GB=("go-play" "super-go-play" "retro-go")
+  OPTION="${monkey}  ${red}Please Select ${cyan}GB/GBC Emulator${nc}"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${OPTION}"
+  echo "--------------------------------------------------------------------------"
+  select EMU in "${GB[@]}"
+  do
+    case $EMU in
+      * )
+        if [[ $EMU[0,1] ]]
+        then
+          clear
+          echo "--------------------------------------------------------------------------"
+          echo -e "${squid}  ${green}Selected ${cyan}${EMU#*.}${nc} as GB/GBC Emulator"
+          echo "--------------------------------------------------------------------------"
+          GB_OPTION_PATH="$REPO/Emulators/${EMU#*.}"
+          sleep 1
+          clear
+          break
+        else
+          set_gb_path
+        fi
+    esac
+  done
+}
 
 # set_nes_path
 set_nes_path() {
@@ -234,9 +263,10 @@ then
   set_config_option
 
   set_nes_path
+  set_gb_path
   set_handy_path
 
-  cd $SUPER_GOPLAY_PATH
+  cd $GB_OPTION_PATH
   clear
   echo "--------------------------------------------------------------------------"
   echo -e "${game}  ${green}Compiling ${cyan}gnuboy-go${nc}"

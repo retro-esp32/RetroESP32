@@ -133,16 +133,16 @@ void videoTask(void *arg)
 
 //Read an unaligned byte.
 char unalChar(const unsigned char *adr) {
-	//See if the byte is in memory that can be read unaligned anyway.
-	if (!(((int)adr)&0x40000000)) return *adr;
-	//Nope: grab a word and distill the byte.
-	int *p=(int *)((int)adr&0xfffffffc);
-	int v=*p;
-	int w=((int)adr&3);
-	if (w==0) return ((v>>0)&0xff);
-	if (w==1) return ((v>>8)&0xff);
-	if (w==2) return ((v>>16)&0xff);
-	if (w==3) return ((v>>24)&0xff);
+    //See if the byte is in memory that can be read unaligned anyway.
+    if (!(((int)adr)&0x40000000)) return *adr;
+    //Nope: grab a word and distill the byte.
+    int *p=(int *)((int)adr&0xfffffffc);
+    int v=*p;
+    int w=((int)adr&3);
+    if (w==0) return ((v>>0)&0xff);
+    if (w==1) return ((v>>8)&0xff);
+    if (w==2) return ((v>>16)&0xff);
+    if (w==3) return ((v>>24)&0xff);
 
     abort();
     return 0;
@@ -342,6 +342,10 @@ static void DoMenuHome()
         }
         ili9341_clear(0);
         odroid_display_unlock();
+
+        ili9341_write_frame_8bit(update->buffer, NULL,
+                                 update->width, update->height,
+                                 update->stride, PIXEL_MASK, update->palette);        
     #else
         // Clear audio to prevent studdering
         printf("PowerDown: stopping audio.\n");
@@ -531,8 +535,8 @@ void app_main(void)
         const esp_partition_t* part = esp_partition_find_first(0x40, 0, NULL);
         if (part == 0)
         {
-        	printf("esp_partition_find_first failed.\n");
-        	abort();
+            printf("esp_partition_find_first failed.\n");
+            abort();
         }
 
         void* flashAddress;
@@ -649,13 +653,13 @@ void app_main(void)
     sms.use_fm = 0;
 
 // #if 1
-// 	sms.country = TYPE_OVERSEAS;
+//  sms.country = TYPE_OVERSEAS;
 // #else
 //     sms.country = TYPE_DOMESTIC;
 // #endif
 
-	//sms.dummy = framebuffer[0]; //A normal cart shouldn't access this memory ever. Point it to vram just in case.
-	// sms.sram = malloc(SRAM_SIZE);
+    //sms.dummy = framebuffer[0]; //A normal cart shouldn't access this memory ever. Point it to vram just in case.
+    // sms.sram = malloc(SRAM_SIZE);
     // if (!sms.sram)
     //     abort();
     //
@@ -777,26 +781,26 @@ void app_main(void)
 
 
         int smsButtons=0;
-    	if (joystick.values[ODROID_INPUT_UP]) smsButtons |= INPUT_UP;
-    	if (joystick.values[ODROID_INPUT_DOWN]) smsButtons |= INPUT_DOWN;
-    	if (joystick.values[ODROID_INPUT_LEFT]) smsButtons |= INPUT_LEFT;
-    	if (joystick.values[ODROID_INPUT_RIGHT]) smsButtons |= INPUT_RIGHT;
-    	if (joystick.values[ODROID_INPUT_A]) smsButtons |= INPUT_BUTTON2;
-    	if (joystick.values[ODROID_INPUT_B]) smsButtons |= INPUT_BUTTON1;
+        if (joystick.values[ODROID_INPUT_UP]) smsButtons |= INPUT_UP;
+        if (joystick.values[ODROID_INPUT_DOWN]) smsButtons |= INPUT_DOWN;
+        if (joystick.values[ODROID_INPUT_LEFT]) smsButtons |= INPUT_LEFT;
+        if (joystick.values[ODROID_INPUT_RIGHT]) smsButtons |= INPUT_RIGHT;
+        if (joystick.values[ODROID_INPUT_A]) smsButtons |= INPUT_BUTTON2;
+        if (joystick.values[ODROID_INPUT_B]) smsButtons |= INPUT_BUTTON1;
 
         int smsSystem=0;
-		if (sms.console == CONSOLE_SMS||sms.console == CONSOLE_SMS2)
-		{
-			if (joystick.values[ODROID_INPUT_START]) smsSystem |= INPUT_PAUSE;
-			if (joystick.values[ODROID_INPUT_SELECT]) smsSystem |= INPUT_START;
-		}
-		else
-		{
-			if (joystick.values[ODROID_INPUT_START]) smsSystem |= INPUT_START;
-			if (joystick.values[ODROID_INPUT_SELECT]) smsSystem |= INPUT_PAUSE;
-		}
+        if (sms.console == CONSOLE_SMS||sms.console == CONSOLE_SMS2)
+        {
+            if (joystick.values[ODROID_INPUT_START]) smsSystem |= INPUT_PAUSE;
+            if (joystick.values[ODROID_INPUT_SELECT]) smsSystem |= INPUT_START;
+        }
+        else
+        {
+            if (joystick.values[ODROID_INPUT_START]) smsSystem |= INPUT_START;
+            if (joystick.values[ODROID_INPUT_SELECT]) smsSystem |= INPUT_PAUSE;
+        }
 
-    	input.pad[0]=smsButtons;
+        input.pad[0]=smsButtons;
         input.system=smsSystem;
 
 

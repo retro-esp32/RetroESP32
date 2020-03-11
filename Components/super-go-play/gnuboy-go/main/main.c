@@ -350,7 +350,7 @@ static void LoadState(const char* cartName)
         }
     }
 
-	pal_set(odroid_settings_GBPalette_get());
+    pal_set(odroid_settings_GBPalette_get());
     Volume = odroid_settings_Volume_get();
 }
 
@@ -389,7 +389,7 @@ static void PowerDown()
 
 static void DoMenuHome()
 {
-uint16_t* param = 1;     
+    uint16_t* param = 1;     
     #ifdef CONFIG_IN_GAME_MENU_YES
         odroid_display_lock();
         hud_menu();
@@ -595,13 +595,13 @@ void app_main(void)
     // vid_begin
     memset(&fb, 0, sizeof(fb));
     fb.w = 160;
-  	fb.h = 144;
-  	fb.pelsize = 2;
-  	fb.pitch = fb.w * fb.pelsize;
-  	fb.indexed = 0;
-  	fb.ptr = framebuffer;
-  	fb.enabled = 1;
-  	fb.dirty = 0;
+    fb.h = 144;
+    fb.pelsize = 2;
+    fb.pitch = fb.w * fb.pelsize;
+    fb.indexed = 0;
+    fb.ptr = framebuffer;
+    fb.enabled = 1;
+    fb.dirty = 0;
 
 
     // Note: Magic number obtained by adjusting until audio buffer overflows stop.
@@ -612,10 +612,10 @@ void app_main(void)
     // pcm.len = count of 16bit samples (x2 for stereo)
     memset(&pcm, 0, sizeof(pcm));
     pcm.hz = AUDIO_SAMPLE_RATE;
-  	pcm.stereo = 1;
-  	pcm.len = /*pcm.hz / 2*/ audioBufferLength;
-  	pcm.buf = heap_caps_malloc(AUDIO_BUFFER_SIZE, MALLOC_CAP_8BIT | MALLOC_CAP_DMA);
-  	pcm.pos = 0;
+    pcm.stereo = 1;
+    pcm.len = /*pcm.hz / 2*/ audioBufferLength;
+    pcm.buf = heap_caps_malloc(AUDIO_BUFFER_SIZE, MALLOC_CAP_8BIT | MALLOC_CAP_DMA);
+    pcm.pos = 0;
 
     audioBuffer[0] = pcm.buf;
     audioBuffer[1] = heap_caps_malloc(AUDIO_BUFFER_SIZE, MALLOC_CAP_8BIT | MALLOC_CAP_DMA);
@@ -718,11 +718,11 @@ void app_main(void)
             odroid_settings_ScaleDisabled_set(ODROID_SCALE_DISABLE_GB, scaling_enabled ? 0 : 1);
         }
 
-		// Cycle through palets
-		if (joystick.values[ODROID_INPUT_SELECT] && !lastJoysticState.values[ODROID_INPUT_LEFT] && joystick.values[ODROID_INPUT_LEFT])
+        // Cycle through palets
+        if (joystick.values[ODROID_INPUT_SELECT] && !lastJoysticState.values[ODROID_INPUT_LEFT] && joystick.values[ODROID_INPUT_LEFT])
         {
-			pal_next();
-			odroid_settings_GBPalette_set(pal_get());
+            pal_next();
+            odroid_settings_GBPalette_set(pal_get());
         }
 
         if (joystick.values[ODROID_INPUT_SELECT] && !lastJoysticState.values[ODROID_INPUT_RIGHT] && joystick.values[ODROID_INPUT_RIGHT])
