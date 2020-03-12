@@ -48,7 +48,24 @@ $MKFW_PATH/mkfw "${NAME}" $FIRMWARE_PATH/Assets/${TILE}.raw \
 
 mv firmware.fw "$FIRMWARE_PATH/Releases/${VERSION}/${NAME}.fw"
 
+clear
+echo "--------------------------------------------------------------------------"
+echo -e "${clamp}  ${green}Creating ZIP File of ${cyan}${VERSION}${nc} Firmware"
+echo "--------------------------------------------------------------------------"
+
+cd $FIRMWARE_PATH/Releases/
+ls
+ZIP = "${VERSION}.zip"
+if [ -f "$ZIP" ];
+then
+  rm -f ${ZIP}
+fi
+zip -qr -X "${VERSION}.zip" ${VERSION}
+#mv "${VERSION}.zip" $FIRMWARE_PATH/Releases/
+
+
 #---------------------------------
 # Goodbye
 #---------------------------------
-source helpers/goodbye
+cd $SRC_PATH
+#source helpers/goodbye
