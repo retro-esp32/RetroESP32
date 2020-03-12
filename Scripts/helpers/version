@@ -9,6 +9,7 @@ SOURCE=""
 
 # port
 version() {
+  clear
   VERSIONS=("odroid-go" "retro-esp")
   OPTION="${monkey}  ${white}Please Select Your ${nc}${magentabg} ${white}Hardware ${nc} ${magenta}Version${nc}"
   echo "--------------------------------------------------------------------------"
@@ -60,5 +61,7 @@ read -n 1 -r response
 if [[ "$response" = "y" ]]
 then
   version
+else
+  VERSION="retro-esp"
 fi
 clear

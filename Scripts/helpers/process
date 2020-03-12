@@ -23,7 +23,7 @@ GB_OPTION_PATH=""
 
 # set_nes_path
 set_gb_path() {
-  GB=("go-play" "super-go-play" "retro-go")
+  GB=("retro-go" "super-go-play" "go-play")
   OPTION="${monkey}  ${red}Please Select ${cyan}GB/GBC Emulator${nc}"
   echo "--------------------------------------------------------------------------"
   echo -e "${OPTION}"
@@ -51,7 +51,7 @@ set_gb_path() {
 
 # set_nes_path
 set_nes_path() {
-  NES=("go-play" "super-go-play" "retro-go")
+  NES=("retro-go" "super-go-play" "go-play")
   OPTION="${monkey}  ${red}Please Select ${cyan}NES Emulator${nc}"
   echo "--------------------------------------------------------------------------"
   echo -e "${OPTION}"
@@ -79,7 +79,7 @@ set_nes_path() {
 
 # set_handy_path
 set_handy_path() {
-  NES=("handy-go" "odroid-go-handy/handy-go")
+  NES=("odroid-go-handy/handy-go" "handy-go")
   OPTION="${monkey}  ${red}Please Select ${cyan}LYNX Emulator${nc}"
   echo "--------------------------------------------------------------------------"
   echo -e "${OPTION}"
@@ -188,7 +188,7 @@ options() {
       * ) echo -e "${OPTION}";;
     esac
   done
-  clear             
+  clear
 }
 
 # DEFUALT
