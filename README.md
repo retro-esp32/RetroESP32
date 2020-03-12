@@ -77,6 +77,7 @@ This project is licensed under the Creative Commons Attribution Share Alike 4.0 
 * [pelle7](https://github.com/pelle7)
 * [pebri86](https://github.com/pebri86)
 * [hardkernel](https://github.com/hardkernel)
+* [ducalex](https://github.com/ducalex/)
 
 ### Support
 > We Like Coffee!
