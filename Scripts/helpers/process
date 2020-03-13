@@ -7,6 +7,7 @@ RETRO_PATH="$REPO/Launchers/retro-esp32/"
 GENERIC_PATH="$REPO/Launchers/emulator-launcher-odroid-go/"
 GOPLAY_PATH="$REPO/Emulators/go-play/"
 SUPER_GOPLAY_PATH="$REPO/Emulators/super-go-play/"
+RETRO_GO_PATH="$REPO/Emulators/retro-go/"
 HANDY_PATH="$REPO/Emulators/odroid-go-handy/"
 EMULATOR_PATH="$REPO/Emulators/"
 
@@ -288,7 +289,8 @@ then
   make -j8 -s
   cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
 
-  cd $SUPER_GOPLAY_PATH
+  #cd $SUPER_GOPLAY_PATH
+  cd $RETRO_GO_PATH
   clear
   echo "--------------------------------------------------------------------------"
   echo -e "${game}  ${green}Compiling ${cyan}smsplusgx-go${nc}"
