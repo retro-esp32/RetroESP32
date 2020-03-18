@@ -94,36 +94,38 @@
   };
   STATES STATE;
 
-  typedef struct{
-    int bg;
-    int fg;
-    char name[10];
-  } THEME;
-  THEME THEMES[22] = {
-    {32768,54580,"maroon"},
-    {57545,62839,"red"},
-    {64143,65049,"pink"},
-    {39684,56918,"brown"},
-    {62470,65174,"orange"},
-    {50604,61240,"apricot"},
-    {33792,54932,"olive"},
-    {65283,65461,"yellow"},
-    {60845,63289,"beige"},
-    {49000,59351,"lime"},
-    {15753,48951,"green"},
-    {45048,57340,"mint"},
-    {17617,48858,"teal"},
-    {18078,49023,"cyan"},
-    {14,42297,"navy"},
-    {17178,48733,"blue"},
-    {37110,54652,"purple"},
-    {52318,61119,"lavender"},
-    {59804,62910,"magenta"},
-    {0,42292,"black"},
-    {16936,48631,"dark"},
-    {29614,52857,"light"}
-  };
-  THEME GUI;
+// THEME
+typedef struct{
+  int bg;
+  int fg;
+  int hl;
+  char name[10];
+} THEME;
+THEME THEMES[22] = {
+  {63877,51492,20610,"grapefruit"},
+  {64452,51971,20770,"caramel"},
+  {64963,52386,20961,"beer"},
+  {65504,52832,21121,"mustard"},
+  {49120,38497,14977,"slime"},
+  {30689,24161,8833,"algae"},
+  {8162,7778,4737,"jade"},
+  {8174,7787,4740,"frog"},
+  {8183,5746,2695,"seafoam"},
+  {8191,5721,2698,"celeste"},
+  {9727,9433,4586,"denim"},
+  {11231,8985,4394,"sky"},
+  {12511,8344,4202,"cobalt"},
+  {28959,22777,8298,"indigo"},
+  {47359,37081,14442,"plum"},
+  {63743,51417,20586,"orchid"},
+  {63799,51443,20583,"cupcake"},
+  {63855,51500,20613,"lemonade"},
+  {0,25388,48631,"night"},
+  {25388,38066,55002,"carbon"},
+  {44373,55002,65535,"smoke"},
+  {65535,52825,16904,"cloud"},
+};
+THEME GUI;
 //}#pragma endregion Structs
 
 //{#pragma region Sprites
@@ -315,7 +317,7 @@ const uint16_t FONT_5x7[7][250] = {
         if(string[n] != ' ') {
           for(int c = dx; c < (dx+cols); c++) {
             //buffer[i] = FONT_5x5[r][c] == 0 ? GUI.bg : current ? WHITE : GUI.fg;
-            buffer[i] = FONT_5x7[r][c] == 0 ? GUI.bg : current ? WHITE : GUI.fg;
+            buffer[i] = FONT_5x7[r][c] == 0 ? GUI.bg : current ? GUI.hl : GUI.fg;
             i++;
           }
         }
@@ -376,7 +378,7 @@ const uint16_t FONT_5x7[7][250] = {
     i = 0;
     for(int r = 0; r < h; r++) {
       for(int c = 0; c < w; c++) {
-        buffer[i] = logo[r][c] == 0 ? GUI.bg : GUI.fg;
+        buffer[i] = logo[r][c] == 0 ? GUI.bg : GUI.hl;
         i++;
       }
     }
@@ -415,7 +417,7 @@ const uint16_t FONT_5x7[7][250] = {
         STATE = WITHSAVE[n];
         y+=20;
         for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
-          buffer[i] = icons[r+STATE.offset][c] == WHITE ? OPTION == n ? WHITE : GUI.fg : GUI.bg;i++;
+          buffer[i] = icons[r+STATE.offset][c] == WHITE ? OPTION == n ? GUI.hl : GUI.fg : GUI.bg;i++;
         }}
         if(n == OPTIONS-1) {y = 216;}
         ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
@@ -428,7 +430,7 @@ const uint16_t FONT_5x7[7][250] = {
         STATE = WITHOUTSAVE[n];
         y+=20;
         for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
-          buffer[i] = icons[r+STATE.offset][c] == WHITE ? OPTION == n ? WHITE : GUI.fg : GUI.bg;i++;
+          buffer[i] = icons[r+STATE.offset][c] == WHITE ? OPTION == n ? GUI.hl : GUI.fg : GUI.bg;i++;
         }}
         if(n == OPTIONS-1) {y = 216;}
         ili9341_write_frame_rectangleLE(x, y, w, h, buffer);

@@ -368,7 +368,7 @@
       for(int r = 0; r < (rows); r++) {
         if(string[n] != ' ') {
           for(int c = dx; c < (dx+cols); c++) {
-            buffer[i] = FONT_5x7[r][c] == 0 ? GUI.bg : current ? WHITE : GUI.fg;
+            buffer[i] = FONT_5x7[r][c] == 0 ? GUI.bg : current ? GUI.hl : GUI.fg;
             if(remove) {buffer[i] = GUI.bg;}
             i++;
           }
@@ -487,7 +487,9 @@
     int i = 0;
     for(h = 0; h < 9; h++) {
       for(w = 0; w < 18; w++) {
-        buffer[i] = toggle[h + (COLOR*9)][w] == 0 ? GUI.bg : toggle[h + (COLOR*9)][w];
+        buffer[i] = toggle[h + (COLOR*9)][w] == 0 ? 
+        GUI.bg : toggle[h + (COLOR*9)][w] == WHITE ? 
+        SETTING == 1 ? GUI.hl : GUI.fg : toggle[h + (COLOR*9)][w];
         i++;
       }
     }
@@ -536,10 +538,18 @@
     int i = 0;
     for(h = 0; h < 9; h++) {
       for(w = 0; w < 18; w++) {
-        buffer[i] = toggle[h + (COVER*9)][w] == 0 ? GUI.bg : toggle[h + (COVER*9)][w];
-        i++;
+        buffer[i] = toggle[h + (COVER*9)][w] == 0 ? 
+        GUI.bg : toggle[h + (COVER*9)][w] == WHITE ? 
+        SETTING == 4 ? GUI.hl : GUI.fg : toggle[h + (COVER*9)][w];
+        i++;    
       }
     }
+    /*
+        buffer[i] = toggle[h + (COVER*9)][w] == 0 ? 
+        GUI.bg : toggle[h + (COVER*9)][w] == WHITE ? 
+        SETTING == 4 ? GUI.hl : GUI.fg : toggle[h + (COVER*9)][w];
+        i++;    
+    */
     ili9341_write_frame_rectangleLE(x, y, 18, 9, buffer);
   }
 
@@ -599,7 +609,7 @@
       for(h = 0; h < 7; h++) {
         for(w = 0; w < (12.5 * volume); w++) {
           if(SETTING == 2) {
-            buffer[i] = WHITE;
+            buffer[i] = GUI.hl;
           } else {
             buffer[i] = GUI.fg;
           }
@@ -640,7 +650,7 @@
       for(h = 0; h < 7; h++) {
         for(w = 0; w < (BRIGHTNESS_COUNT * BRIGHTNESS)+BRIGHTNESS+1; w++) {
           if(SETTING == 3) {
-            buffer[i] = WHITE;
+            buffer[i] = GUI.hl;
           } else {
             buffer[i] = GUI.fg;
           }
@@ -766,10 +776,10 @@
           for(int c = 0; c < 32; c++) {
             switch(COLOR) {
               case 0:
-                buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? WHITE : GUI.bg;
+                buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? GUI.hl : GUI.bg;
               break;
               case 1:
-                //buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? WHITE : GUI.bg;
+                //buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? GUI.hl : GUI.bg;
                 buffer[i] = (*SYSTEMS[e].color)[r][c] == 0 ? GUI.bg : (*SYSTEMS[e].color)[r][c];
               break;
             }
@@ -785,7 +795,7 @@
     int i = 0;
     for(int h = 0; h < 16; h++) {
       for(int w = 0; w < 16; w++) {
-        buffer[i] = folder[h][w] == WHITE ? current ? WHITE : GUI.fg : GUI.bg;
+        buffer[i] = folder[h][w] == WHITE ? current ? GUI.hl : GUI.fg : GUI.bg;
         i++;
       }
     }
@@ -799,7 +809,7 @@
       for(int w = offset; w < (offset+16); w++) {
         switch(COLOR) {
           case 0:
-            buffer[i] = media[h][w] == WHITE ? current ? WHITE : GUI.fg : GUI.bg;
+            buffer[i] = media[h][w] == WHITE ? current ? GUI.hl : GUI.fg : GUI.bg;
           break;
           case 1:
             buffer[i] = media_color[h][w] == 0 ? GUI.bg : media_color[h][w];
@@ -830,7 +840,7 @@
       draw_mask(x,y,16,16);
       for(h = 0; h < 16; h++) {
         for(w = 0; w < 16; w++) {
-          buffer[i] = battery[h][w] == WHITE ? WHITE : GUI.bg;
+          buffer[i] = battery[h][w] == WHITE ? GUI.hl : GUI.bg;
           i++;
         }
       }
@@ -892,7 +902,7 @@
     }
     for(h = 0; h < 16; h++) {
       for(w = 0; w < 16; w++) {
-        buffer[i] = speaker[dh+h][w] == WHITE ? WHITE : GUI.bg;
+        buffer[i] = speaker[dh+h][w] == WHITE ? GUI.hl : GUI.bg;
         i++;
       }
     }
@@ -932,7 +942,7 @@
 
     for(h = 0; h < 16; h++) {
       for(w = 0; w < 16; w++) {
-        buffer[i] = brightness[dy+h][w] == WHITE ? WHITE : GUI.bg;
+        buffer[i] = brightness[dy+h][w] == WHITE ? GUI.hl : GUI.bg;
         i++;
       }
     }
@@ -973,10 +983,10 @@
       for(int c = 0; c < 32; c++) {
         switch(COLOR) {
           case 0:
-            buffer[i] = (*SYSTEMS[STEP].system)[r][c] == WHITE ? WHITE : GUI.bg;
+            buffer[i] = (*SYSTEMS[STEP].system)[r][c] == WHITE ? GUI.hl : GUI.bg;
           break;
           case 1:
-            //buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? WHITE : GUI.bg;
+            //buffer[i] = (*SYSTEMS[e].system)[r][c] == WHITE ? GUI.hl : GUI.bg;
             buffer[i] = (*SYSTEMS[STEP].color)[r][c] == 0 ? GUI.bg : (*SYSTEMS[STEP].color)[r][c];
           break;
         }
@@ -1023,7 +1033,7 @@
       i = 0;
       offset = 5;
       for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
-        buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 0 ? WHITE : GUI.fg : GUI.bg;i++;
+        buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 0 ? GUI.hl : GUI.fg : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       draw_text(x+10,y,(char *)"Resume",false,OPTION == 0?true:false, false);
@@ -1032,7 +1042,7 @@
       y+=20;
       offset = 10;
       for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
-        buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 1 ? WHITE : GUI.fg : GUI.bg;i++;
+        buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 1 ? GUI.hl : GUI.fg : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       draw_text(x+10,y,(char *)"Restart",false,OPTION == 1?true:false, false);
@@ -1041,7 +1051,7 @@
       y+=20;
       offset = 20;
       for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
-        buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 2 ? WHITE : GUI.fg : GUI.bg;i++;
+        buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 2 ? GUI.hl : GUI.fg : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       draw_text(x+10,y,(char *)"Delete Save",false,OPTION == 2?true:false, false);
@@ -1050,7 +1060,7 @@
       i = 0;
       offset = 0;
       for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
-        buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 0 ? WHITE : GUI.fg : GUI.bg;i++;
+        buffer[i] = icons[r+offset][c] == WHITE ? OPTION == 0 ? GUI.hl : GUI.fg : GUI.bg;i++;
       }}
       ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
       draw_text(x+10,y,(char *)"Run",false,OPTION == 0?true:false, false);
@@ -1063,7 +1073,7 @@
     int option = SAVED ? 3 : 1;
     draw_mask(x,y-1,80,9);
     for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
-      buffer[i] = icons[r+offset][c] == WHITE ? OPTION == option ? WHITE : GUI.fg : GUI.bg;i++;
+      buffer[i] = icons[r+offset][c] == WHITE ? OPTION == option ? GUI.hl : GUI.fg : GUI.bg;i++;
     }}
     ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
     draw_text(x+10,y,ROM.favorite?(char *)"Unfavorite":(char *)"Favorite",false,OPTION == option?true:false, false);
@@ -2104,7 +2114,7 @@
     int i = 0;
     for(int r = 0; r < h; r++) {
       for(int c = 0; c < w; c++) {
-        buffer[i] = logo[r][c] == 0 ? GUI.bg : GUI.fg;
+        buffer[i] = logo[r][c] == 0 ? GUI.bg : GUI.hl;
         i++;
       }
     }
