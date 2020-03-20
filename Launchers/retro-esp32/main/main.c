@@ -1963,7 +1963,7 @@
     //  printf("\n----- %s -----\n%s\n", __func__, file);
     for(int h = 0; h < bh; h++) {
       for(int w = 0; w < bw; w++) {
-        buffer[i] = (h == 0) || (h == bh -1) ? WHITE : (w == 0) ||  (w == bw -1) ? WHITE : GUI.bg;
+        buffer[i] = (h == 0) || (h == bh -1) ? GUI.hl : (w == 0) ||  (w == bw -1) ? GUI.hl : GUI.bg;
         i++;
       }
     }
