@@ -27,8 +27,8 @@ static float adc_value = 0.0f;
 static float forced_adc_value = 0.0f;
 static bool battery_monitor_enabled = true;
 
-#define BACKLIGHT_LEVEL_COUNT (4)
-static int BacklightLevels[BACKLIGHT_LEVEL_COUNT] = {10, 33, 66, 100};
+#define BACKLIGHT_LEVEL_COUNT (10)
+static int BacklightLevels[BACKLIGHT_LEVEL_COUNT] = {10,20,30,40,50,60,70,80,90,100};
 static int BacklightLevel = BACKLIGHT_LEVEL_COUNT - 1;
 
 int is_backlight_initialized();
@@ -80,10 +80,10 @@ odroid_gamepad_state odroid_input_read_raw()
 
     #ifdef CONFIG_DEFAULT_MENU_KEY
     state.values[ODROID_INPUT_MENU] = !(gpio_get_level(ODROID_GAMEPAD_IO_MENU));
-#endif    
+#endif
 #ifdef CONFIG_COMBO_MENU_KEY
     state.values[ODROID_INPUT_MENU] = state.values[ODROID_INPUT_SELECT] && state.values[ODROID_INPUT_START];
-#endif    
+#endif
     state.values[ODROID_INPUT_VOLUME] = !(gpio_get_level(ODROID_GAMEPAD_IO_VOLUME));
 
     return state;

@@ -55,7 +55,7 @@ static spi_transaction_t trans[SPI_TRANSACTION_COUNT];
 static spi_device_handle_t spi;
 static bool use_polling = false;
 
-static int BacklightLevels[] = {10, 25, 50, 75, 100};
+static int BacklightLevels[] = {10,20,30,40,50,60,70,80,90,100};
 static int BacklightLevel = ODROID_BACKLIGHT_LEVEL2;
 
 /*
@@ -720,7 +720,7 @@ void odroid_display_set_scale(short width, short height, float aspect)
 
     #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
         if(x_origin == 3) {x_origin = 0;}
-        if(x_origin == 22) {x_origin = 14;}    
+        if(x_origin == 22) {x_origin = 14;}
     #endif
 
     printf("%dx%d@%.3f x_inc:%d y_inc:%d x_scale:%.3f y_scale:%.3f x_origin:%d y_origin:%d\n",

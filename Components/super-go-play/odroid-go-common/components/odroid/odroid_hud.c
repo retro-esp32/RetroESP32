@@ -103,28 +103,28 @@ typedef struct{
   char name[10];
 } THEME;
 THEME THEMES[22] = {
-  {63877,51492,20610,"grapefruit"},
-  {64452,51971,20770,"caramel"},
-  {64963,52386,20961,"beer"},
-  {65504,52832,21121,"mustard"},
-  {49120,38497,14977,"slime"},
-  {30689,24161,8833,"algae"},
-  {8162,7778,4737,"jade"},
-  {8174,7787,4740,"frog"},
-  {8183,5746,2695,"seafoam"},
-  {8191,5721,2698,"celeste"},
-  {9727,9433,4586,"denim"},
-  {11231,8985,4394,"sky"},
-  {12511,8344,4202,"cobalt"},
-  {28959,22777,8298,"indigo"},
-  {47359,37081,14442,"plum"},
-  {63743,51417,20586,"orchid"},
-  {63799,51443,20583,"cupcake"},
-  {63855,51500,20613,"lemonade"},
-  {0,25388,48631,"night"},
-  {25388,38066,55002,"carbon"},
-  {44373,55002,65535,"smoke"},
-  {65535,52825,16904,"cloud"},
+	{63877,35043,20610,"grapefruit"},
+	{64420,35362,20770,"caramel"},
+	{64963,35650,20961,"beer"},
+	{65504,35937,21121,"mustard"},
+	{49120,27745,14977,"slime"},
+	{30689,17505,8833,"algae"},
+	{8162,7266,4737,"jade"},
+	{8174,5224,2692,"frog"},
+	{8183,5229,2695,"seafoam"},
+	{8191,5233,2697,"celeste"},
+	{9727,6993,4586,"denim"},
+	{11231,6706,4394,"sky"},
+	{12543,6257,4202,"cobalt"},
+	{28959,16561,8298,"indigo"},
+	{47359,26801,14442,"plum"},
+	{63743,34961,20586,"orchid"},
+	{63799,34989,20583,"cupcake"},
+	{63855,35016,20613,"lemonade"},
+	{0,38034,48631,"night"},
+	{27437,46518,55002,"carbon"},
+	{44373,55002,65535,"smoke"},
+	{65535,33840,16904,"cloud"},
 };
 THEME GUI;
 //}#pragma endregion Structs
@@ -469,7 +469,7 @@ THEME GUI;
     #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
       volume = 8;
     #endif
-    odroid_settings_Volume_set(0); 
+    odroid_settings_Volume_set(0);
     odroid_audio_volume_set(0);
     odroid_audio_terminate();
 
@@ -507,12 +507,12 @@ THEME GUI;
       */
       if (gamepad.values[ODROID_INPUT_B]) {
         ACTION = 0;
-        odroid_settings_Volume_set(volume); 
+        odroid_settings_Volume_set(volume);
         odroid_audio_volume_set(volume);
 
         int sink = odroid_settings_AudioSink_get();
         odroid_settings_AudioSink_set(sink);
-        odroid_audio_set_sink(sink); 
+        odroid_audio_set_sink(sink);
 
         debounce(ODROID_INPUT_B);
         return 0;
@@ -521,12 +521,12 @@ THEME GUI;
         BUTTON A
       */
       if (gamepad.values[ODROID_INPUT_A]) {
-        odroid_settings_Volume_set(volume); 
+        odroid_settings_Volume_set(volume);
         odroid_audio_volume_set(volume);
 
         int sink = odroid_settings_AudioSink_get();
         odroid_settings_AudioSink_set(sink);
-        odroid_audio_set_sink(sink);  
+        odroid_audio_set_sink(sink);
 
         hud_debug(STATE.label);
         ACTION = STATE.action;
