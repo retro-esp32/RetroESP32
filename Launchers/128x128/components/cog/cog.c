@@ -12,6 +12,8 @@
 
 #include <string.h>
 
+extern void debug(char *string);
+
 void cog_init(void) {
     printf("\n**********\n%s\n**********\n", __func__);
 }

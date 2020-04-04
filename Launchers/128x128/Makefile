@@ -5,5 +5,11 @@
 
 PROJECT_NAME := 128x128
 
+CWD := $(shell cd ../ && (bash -c "dirs +0"))
+EXTRA_COMPONENT_DIRS := $(CWD)/components
+
+$(info    CWD is $(CWD))
+$(info    EXTRA_COMPONENT_DIRS is $(EXTRA_COMPONENT_DIRS))
+
 include $(IDF_PATH)/make/project.mk
 

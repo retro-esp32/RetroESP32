@@ -50,7 +50,7 @@
 /*
   COG
 */
-#include "../components/cog/cog.h"
+#include "cog.h"
 
 
 //{#pragma region Debug
@@ -65,7 +65,7 @@
     nvs_flash_init();
 
     char message[256] = "";
-    sprintf(message, "%s", __func__);
+    sprintf(message, "%s\nline #%d", __func__, __LINE__);
     debug(message);
 
     cog_init();
