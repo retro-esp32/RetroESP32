@@ -1,10 +1,3 @@
-> ### Although we do this for 💕 of 🕹️
-> **We Also Like Coffee!**
-> *Please Consider Supporting*
-> [![Support](https://raw.githubusercontent.com/retro-esp32/RetroESP32/master/Assets/sponsor.jpg)](https://github.com/sponsors/retro-esp32)
-
------
-
 # ![Retro ESP32](Assets/logo.jpg)
 > Software Branch
 
@@ -206,7 +199,11 @@ make menuconfig
 | ---- | ---- | ---- | ---- |
 |  ![](Assets/launcher/splash.jpg)    | ![](Assets/launcher/games.jpg)    | ![](Assets/launcher/manager.jpg)    | ![](Assets/launcher/run.jpg)    |
 
-### Support
-> We Like Coffee!
+-----
 
-[![Support](https://raw.githubusercontent.com/retro-esp32/RetroESP32/master/Assets/sponsor.jpg)](https://github.com/sponsors/32teeth)
+> ## Although we do this for 💕 of 🕹️
+> **We Also Like Coffee!**
+> *Please Consider Supporting*<br>
+> [![Support](https://raw.githubusercontent.com/retro-esp32/RetroESP32/master/Assets/sponsor.jpg)](https://github.com/sponsors/retro-esp32)
+
+-----
