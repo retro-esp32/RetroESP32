@@ -1,6 +1,6 @@
 > ### Although we do this for 💕 of 🕹️
 > **We Also Like Coffee!**
-> *Please Consider Supporting*
+> *Please Consider Supporting*<br/>
 > [![Support](https://raw.githubusercontent.com/retro-esp32/RetroESP32/master/Assets/sponsor.jpg)](https://github.com/sponsors/retro-esp32)
 
 -----
