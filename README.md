@@ -1,3 +1,29 @@
+![Covid-19](https://raw.githubusercontent.com/retro-esp32/RetroESP32/master/Assets/covid-19.jpg)
+> A message to our valued customers
+
+We can not guarantee that once shipped, the product doesn't encounter and opportunity of transference or contamination.
+
+We are NOT out of stock, We have simply **zeroed out** our inventory.
+
+### Safety First
+
+Due to COVID-19 outbreak, we can not guarantee our, nor yours, the valued customer that the product, once shipped doesn't encounter and opportunity of transference.
+
+For this reason, it is with heavy heart that we have seized shipping.
+
+### The Good News
+> Silver Lining
+
+If you are interested in any of our products, simply add it to **wishlist** or **waitlist**
+
+Once the pandemic has been lifted, we will start shipping again.
+
+***Thank You For Understanding***
+
+*Handheld Gaming Team*
+
+-----
+
 # ![Retro ESP32](Assets/logo.jpg)
 > Retro ESP32 is a turbo charged Odroid Go Launcher, Emulator and ROM Manager
 
