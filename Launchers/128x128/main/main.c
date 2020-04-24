@@ -47,17 +47,16 @@
 #include "driver/sdspi_host.h"
 #include "driver/ledc.h"
 
+//{#pragma region Debug
+  extern void debug(char *string) {
+    printf("\n**********\n%s\n**********\n", string);
+  }
+//}#pragma endregion Debug
+
 /*
   COG
 */
 #include "cog.h"
-
-
-//{#pragma region Debug
-  void debug(char *string) {
-    printf("\n**********\n%s\n**********\n", string);
-  }
-//}#pragma endregion Debug
 
 
 //{#pragma region Main
@@ -65,7 +64,7 @@
     nvs_flash_init();
 
     char message[256] = "";
-    sprintf(message, "%s\nline #%d", __func__, __LINE__);
+    sprintf(message, "%s\nfile %s\nline #%d", __func__, __FILE__, __LINE__);
     debug(message);
 
     cog_init();
