@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#---------------------------------
+# import styles
+#---------------------------------
+source styles
+
+# port
+port() {
+  clear
+  PORTS=(/dev/cu*)
+  OPTION="${monkey}  ${red}Please Select a ${cyan}COM Port? ${nc}"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${OPTION}"
+  echo "--------------------------------------------------------------------------"
+  select PORT in "${PORTS[@]}"
+  do
+    case $PORT in
+      * )
+        if [[ $PORT[0,1] ]]
+        then
+          clear
+          echo "--------------------------------------------------------------------------"
+          echo -e "${squid}  ${green}Selected ${cyan}${PORT#*.} ${nc}"
+          echo "--------------------------------------------------------------------------"
+          sleep 0.5
+          clear
+          break
+        else
+          port
+        fi
+    esac
+  done
+}
+
+port
+
+

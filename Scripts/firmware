@@ -1,0 +1,71 @@
+#!/bin/bash
+
+SRC_PATH=`pwd`
+REPO=$(dirname $PWD)
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/styles
+
+#---------------------------------
+# Paths
+#---------------------------------
+source helpers/paths
+
+#---------------------------------
+# VERSIONS
+#---------------------------------
+source helpers/version
+
+#---------------------------------
+# PROCESS
+#---------------------------------
+source helpers/process
+
+clear
+echo "--------------------------------------------------------------------------"
+echo -e "${disk} ${green}Creating ${cyan}${NAME}${nc} Firmware"
+echo "--------------------------------------------------------------------------"
+
+echo "Building mkfw"
+cd $MKFW_PATH
+make
+
+cd $SRC_PATH
+ffmpeg -i $FIRMWARE_PATH/Assets/${TILE}.jpg -f rawvideo -pix_fmt rgb565 $FIRMWARE_PATH/Assets/${TILE}.raw -y
+
+$MKFW_PATH/mkfw "${NAME}" $FIRMWARE_PATH/Assets/${TILE}.raw \
+0 16 524288 ${BIN} $FIRMWARE_PATH/Bins/${BIN}.bin \
+0 17 786432 nesemu-go $FIRMWARE_PATH/Bins/nesemu-go.bin \
+0 18 720896 gnuboy-go $FIRMWARE_PATH/Bins/gnuboy-go.bin \
+0 19 1441792 smsplusgx-go $FIRMWARE_PATH/Bins/smsplusgx-go.bin \
+0 20 524288 spectrum $FIRMWARE_PATH/Bins/spectrum.bin \
+0 21 1703936 stella-go $FIRMWARE_PATH/Bins/stella-go.bin \
+0 22 786432 prosystem-go $FIRMWARE_PATH/Bins/prosystem-go.bin \
+0 23 1507328 handy-go $FIRMWARE_PATH/Bins/handy-go.bin \
+0 24 720896 pcengine-go $FIRMWARE_PATH/Bins/pcengine-go.bin
+
+mv firmware.fw "$FIRMWARE_PATH/Releases/${VERSION}/${NAME}.fw"
+
+clear
+echo "--------------------------------------------------------------------------"
+echo -e "${clamp}  ${green}Creating ZIP File of ${cyan}${VERSION}${nc} Firmware"
+echo "--------------------------------------------------------------------------"
+
+cd $FIRMWARE_PATH/Releases/
+ls
+ZIP = "${VERSION}.zip"
+if [ -f "$ZIP" ];
+then
+  rm -f ${ZIP}
+fi
+zip -qr -X "${VERSION}.zip" ${VERSION}
+#mv "${VERSION}.zip" $FIRMWARE_PATH/Releases/
+
+
+#---------------------------------
+# Goodbye
+#---------------------------------
+cd $SRC_PATH
+#source helpers/goodbye

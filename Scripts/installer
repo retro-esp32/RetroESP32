@@ -1,0 +1,78 @@
+#!/bin/bash
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/styles
+
+SCRIPTS=$PWD
+TAR=''
+
+echo "--------------------------------------------------------------------------"
+echo -e "${wrench}  ${red}(Re)Install ${cyan}xtensa-esp32? ${nc}[y/${bold}N${nc}]"
+echo "--------------------------------------------------------------------------"
+read -n 1 -r response
+if [[ "$response" = "y" ]]
+then
+  clear
+  echo "--------------------------------------------------------------------------"
+  echo -e "${monkey}  ${green}Downloading ${cyan}xtensa-esp32${nc}"
+  echo "--------------------------------------------------------------------------"
+  cd ~/Downloads
+  OS="`uname`"
+  case $OS in
+    'Linux')
+      TAR='xtensa-esp32-elf-linux64-1.22.0-80-g6c4433a-5.2.0.tar.gz'
+      ;;
+    'Darwin')
+      TAR='xtensa-esp32-elf-osx-1.22.0-80-g6c4433a-5.2.0.tar.gz'
+      ;;
+    *) ;;
+  esac
+  [ -e ${TAR} ] && \
+  rm  ${TAR}
+
+  curl https://dl.espressif.com/dl/${TAR} \
+  --output ${TAR} \
+  --progress-bar
+  clear
+  echo "--------------------------------------------------------------------------"
+  echo -e "${disk}  ${blue}Extracting ${cyan}xtensa-esp32${nc}"
+  echo "--------------------------------------------------------------------------"
+  cd ~/esp
+  tar -xzf ~/Downloads/${TAR}
+  sleep 1
+  clear
+  echo "--------------------------------------------------------------------------"
+  echo -e "${memo}  ${blue}Preparing ${cyan}environment variables${nc}"
+  echo "--------------------------------------------------------------------------"
+  cd ${SCRIPTS}
+
+  #---------------------------------
+  # ESP32
+  #---------------------------------
+  source helpers/esp32
+
+  #---------------------------------
+  # Paths
+  #---------------------------------
+  source helpers/paths
+
+  #---------------------------------
+  # Goodbye
+  #---------------------------------
+  source helpers/goodbye
+fi
+clear
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/esp32
+
+#---------------------------------
+# Goodbye
+#---------------------------------
+source helpers/goodbye
+sleep 1
+clear

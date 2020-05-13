@@ -1,0 +1,145 @@
+#!/bin/bash
+
+SRC_PATH=`pwd`
+REPO=$(dirname $PWD)
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/styles
+
+#---------------------------------
+# Paths
+#---------------------------------
+source helpers/paths
+
+#---------------------------------
+# VERSIONS
+#---------------------------------
+source helpers/version
+
+#---------------------------------
+# PROCESS
+#---------------------------------
+source helpers/process
+
+#---------------------------------
+# PORT
+#---------------------------------
+source helpers/ports
+
+#---------------------------------
+# BAUD
+#---------------------------------
+source helpers/bauds
+
+#---------------------------------
+# Eraser
+#---------------------------------
+source helpers/eraser
+
+clear
+echo "--------------------------------------------------------------------------"
+echo -e "${game}  ${green}Single Flash or By Address ${nc}"
+echo -e "\t Single Flash? [y/${bold}N${nc}]"
+echo "--------------------------------------------------------------------------"
+read -n 1 -r response
+clear
+if [[ "$response" = "y" ]]
+then
+  echo "--------------------------------------------------------------------------"
+  echo -e "${game}  ${green}Flashing Device ${nc} - Hang Tight"
+  echo "--------------------------------------------------------------------------"
+  esptool.py \
+  --chip esp32 \
+  --port ${PORT} \
+  --baud ${BAUD} \
+  --before default_reset \
+  --after hard_reset write_flash -z \
+  --flash_mode dio \
+  --flash_freq 80m \
+  --flash_size detect \
+  0x1000 $FIRMWARE_PATH/Bins/bootloader.bin \
+  0x8000 $FIRMWARE_PATH/Bins/partitions.bin \
+  0x10000 $FIRMWARE_PATH/Bins/${BIN}.bin \
+  0x200000 $FIRMWARE_PATH/Bins/${BIN}.bin \
+  0x280000 $FIRMWARE_PATH/Bins/nesemu-go.bin \
+  0x340000 $FIRMWARE_PATH/Bins/gnuboy-go.bin \
+  0x3F0000 $FIRMWARE_PATH/Bins/smsplusgx-go.bin \
+  0x550000 $FIRMWARE_PATH/Bins/spectrum.bin \
+  0x5E0000 $FIRMWARE_PATH/Bins/stella-go.bin \
+  0x780000 $FIRMWARE_PATH/Bins/prosystem-go.bin \
+  0x840000 $FIRMWARE_PATH/Bins/handy-go.bin \
+  0x930000 $FIRMWARE_PATH/Bins/pcengine-go.bin
+else
+  ADDRESSES=(
+  "0x1000"
+  "0x8000"
+  "0x10000"
+  "0x200000"
+  "0x280000"
+  "0x340000"
+  "0x3F0000"
+  "0x550000"
+  "0x5E0000"
+  "0x780000"
+  "0x840000"
+  "0x930000"
+  )
+
+  NAMES=(
+  "bootloader"
+  "partitions"
+  "${BIN}"
+  "${BIN}"
+  "nesemu-go"
+  "gnuboy-go"
+  "smsplusgx-go"
+  "spectrum"
+  "stella-go"
+  "prosystem-go"
+  "handy-go"
+  "pcengine-go"
+  )
+
+  BINS=(
+  "$FIRMWARE_PATH/Bins/bootloader.bin"
+  "$FIRMWARE_PATH/Bins/partitions.bin"
+  "$FIRMWARE_PATH/Bins/${BIN}.bin"
+  "$FIRMWARE_PATH/Bins/${BIN}.bin"
+  "$FIRMWARE_PATH/Bins/nesemu-go.bin"
+  "$FIRMWARE_PATH/Bins/gnuboy-go.bin"
+  "$FIRMWARE_PATH/Bins/smsplusgx-go.bin"
+  "$FIRMWARE_PATH/Bins/spectrum.bin"
+  "$FIRMWARE_PATH/Bins/stella-go.bin"
+  "$FIRMWARE_PATH/Bins/prosystem-go.bin"
+  "$FIRMWARE_PATH/Bins/handy-go.bin"
+  "$FIRMWARE_PATH/Bins/pcengine-go.bin"
+  )
+
+  clear
+  for i in "${!ADDRESSES[@]}"
+  do
+    echo "--------------------------------------------------------------------------"
+    echo -e "${game}  Writing ${cyan}${NAMES[i]}${nc} to ${green}${ADDRESSES[i]}${nc}"
+    echo "--------------------------------------------------------------------------"
+    esptool.py \
+    --chip esp32 \
+    --port ${PORT} \
+    --baud ${BAUD} \
+    --before default_reset \
+    --after hard_reset write_flash -z \
+    --flash_mode dio \
+    --flash_freq 80m \
+    --flash_size detect \
+    --no-progress \
+    ${ADDRESSES[i]} ${BINS[i]}
+
+    clear
+  done
+fi
+
+#---------------------------------
+# Goodbye
+#---------------------------------
+source helpers/goodbye

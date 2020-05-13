@@ -1,0 +1,80 @@
+#!/bin/bash
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/styles
+
+
+#---------------------------------
+# DON'T TOUCH START
+#---------------------------------
+REPO=$(dirname $PWD)
+ESP="$REPO/Tools/esp-idf"
+ODROID="$REPO/Odroid/odroid-go-firmware"
+GOPLAY="$REPO/Emulators/go-play"
+PCE="$REPO/Emulators/odroid-go-pcengine-huexpress"
+SPECTRUM="$REPO/Emulators/odroid-go-spectrum-emulator"
+
+clear
+cd $ESP
+required="release/v3.2-odroid"
+echo "--------------------------------------------------------------------------"
+echo -e "${dragon}  ${yellow}Checking ${magenta}'esp-idf'${nc} for ${red}${required}${nc} branch"
+echo "--------------------------------------------------------------------------"
+git checkout -b ${required} origin/${required}
+sleep 1
+clear
+echo "--------------------------------------------------------------------------"
+echo -e "${dragon}  ${green}Success ${magenta}'esp-idf'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
+echo "--------------------------------------------------------------------------"
+sleep 1
+clear
+cd $ODROID
+required="esp-idf-v3.2"
+echo "--------------------------------------------------------------------------"
+echo -e "${rabbit}  ${yellow}Checking ${magenta}'odroid-go-firmware'${nc} for ${red}${required}${nc} branch"
+echo "--------------------------------------------------------------------------"
+git checkout -b ${required} origin/${required}
+sleep 1
+clear
+echo "--------------------------------------------------------------------------"
+echo -e "${rabbit}  ${green}Success ${magenta}'odroid-go-firmware'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
+echo "--------------------------------------------------------------------------"
+sleep 1
+clear
+cd $GOPLAY
+required="master"
+echo "--------------------------------------------------------------------------"
+echo -e "${whale}  ${yellow}Checking ${magenta}'go-play'${nc} for ${red}${required}${nc} branch"
+echo "--------------------------------------------------------------------------"
+git checkout -b ${required} origin/${required}
+sleep 1
+clear
+echo "--------------------------------------------------------------------------"
+echo -e "${whale}  ${green}Success ${magenta}'go-play'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
+echo "--------------------------------------------------------------------------"
+clear
+cd $PCE
+required="develop"
+echo "--------------------------------------------------------------------------"
+echo -e "${chicken}  ${yellow}Checking ${magenta}'pcengine-go'${nc} for ${red}${required}${nc} branch"
+echo "--------------------------------------------------------------------------"
+git checkout -b ${required} origin/${required}
+sleep 1
+clear
+echo "--------------------------------------------------------------------------"
+echo -e "${chicken}  ${green}Success ${magenta}'pcengine-go'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
+echo "--------------------------------------------------------------------------"
+clear
+cd $SPECTRUM
+required="feature/goemu"
+echo "--------------------------------------------------------------------------"
+echo -e "${hamster}  ${yellow}Checking ${magenta}'spectrum-go'${nc} for ${red}${required}${nc} branch"
+echo "--------------------------------------------------------------------------"
+git checkout -b ${required} origin/${required}
+sleep 1
+clear
+echo "--------------------------------------------------------------------------"
+echo -e "${hamster}  ${green}Success ${magenta}'spectrum-go'${nc} is now on ${green}$(git rev-parse --abbrev-ref HEAD)${nc} branch"
+echo "--------------------------------------------------------------------------"

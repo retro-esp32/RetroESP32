@@ -1,0 +1,7 @@
+build/
+sdkconfig.old
+*.gch
+components/lynx/*.o
+.DS_Store
+lynx.fw
+atarilynx-title.raw

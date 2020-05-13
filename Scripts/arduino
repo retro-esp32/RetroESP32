@@ -1,0 +1,50 @@
+#!/bin/bash
+
+#---------------------------------
+# DON'T TOUCH START
+#---------------------------------
+SRC_PATH=`pwd`
+REPO=$(dirname $PWD)
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/styles
+
+#---------------------------------
+# Paths
+#---------------------------------
+source helpers/paths
+
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/styles
+
+ARDUINO_PATH="$REPO/Arduino"
+MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
+SKETCH="Buttons" # <-- change the name and leave out .ino.bin
+
+clear
+echo "--------------------------------------------------------------------------"
+echo -e "${pad}  ${green}Creating ${cyan}Arduino${nc} Firmware"
+echo "--------------------------------------------------------------------------"
+
+
+echo "Building mkfw"
+cd $MKFW_PATH
+make
+
+cd $SRC_PATH
+ffmpeg -i $ARDUINO_PATH/assets/$SKETCH.png -f rawvideo -pix_fmt rgb565 $ARDUINO_PATH/raw/$SKETCH.raw -y
+
+$MKFW_PATH/mkfw $SKETCH $ARDUINO_PATH/raw/$SKETCH.raw \
+0 16 1048576 $SKETCH $ARDUINO_PATH/bin/$SKETCH.ino.bin
+
+mv firmware.fw $ARDUINO_PATH/firmware/$SKETCH.fw
+
+#---------------------------------
+# Goodbye
+#---------------------------------
+source helpers/goodbye

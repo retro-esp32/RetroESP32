@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# port
+bauds() {
+
+  BAUDS=("2000000" "921600" "460800" "230400" "115200")
+  OPTION="${monkey}  ${red}Please Select ${cyan}Baud Rate${nc}"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${OPTION}"
+  echo "--------------------------------------------------------------------------"
+  select BAUD in "${BAUDS[@]}"
+  do
+    case $BAUD in
+      * )
+        if [[ $BAUD[0,1] ]]
+        then
+          clear
+          echo "--------------------------------------------------------------------------"
+          echo -e "${squid}  ${green}Selected ${cyan}${BAUD#*.}${nc} Baud Rate"
+          echo "--------------------------------------------------------------------------"
+          sleep 0.5
+          clear
+          break
+        else
+          bauds
+        fi
+    esac
+  done
+}
+
+bauds
