@@ -89,7 +89,9 @@ This project is licensed under the Creative Commons Attribution Share Alike 4.0 
 -----
 
 ## Support
-> We Love Coffee!
+> Although we do this for 💕 of 🕹️
+> **We Also Like Coffee!**
+> *Please Consider Supporting*<br>
 
 Did you know, you can support us in a few way? We offer multiple sposorship tiers, with different rewards!
 
@@ -99,4 +101,3 @@ See what *fits*.
  [![Support](https://raw.githubusercontent.com/retro-esp32/RetroESP32/master/Assets/sponsor.jpg)](https://github.com/sponsors/retro-esp32)
 
 **Thank You**
-
