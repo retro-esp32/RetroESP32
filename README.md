@@ -89,9 +89,9 @@ This project is licensed under the Creative Commons Attribution Share Alike 4.0 
 -----
 
 ## Support
-> Although we do this for 💕 of 🕹️
-> **We Also Like Coffee!**
-> *Please Consider Supporting*
+> Although we do this for 💕 of 🕹️<br/>
+> **We Also Like Coffee!** <br/>
+> *Please Consider Supporting* <br/>
 
 
 
