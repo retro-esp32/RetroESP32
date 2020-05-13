@@ -90,10 +90,8 @@ This project is licensed under the Creative Commons Attribution Share Alike 4.0 
 
 ## Support
 > Although we do this for 💕 of 🕹️
-
 > **We Also Like Coffee!**
-
-> *Please Consider Supporting*<br>
+> *Please Consider Supporting*
 
 Did you know, you can support us in a few way? We offer multiple sposorship tiers, with different rewards!
 
