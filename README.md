@@ -8,13 +8,19 @@
 
 | Retro ESP32 In Action                              |        Summary                                                      |
 | ----------------------------- | ------------------------------------------------------------ |
-| <img src="Assets/animated.gif" alt="Teaser" width="560"> | ![Retro ESP32](Assets/logo.jpg)<br/><br/>**Retro ESP32** is the ultimate feature packed [Odroid Go](https://www.hardkernel.com/shop/odroid-go/) Launcher. <br/><br/>Includes color schemes and theming. <br/>Drawing inspiration from the popular [RetroArch](https://www.retroarch.com/) emulator front end of choice. <br/>We packed 11 (current count) prebundled emulators including ROM / Game manager. <br/>Additionally each emulator includes an in game menu for further management.<br/><br/>**[Get Your Copy Today](https://github.com/retro-esp32/RetroESP32/releases)** |
-| <img src="https://raw.githubusercontent.com/wiki/retro-esp32/RetroESP32/Assets/Tindie/PCB-000.jpg" alt="Retro ESP32 MGB-001" width="560"> | Looking for a Game Boy Pocket drop in solution?  [Get Yours Today](https://www.tindie.com/products/game-boy-pocket/retro-esp32/)<br/><br/> Exculsively at: <br/>[<img src="https://d2ss6ovg47m0r5.cloudfront.net/images/tindie-logo.png" alt="Tindie">](https://www.tindie.com/products/game-boy-pocket/retro-esp32/)|
+| <img src="Assets/animated.gif" alt="Teaser" width="320"> | ![Retro ESP32](Assets/logo.jpg)<br/><br/>**Retro ESP32** is the ultimate feature packed [Odroid Go](https://www.hardkernel.com/shop/odroid-go/) Launcher. <br/><br/>Includes color schemes and theming. <br/>Drawing inspiration from the popular [RetroArch](https://www.retroarch.com/) emulator front end of choice. <br/>We packed 11 (current count) prebundled emulators including ROM / Game manager. <br/>Additionally each emulator includes an in game menu for further management.<br/><br/>**[Get Your Copy Today](https://github.com/retro-esp32/RetroESP32/releases)** |
+| <img src="https://raw.githubusercontent.com/wiki/retro-esp32/RetroESP32/Assets/Tindie/PCB-000.jpg" alt="Retro ESP32 MGB-001" width="320"> | Looking for a Game Boy Pocket drop in solution?  [Get Yours Today](https://www.tindie.com/products/game-boy-pocket/retro-esp32/)<br/><br/> Exculsively at: <br/>[<img src="https://d2ss6ovg47m0r5.cloudfront.net/images/tindie-logo.png" alt="Tindie">](https://www.tindie.com/products/game-boy-pocket/retro-esp32/)|
 
 ## Preperation
 > Update Odroid Go Firmware
 
-[Follow the guide here](https://medium.com/@siloraptor/upgrading-the-firmware-of-the-odroid-go-dd7eebdc7ed4)
+This only applies to owners of the Hardkernel [Odroid Go](https://www.hardkernel.com/shop/odroid-go/)  *NOT the Retro ESP32*
+
+**If you have purchased a Retro ESP32 from us, you can skip this step.**
+
+[Get the latest Retro Odroid Go Frimware](https://github.com/retro-esp32/Retro-Odroid-Go-Firmware)
+
+
 
 ## Installation
 > Copy, Mount, Flash
@@ -44,23 +50,23 @@ We kept installation of Retro ESP32 super simple.
 - [x] Atari 7800
 - [x] Atari Lynx
 - [x] PC Engine
-- [ ] Commodore 64
-- [ ] Nintendo Game & Watch (Soon)
 
+## Features
+> What makes Retro ESP32 different
 
+- [x] Configurator
+- [x] Themes (color pack and icons)
+- [x] RetroArch like GUI experience
+- [x] In game HUD menu
+- [x] **Recently Played** *(First in Launchers Community)*
+- [x] **Favorites List** *(Another First)*
+- [x] **3** Scale levels for *'Core'* Emaulators *(Original, Box, Full Screen)*
 
 ## Have your say!
 > Don't be shy, our team is here
 
 *Have a great idea? Want to see a feature? Ran into a problem?*
 Use our [Project](https://github.com/retro-esp32/RetroESP32/projects/1) and [Issue](https://github.com/retro-esp32/RetroESP32/issues) sections to have your say.
-
-## More, more and more
-> Branches and Releases
-
-| Hardware | Software | Release |
-| :------: | :------: | :-----: |
-| [![Hardware](Assets/hw.png)](https://github.com/retro-esp32/RetroESP32/tree/Hardware)         |     [![Software](Assets/sw.png)](https://github.com/retro-esp32/RetroESP32/tree/Software)      |    [![Firmware](Assets/fw.png)](https://github.com/retro-esp32/RetroESP32/releases)      |
 
 
 ## Authors
@@ -80,8 +86,17 @@ This project is licensed under the Creative Commons Attribution Share Alike 4.0 
 * [hardkernel](https://github.com/hardkernel)
 * [ducalex](https://github.com/ducalex/)
 
-### Support
-> We Like Coffee!
+-----
 
-[![Support](https://raw.githubusercontent.com/retro-esp32/RetroESP32/master/Assets/sponsor.jpg)](https://github.com/sponsors/32teeth)
+## Support
+> We Love Coffee!
+
+Did you know, you can support us in a few way? We offer multiple sposorship tiers, with different rewards!
+
+Take a *look*. 
+See what *fits*.
+
+ [![Support](https://raw.githubusercontent.com/retro-esp32/RetroESP32/master/Assets/sponsor.jpg)](https://github.com/sponsors/retro-esp32)
+
+**Thank You**
 
