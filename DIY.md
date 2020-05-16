@@ -86,9 +86,9 @@ You can copy this onto your *SD Card* into the ***odroid/firmware*** folder
 ##### Enabling new firmware
 > Insert the sd card into your Retro ESP32 /  (Odroid Go) and follow the prompts
 
-| List                                           | Selection                             | Verification                               | Write                                         | Reboot                                 |
-| ---------------------------------------------- | ------------------------------------- | ------------------------------------------ | --------------------------------------------- | -------------------------------------- |
-| ![Power on your hardware](Assets/IMG_1081.jpg) | ![Firmware List](Assets/IMG_1082.jpg) | ![Firmware Selection](Assets/IMG_1083.jpg) | ![Firmware Verification](Assets/IMG_1089.jpg) | ![Firmware Write](Assets/IMG_1090.jpg) |
+| Boot| Settings| List| Select| Write| Reboot|
+| ----- | ----- | ----- | ----- | ----- | ----- |
+| ![Power on your hardware](Assets/DIY/DIY-Launch.jpg) | ![Seetings](Assets/DIY/DIY-Settings.jpg) | ![Firmware List](Assets/DIY/DIY-List.jpg) | ![Firmware Select](Assets/DIY/DIY-Select.jpg) | ![Firmware Write](Assets/DIY/DIY-Writing.jpg) | ![Reboot](Assets/DIY/DIY-Rebooting.jpg) |
 
 ### Build and Load OTA
 > Follow Onscreen Prompts
