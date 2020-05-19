@@ -79,20 +79,23 @@
     int action;
     int offset;
   } STATES;
-  STATES WITHSAVE[6] = {
+  STATES WITHSAVE[5] = {
     {"Resume Game",0, 0},
     {"Restart Game",1, 10},
     {"Reload Game",2, 5},
     {"Overwrite Game",4, 25},
-    {"Delete Save",5, 15},
-    {"Exit Game",6, 20}
+    {"Delete Save",5, 15}
   };
-  STATES WITHOUTSAVE[4] = {
+  STATES WITHOUTSAVE[3] = {
     {"Resume Game",0, 0},
     {"Restart Game",1, 10},
-    {"Save Game",3, 25},
-    {"Exit Game",6, 20}
+    {"Save Game",3, 25}
   };
+  STATES EXTRAS[3] = {
+    {"Volume",6, 0},
+    {"Brightness",6, 10},
+    {"Quit Game",6, 25}
+  };  
   STATES STATE;
 
 // THEME
@@ -176,7 +179,6 @@ const uint16_t FONT_5x7[7][250] = {
     {65535,0,65535,65535,65535},
     {65535,0,0,0,65535},
     {0,65535,65535,65535,0},
-
 };
 
   const uint16_t logo[12][64] = {
@@ -280,7 +282,7 @@ const uint16_t FONT_5x7[7][250] = {
         gets(tmp);
         if(strcmp(save_name, tmp) == 0) {
           SAVED = true;
-          printf("\n******\nfile_to_delete:%s\nsave_name:%s\ntmp%s\n******\n", file_to_delete, save_name, tmp);
+          //printf("\n******\nfile_to_delete:%s\nsave_name:%s\ntmp%s\n******\n", file_to_delete, save_name, tmp);
           hud_delete_save(file_to_delete);
         }
       }
@@ -410,32 +412,47 @@ const uint16_t FONT_5x7[7][250] = {
     h = 5;
     i = 0;
     int n;
-    if(OPTIONS == 6) {
-      for(n = 0; n < OPTIONS; n++) {
+    if(OPTIONS == 8) {
+      for(n = 0; n < 5; n++) {
         STATE = WITHSAVE[n];
         y+=20;
         for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
           buffer[i] = icons[r+STATE.offset][c] == WHITE ? OPTION == n ? GUI.hl : GUI.fg : GUI.bg;i++;
         }}
-        if(n == OPTIONS-1) {y = 216;}
         ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
         hud_text(x+10,y,STATE.label,false,OPTION == n?true:false);
         i = 0;
       }
-      STATE = WITHSAVE[OPTION];
     } else {
-      for(n = 0; n < OPTIONS; n++) {
+      for(n = 0; n < 3; n++) {
         STATE = WITHOUTSAVE[n];
         y+=20;
         for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
           buffer[i] = icons[r+STATE.offset][c] == WHITE ? OPTION == n ? GUI.hl : GUI.fg : GUI.bg;i++;
         }}
-        if(n == OPTIONS-1) {y = 216;}
         ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
         hud_text(x+10,y,STATE.label,false,OPTION == n?true:false);
         i = 0;
       }
-      STATE = WITHOUTSAVE[OPTION];
+    }
+
+    y=156;
+    for(n = 0; n < 3; n++) {
+      STATE = EXTRAS[n];
+      y+=20;
+      for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
+        buffer[i] = icons[r+STATE.offset][c] == WHITE ? OPTION == (n+OPTIONS-2) ? GUI.hl : GUI.fg : GUI.bg;i++;
+      }}
+      ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+      hud_text(x+10,y,STATE.label,false,OPTION == (n+OPTIONS-2)?true:false);
+      i = 0;
+    } 
+
+    int LIMIT = OPTIONS - 3;
+    if(OPTION < LIMIT) {
+      STATE = OPTIONS == 8 ? WITHSAVE[OPTION] : WITHOUTSAVE[OPTION];
+    } else {
+      STATE = EXTRAS[OPTION-LIMIT];
     }
   }
 //}#pragma endregion Display
@@ -447,10 +464,10 @@ const uint16_t FONT_5x7[7][250] = {
       buffer = (uint16_t *)malloc(size);
       if (!buffer) abort();
       OPTION = 0;
-      OPTIONS = SAVED ? 6 : 4;
+      OPTIONS = SAVED ? 8 : 6;
       hud_theme();
       GUI = THEMES[USER];
-      STATE = OPTIONS == 6 ? WITHSAVE[OPTION] : WITHOUTSAVE[OPTION];
+      STATE = OPTIONS == 8 ? WITHSAVE[OPTION] : WITHOUTSAVE[OPTION];
       INIT = true;
     }
   }
