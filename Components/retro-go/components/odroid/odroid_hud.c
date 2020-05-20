@@ -425,6 +425,43 @@ const uint16_t icons[55][5] = {
     }
   }
 
+
+  void hud_bar(int x, int y, int percent, bool active) {
+    int w, h;
+
+    int i = 0;
+    for(h = 0; h < 7; h++) {
+      for(w = 0; w < 100; w++) {
+        buffer[i] = (w+h)%2 == 0 ? GUI.fg : GUI.bg;
+        i++;
+      }
+    }  
+    ili9341_write_frame_rectangleLE(x, y, 100, 7, buffer);  
+
+    i = 0;
+    for(h = 0; h < 7; h++) {
+      for(w = 0; w < percent; w++) {
+        buffer[i] = active ? GUI.hl : GUI.fg;
+        i++;
+      }
+    }  
+    ili9341_write_frame_rectangleLE(x, y, percent, 7, buffer);      
+  }
+
+  void hud_volume() {
+    // y=176;
+    int LIMIT = OPTIONS - 3;
+    bool active = OPTION == LIMIT ? true : false;
+    hud_bar((SCREEN.w - 120), 176, 50, active);
+  }
+
+  void hud_brightness() {
+    // y=176;
+    int LIMIT = OPTIONS - 2;
+    bool active = OPTION == LIMIT ? true : false;    
+    hud_bar((SCREEN.w - 120), 196, 25, active);
+  }  
+
   void hud_options() {
     x = 16;
     y = 28;
@@ -475,6 +512,9 @@ const uint16_t icons[55][5] = {
       STATE = EXTRAS[OPTION-LIMIT];
     }
     printf("\n**********\n%s - %d:%d\n**********\n", STATE.label, OPTION, LIMIT);
+
+    hud_volume();
+    hud_brightness();
   }
 //}#pragma endregion Display
 
