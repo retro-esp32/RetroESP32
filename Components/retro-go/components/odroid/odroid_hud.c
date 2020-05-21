@@ -92,8 +92,8 @@
     {"Save Game",3, 25}
   };
   STATES EXTRAS[3] = {
-    {"Volume",6, 45},
-    {"Brightness",6, 50},
+    {"Volume",8, 45},
+    {"Brightness",9, 50},
     {"Quit Game",6, 20}
   };  
   STATES STATE;
@@ -627,6 +627,10 @@ const uint16_t icons[55][5] = {
           case 6: // "Exit Game"
             odroid_system_application_set(0);
             esp_restart();
+          break;
+          case 7:
+          case 8:
+            // do nothing
           break;
         }
         debounce(ODROID_INPUT_A);
