@@ -462,7 +462,7 @@ THEME GUI;
 
   void hud_volume() {
     // y=176;
-    int32_t VOLUME = odroid_audio_volume_get();
+    int32_t VOLUME = odroid_settings_Volume_get();
     int LIMIT = OPTIONS - 3;
     bool active = OPTION == LIMIT ? true : false;
     hud_bar((SCREEN.w - 120), 176, VOLUME * 12.5, active);
@@ -539,7 +539,7 @@ THEME GUI;
     } else {
       STATE = EXTRAS[OPTION-LIMIT];
     }
-    printf("\n**********\n%s - %d:%d\n**********\n", STATE.label, OPTION, LIMIT);    
+    printf("\n**********\n%s - OPTIONS:%d OPTION:%d LIMIT:%d\n**********\n", STATE.label, OPTIONS, OPTION, LIMIT);    
 
     fsy = 156;
     hud_frameskip();
@@ -573,9 +573,9 @@ THEME GUI;
 
 //{#pragma region Menu
   void hud_menu(void) {
-    int volume = odroid_audio_volume_get();
+    VOLUME = odroid_settings_Volume_get();
     #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-      volume = 8;
+      //volume = 8;
     #endif
     odroid_audio_terminate();
     hud_init();
@@ -606,23 +606,59 @@ THEME GUI;
         usleep(200000);
         //debounce(ODROID_INPUT_DOWN);
       }
-      if(STATE.action == 6) {
-        /*
-          LEFT
-        */
-        if(gamepad.values[ODROID_INPUT_LEFT]) {
+      /*
+        LEFT
+      */
+      if(gamepad.values[ODROID_INPUT_LEFT]) {
+        if(STATE.action == 6) {
           if(frameskip > 2) {frameskip--;}
           hud_options();
-          usleep(200000);
         }
-        /*
-          RIGHT
-        */
-        if(gamepad.values[ODROID_INPUT_RIGHT]) {
+        if(OPTION == OPTIONS - 3) {
+          if(VOLUME > 0) {
+            VOLUME--;
+            odroid_audio_volume_set(VOLUME);
+            odroid_settings_Volume_set(VOLUME);
+            hud_options();
+            usleep(200000);
+          }
+        }          
+        if(OPTION == OPTIONS - 3 + 1) {
+          if(BRIGHTNESS > 0) {
+            BRIGHTNESS--;
+            odroid_settings_Backlight_set(BRIGHTNESS);
+            hud_options();
+            usleep(200000);
+          }
+        }           
+        usleep(200000);
+      }
+      /*
+        RIGHT
+      */
+      if(gamepad.values[ODROID_INPUT_RIGHT]) {
+        if(STATE.action == 6) {
           if(frameskip < 10) {frameskip++;}
           hud_options();
-          usleep(200000);
+        } 
+        if(OPTION == OPTIONS - 3) {
+          if(VOLUME < 8) {
+            VOLUME++;
+            odroid_audio_volume_set(VOLUME);
+            odroid_settings_Volume_set(VOLUME);
+            hud_options();
+            usleep(200000);
+          }
         }
+        if(OPTION == OPTIONS - 3 + 1) {
+          if(BRIGHTNESS < (BRIGHTNESS_COUNT-1)) {
+            BRIGHTNESS++;
+            odroid_settings_Backlight_set(BRIGHTNESS);
+            hud_options();
+            usleep(200000);
+          }
+        }         
+        usleep(200000);
       }
       /*
         BUTTON B
@@ -636,7 +672,7 @@ THEME GUI;
         BUTTON A
       */
       if (gamepad.values[ODROID_INPUT_A]) {
-        odroid_audio_volume_set(volume);
+        odroid_settings_Volume_set(VOLUME);
         hud_debug(STATE.label);
         ACTION = STATE.action;
         switch(ACTION) {
