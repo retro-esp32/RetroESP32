@@ -63,6 +63,12 @@
   bool INIT = false;
   bool SAVED = false;
   bool forceConsoleReset;
+
+
+  int32_t VOLUME = 0;
+  int32_t BRIGHTNESS = 0;
+  const int32_t BRIGHTNESS_COUNT = 10;
+  const int32_t BRIGHTNESS_LEVELS[10] = {10,20,30,40,50,60,70,80,90,100};      
 //}#pragma endregion Globals
 
 //{#pragma region Structs
@@ -79,19 +85,22 @@
     int action;
     int offset;
   } STATES;
-  STATES WITHSAVE[6] = {
+  STATES WITHSAVE[5] = {
     {"Resume Game",0, 0},
     {"Restart Game",1, 10},
     {"Reload Game",2, 5},
     {"Overwrite Game",4, 25},
-    {"Delete Save",5, 15},
-    {"Exit Game",6, 20}
+    {"Delete Save",5, 15}
   };
-  STATES WITHOUTSAVE[3] = {
+  STATES WITHOUTSAVE[2] = {
     {"Resume Game",0, 0},
-    {"Restart Game",1, 10},
-    {"Exit Game",6, 20}
+    {"Restart Game",1, 10}
   };
+  STATES EXTRAS[3] = {
+    {"Volume",8, 45},
+    {"Brightness",9, 50},
+    {"Quit Game",6, 20}
+  };     
   STATES STATE;
 
 // THEME
@@ -139,43 +148,62 @@ const uint16_t FONT_5x7[7][250] = {
   {65535,0,0,0,65535,65535,65535,65535,65535,0,0,65535,65535,65535,0,65535,65535,65535,65535,0,65535,65535,65535,65535,65535,65535,0,0,0,0,0,65535,65535,65535,0,65535,0,0,0,65535,65535,65535,65535,65535,65535,0,65535,65535,0,0,65535,0,0,0,65535,65535,65535,65535,65535,65535,65535,0,0,0,65535,65535,0,0,0,65535,0,65535,65535,65535,0,65535,0,0,0,0,0,0,0,0,65535,65535,0,0,0,65535,0,65535,65535,65535,0,0,0,65535,0,0,0,65535,65535,65535,0,0,0,65535,0,0,0,65535,0,65535,0,65535,0,0,0,65535,0,0,65535,0,0,65535,65535,65535,65535,65535,0,65535,65535,65535,0,65535,65535,65535,65535,65535,65535,65535,65535,65535,65535,0,65535,65535,65535,0,0,0,0,0,65535,0,65535,65535,65535,0,0,65535,65535,65535,0,65535,0,0,0,0,0,65535,65535,65535,0,0,65535,65535,65535,0,0,0,65535,0,0,0,0,0,0,0,0,0,0,0,0,0,65535,65535,65535,0,0,0,65535,0,0,0,0,65535,0,0,0,0,65535,0,0,65535,0,0,0,0,0,0,0,65535,0,0,65535,0,0,0,0,65535,65535,65535,0,0,65535,65535,65535,0,0,0,0,0,0,0,0,0,0,0},
 };
 
-  const uint16_t icons[35][5] = {
-    {0,65535,65535,0,0},
-    {0,65535,65535,65535,0},
-    {0,65535,65535,65535,65535},
-    {0,65535,65535,65535,0},
-    {0,65535,65535,0,0},
-    {65535,0,65535,0,0},
-    {65535,0,65535,65535,0},
-    {65535,0,65535,65535,65535},
-    {65535,0,65535,65535,0},
-    {65535,0,65535,0,0},
-    {0,65535,65535,0,65535},
-    {65535,0,0,65535,65535},
-    {65535,0,0,0,65535},
-    {65535,65535,0,0,65535},
-    {65535,0,65535,65535,0},
-    {0,65535,65535,65535,0},
-    {65535,0,65535,0,65535},
-    {65535,65535,0,65535,65535},
-    {65535,0,65535,0,65535},
-    {0,65535,65535,65535,0},
-    {65535,0,0,0,65535},
-    {0,65535,0,65535,0},
-    {0,0,65535,0,0},
-    {0,65535,0,65535,0},
-    {65535,0,0,0,65535},
-    {0,0,0,0,0},
-    {0,0,0,0,65535},
-    {0,0,0,65535,0},
-    {65535,0,65535,0,0},
-    {0,65535,0,0,0},
-    {0,65535,65535,65535,0},
-    {65535,0,65535,0,65535},
-    {65535,0,65535,65535,65535},
-    {65535,0,0,0,65535},
-    {0,65535,65535,65535,0},
-
+const uint16_t icons[55][5] = {
+	{0,65535,65535,0,0},
+	{0,65535,65535,65535,0},
+	{0,65535,65535,65535,65535},
+	{0,65535,65535,65535,0},
+	{0,65535,65535,0,0},
+	{65535,0,65535,0,0},
+	{65535,0,65535,65535,0},
+	{65535,0,65535,65535,65535},
+	{65535,0,65535,65535,0},
+	{65535,0,65535,0,0},
+	{0,65535,65535,0,65535},
+	{65535,0,0,65535,65535},
+	{65535,0,0,0,65535},
+	{65535,65535,0,0,65535},
+	{65535,0,65535,65535,0},
+	{0,65535,65535,65535,0},
+	{65535,0,65535,0,65535},
+	{65535,65535,0,65535,65535},
+	{65535,0,65535,0,65535},
+	{0,65535,65535,65535,0},
+	{65535,0,0,0,65535},
+	{0,65535,0,65535,0},
+	{0,0,65535,0,0},
+	{0,65535,0,65535,0},
+	{65535,0,0,0,65535},
+	{0,0,0,0,0},
+	{0,0,0,0,65535},
+	{0,0,0,65535,0},
+	{65535,0,65535,0,0},
+	{0,65535,0,0,0},
+	{0,65535,65535,65535,0},
+	{65535,0,65535,0,65535},
+	{65535,0,65535,65535,65535},
+	{65535,0,0,0,65535},
+	{0,65535,65535,65535,0},
+	{0,65535,0,65535,0},
+	{65535,65535,65535,65535,65535},
+	{65535,65535,65535,65535,65535},
+	{0,65535,65535,65535,0},
+	{0,0,65535,0,0},
+	{0,65535,0,65535,0},
+	{65535,0,65535,0,65535},
+	{65535,0,0,0,65535},
+	{0,65535,0,65535,0},
+	{0,0,65535,0,0},
+	{0,0,0,65535,0},
+	{0,65535,0,0,65535},
+	{0,0,65535,0,65535},
+	{0,65535,0,0,65535},
+	{0,0,0,65535,0},
+	{65535,0,0,0,65535},
+	{0,0,65535,0,0},
+	{0,65535,0,65535,0},
+	{0,0,65535,0,0},
+	{65535,0,0,0,65535},
 };
 
   const uint16_t logo[12][64] = {
@@ -405,6 +433,47 @@ const uint16_t FONT_5x7[7][250] = {
     }
   }
 
+  void hud_bar(int x, int y, int percent, bool active) {
+    int w, h;
+
+    int i = 0;
+    for(h = 0; h < 7; h++) {
+      for(w = 0; w < 100; w++) {
+        buffer[i] = (w+h)%2 == 0 ? GUI.fg : GUI.bg;
+        i++;
+      }
+    }  
+    ili9341_write_frame_rectangleLE(x, y, 100, 7, buffer);  
+
+    if(percent > 0) {
+      i = 0;
+      for(h = 0; h < 7; h++) {
+        for(w = 0; w < percent; w++) {
+          buffer[i] = active ? GUI.hl : GUI.fg;
+          i++;
+        }
+      }  
+      ili9341_write_frame_rectangleLE(x, y, percent, 7, buffer);  
+    }    
+  }
+
+  void hud_volume() {
+    // y=176;
+    int32_t VOLUME = odroid_settings_Volume_get();
+    int LIMIT = OPTIONS - 3;
+    bool active = OPTION == LIMIT ? true : false;
+    hud_bar((SCREEN.w - 120), 176, VOLUME * 12.5, active);
+  }
+
+  void hud_brightness() {
+    // y=176;
+    int LIMIT = OPTIONS - 2;
+    bool active = OPTION == LIMIT ? true : false;    
+    BRIGHTNESS = odroid_settings_Backlight_get();
+
+    hud_bar((SCREEN.w - 120), 196, (BRIGHTNESS_COUNT * BRIGHTNESS)+BRIGHTNESS+1, active);
+  }   
+
   void hud_options() {
     x = 16;
     y = 28;
@@ -412,7 +481,7 @@ const uint16_t FONT_5x7[7][250] = {
     h = 5;
     i = 0;
     int n;
-    if(OPTIONS == 6) {
+    if(OPTIONS == 7) {
       for(n = 0; n < OPTIONS; n++) {
         STATE = WITHSAVE[n];
         y+=20;
@@ -426,7 +495,7 @@ const uint16_t FONT_5x7[7][250] = {
       }
       STATE = WITHSAVE[OPTION];
     } else {
-      for(n = 0; n < OPTIONS; n++) {
+      for(n = 0; n < 2; n++) {
         STATE = WITHOUTSAVE[n];
         y+=20;
         for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
@@ -439,6 +508,29 @@ const uint16_t FONT_5x7[7][250] = {
       }
       STATE = WITHOUTSAVE[OPTION];
     }
+
+    y=156;
+    for(n = 0; n < 3; n++) {
+      STATE = EXTRAS[n];
+      y+=20;
+      for(int r = 0; r < 5; r++){for(int c = 0; c < 5; c++) {
+        buffer[i] = icons[r+STATE.offset][c] == WHITE ? OPTION == (n+OPTIONS-3) ? GUI.hl : GUI.fg : GUI.bg;i++;
+      }}
+      ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+      hud_text(x+10,y,STATE.label,false,OPTION == (n+OPTIONS-3)?true:false);
+      i = 0;
+    } 
+
+    int LIMIT = OPTIONS - 3;
+    if(OPTION < LIMIT) {
+      STATE = OPTIONS == 7 ? WITHSAVE[OPTION] : WITHOUTSAVE[OPTION];
+    } else {
+      STATE = EXTRAS[OPTION-LIMIT];
+    }
+    printf("\n**********\n%s - %d:%d\n**********\n", STATE.label, OPTION, LIMIT);
+
+    hud_volume();
+    hud_brightness();    
   }
 //}#pragma endregion Display
 
@@ -449,10 +541,10 @@ const uint16_t FONT_5x7[7][250] = {
       buffer = (uint16_t *)malloc(size);
       if (!buffer) abort();
       OPTION = 0;
-      OPTIONS = SAVED ? 6 : 3;
+      OPTIONS = SAVED ? 8 : 5;
       hud_theme();
       GUI = THEMES[USER];
-      STATE = OPTIONS == 6 ? WITHSAVE[OPTION] : WITHOUTSAVE[OPTION];
+      STATE = OPTIONS == 8 ? WITHSAVE[OPTION] : WITHOUTSAVE[OPTION];
       INIT = true;
       hud_debug("HUD - INIT");
     }
@@ -469,9 +561,9 @@ const uint16_t FONT_5x7[7][250] = {
 
 //{#pragma region Menu
   void hud_menu(void) {
-    int volume = odroid_audio_volume_get();
+    VOLUME = odroid_audio_volume_get();
     #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-      volume = 8;
+      //volume = 8;
     #endif
     odroid_audio_terminate();
     hud_init();
@@ -505,6 +597,50 @@ const uint16_t FONT_5x7[7][250] = {
         usleep(200000);
         //debounce(ODROID_INPUT_DOWN);
       }
+
+    /*
+        LEFT
+      */
+      if(gamepad.values[ODROID_INPUT_LEFT]) {
+        if(OPTION == OPTIONS - 3) {
+          if(VOLUME > 0) {
+            VOLUME--;
+            odroid_settings_Volume_set(VOLUME);
+            hud_options();
+            usleep(200000);
+          }
+        }          
+        if(OPTION == OPTIONS - 3 + 1) {
+          if(BRIGHTNESS > 0) {
+            BRIGHTNESS--;
+            odroid_settings_Backlight_set(BRIGHTNESS);
+            hud_options();
+            usleep(200000);
+          }
+        }        
+      }
+
+      /*
+        RIGHT
+      */
+      if(gamepad.values[ODROID_INPUT_RIGHT]) {
+        if(OPTION == OPTIONS - 3) {
+          if(VOLUME < 8) {
+            VOLUME++;
+            odroid_settings_Volume_set(VOLUME);
+            hud_options();
+            usleep(200000);
+          }
+        }
+        if(OPTION == OPTIONS - 3 + 1) {
+          if(BRIGHTNESS < (BRIGHTNESS_COUNT-1)) {
+            BRIGHTNESS++;
+            odroid_settings_Backlight_set(BRIGHTNESS);
+            hud_options();
+            usleep(200000);
+          }
+        }        
+      }       
       /*
         BUTTON B
       */
@@ -518,7 +654,7 @@ const uint16_t FONT_5x7[7][250] = {
         BUTTON A
       */
       if (gamepad.values[ODROID_INPUT_A]) {
-        odroid_audio_volume_set(volume);
+        odroid_settings_Volume_set(VOLUME);
         hud_debug(STATE.label);
         ACTION = STATE.action;
         switch(ACTION) {
