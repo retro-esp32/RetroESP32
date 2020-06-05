@@ -2107,6 +2107,7 @@
 //{#pragma region Boot Screens
   void splash() {
     draw_background();
+    /*
     int w = 128;
     int h = 18;
     int x = (SCREEN.w/2)-(w/2);
@@ -2119,6 +2120,19 @@
       }
     }
     ili9341_write_frame_rectangleLE(x, y, w, h, buffer);
+    */
+    int w = 155;
+    int h = 38;
+    int x = 96;//(SCREEN.w/2)-(w/2);
+    int y = (SCREEN.h/2)-(h/2);
+    int i = 0;
+    for(int r = 0; r < h; r++) {
+      for(int c = 0; c < w; c++) {
+        buffer[i] = logo3d[r][c] == 0 ? GUI.bg : logo3d[r][c];
+        i++;
+      }
+    }
+    ili9341_write_frame_rectangleLE(x, y, w, h, buffer);    
 
     /*
       BUILD
@@ -2150,6 +2164,7 @@
       usleep(10000);
     }
   }
+
 
   void restart() {
     draw_background();

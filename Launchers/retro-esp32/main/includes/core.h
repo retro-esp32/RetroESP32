@@ -66,6 +66,7 @@
 #include "../sprites/folder.h"
 #include "../sprites/icons.h"
 #include "../sprites/logo.h"
+#include "../sprites/logo3d.h"
 #include "../sprites/media.h"
 #include "../sprites/speaker.h"
 #include "../sprites/toggle.h"
