@@ -89,6 +89,7 @@ void delete_numbers();
 void draw_launcher();
 void draw_launcher_options();
 
+
 /*
   Files
 */
@@ -98,6 +99,13 @@ void get_files();
 void sort_files(char** files);
 void draw_files();
 void has_save_file(char *save_name);
+
+/*
+  File Manager
+*/
+void create_games_file(char *emulator);
+void read_games_file(char *emulator);
+void add_games(char *emulator, char *game);
 
 /*
   Favorites
