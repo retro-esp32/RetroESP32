@@ -1183,7 +1183,7 @@
             SEEK[ROMS.total+1] = telldir(directory);
             ROMS.total++;
 
-            //add_games(EXTENSIONS[STEP], file->d_name);
+            add_games(EXTENSIONS[STEP], file->d_name);
           }
         }
         free(file);
@@ -1283,7 +1283,7 @@
   }
 
   void get_files() {
-    //create_games_file(DIRECTORIES[STEP]);    
+    create_games_file(DIRECTORIES[STEP]);    
     delete_numbers();
     count_files();
     seek_files();
