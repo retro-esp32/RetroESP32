@@ -1182,8 +1182,6 @@
           if(extenstion || (file->d_type == 2)) {
             SEEK[ROMS.total+1] = telldir(directory);
             ROMS.total++;
-
-            //add_games(EXTENSIONS[STEP], file->d_name);
           }
         }
         free(file);
@@ -1283,7 +1281,6 @@
   }
 
   void get_files() {
-    //create_games_file(DIRECTORIES[STEP]);    
     delete_numbers();
     count_files();
     seek_files();
@@ -1355,64 +1352,6 @@
     //printf("\n---------------------\n");
   }
 //}#pragma endregion Files
-
-//{#pragma region File Manager
-  char** GAMES;
-  void create_games_file(char *emulator) {
-    printf("\n----- %s(%s) START -----", __func__, emulator);
-    char file[256] = "/sd/odroid/data";
-    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
-    sprintf(file, "%s/%s.txt", file, emulator);
-
-    struct stat st; if (stat(file, &st) == 0) {unlink(file);}
-
-    FILE *f;
-    f = fopen(file, "rb");
-    if(f == NULL) {
-      f = fopen(file, "w+");
-    //  printf("\nCREATING: %s", file);
-    } else {
-      read_favorites();
-    }
-    //  printf("\nCLOSING: %s", file);
-    fclose(f);    
-    printf("\n----- %s END -----", __func__);
-  }
-
-  void read_games_file(char *emulator) {
-    printf("\n----- %s START -----", __func__);
-    char file[256] = "/sd/odroid/data";
-    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
-    sprintf(file, "%s/%s.txt", file, emulator);
-
-    FILE *f;
-    f = fopen(file, "rb");
-    if(f) {
-    //  printf("\nREADING: %s\n", file);
-      char line[256];
-      while (fgets(line, sizeof(line), f)) {
-        char *ep = &line[strlen(line)-1];
-        while (*ep == '\n' || *ep == '\r'){*ep-- = '\0';}
-        printf("\n%s", line);
-      }
-    }
-    fclose(f);
-
-    printf("\n----- %s END -----", __func__);
-  }
-
-  void add_games(char *emulator, char *game) {
-    printf("\n----- %s START -----", __func__);
-
-    char file[256] = "/sd/odroid/data";
-    sprintf(file, "%s/%s", file, RETROESP_FOLDER);
-    sprintf(file, "%s/%s.txt", file, emulator);  
-
-    printf("%s\n", game);
-
-    printf("\n----- %s END -----", __func__);  
-  }
-//}#pragma endregion File Manager
 
 //{#pragma region Favorites
   void create_favorites() {

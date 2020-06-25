@@ -101,13 +101,6 @@ void draw_files();
 void has_save_file(char *save_name);
 
 /*
-  File Manager
-*/
-void create_games_file(char *emulator);
-void read_games_file(char *emulator);
-void add_games(char *emulator, char *game);
-
-/*
   Favorites
 */
 void create_favorites();
