@@ -105,7 +105,8 @@ void has_save_file(char *save_name);
 */
 void create_games_file(char *emulator);
 void read_games_file(char *emulator);
-void add_games(char *emulator, char *game);
+void add_games_file(char *emulator, char *game);
+void sort_games_file(char *emulator);
 
 /*
   Favorites
