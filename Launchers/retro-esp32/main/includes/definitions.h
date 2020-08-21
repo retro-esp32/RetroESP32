@@ -31,6 +31,8 @@
 */
 #define MAX_FILES 8192
 #define MAX_LENGTH 64
+#define MAX_FILES_LIST 512
+
 
 /*
 
@@ -42,7 +44,7 @@
 /*
 
 */
-#define BUILD "Version 2 Build 5 (v.2.5)"
+#define BUILD "Version 2 Build 6 (v.2.6)"
 
 
 #define _GNU_SOURCE

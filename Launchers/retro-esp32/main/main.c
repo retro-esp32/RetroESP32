@@ -1382,7 +1382,7 @@
     ROMS.total = 0;
 
     free(FAVORITES);
-    FAVORITES = (char**)malloc((100) * sizeof(void*));
+    FAVORITES = (char**)malloc((MAX_FILES_LIST) * sizeof(void*));
 
     char file[256] = "/sd/odroid/data";
     sprintf(file, "%s/%s", file, RETROESP_FOLDER);
@@ -1416,7 +1416,7 @@
     } 
 
     free(FAVORITES);
-    FAVORITES = (char**)malloc((100) * sizeof(void*));
+    FAVORITES = (char**)malloc((MAX_FILES_LIST) * sizeof(void*));
 
     for(int n = 0; n < ROMS.total; n++) {
       size_t len = strlen(TEMP[n]);                                               
@@ -1667,7 +1667,7 @@
     ROMS.total = 0;
 
     free(RECENTS);
-    RECENTS = (char**)malloc((100) * sizeof(void*));
+    RECENTS = (char**)malloc((MAX_FILES_LIST) * sizeof(void*));
 
     char file[256] = "/sd/odroid/data";
     sprintf(file, "%s/%s", file, RETROESP_FOLDER);
@@ -1701,7 +1701,7 @@
     } 
 
     free(RECENTS);
-    RECENTS = (char**)malloc((100) * sizeof(void*));
+    RECENTS = (char**)malloc((MAX_FILES_LIST) * sizeof(void*));
 
     for(int n = 0; n < ROMS.total; n++) {
       size_t len = strlen(TEMP[n]);                                               
