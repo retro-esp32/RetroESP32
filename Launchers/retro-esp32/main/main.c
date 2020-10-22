@@ -671,27 +671,10 @@
   }
   void apply_brightness() {
     const int DUTY_MAX = 0x1fff;
-    //BRIGHTNESS = get_brightness();
+    BRIGHTNESS = get_brightness();
     int duty = DUTY_MAX * (BRIGHTNESS_LEVELS[BRIGHTNESS] * 0.01f);
 
-    if(is_backlight_initialized()) {
-      currentDuty = ledc_get_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-      if (currentDuty != duty) {
-        //ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, currentDuty);
-        //ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-        //ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty, 1000);
-        //ledc_fade_start(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, LEDC_FADE_WAIT_DONE /*LEDC_FADE_NO_WAIT|LEDC_FADE_WAIT_DONE|LEDC_FADE_MAX*/);
-        //ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty);
-        //ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-        ledc_set_fade_time_and_start(
-          LEDC_LOW_SPEED_MODE,
-          LEDC_CHANNEL_0,
-          duty,
-            25,
-          LEDC_FADE_WAIT_DONE
-        );
-      }
-    }
+
   }
 //}#pragma endregion Brightness
 

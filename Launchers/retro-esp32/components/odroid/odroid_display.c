@@ -22,8 +22,10 @@ const gpio_num_t SPI_PIN_NUM_CLK  = GPIO_NUM_18;
 const gpio_num_t LCD_PIN_NUM_CS   = GPIO_NUM_5;
 const gpio_num_t LCD_PIN_NUM_DC   = GPIO_NUM_21;
 const gpio_num_t LCD_PIN_NUM_BCKL = GPIO_NUM_14;
+
 const int LCD_BACKLIGHT_ON_VALUE = 1;
 const int LCD_SPI_CLOCK_RATE = 40000000;
+
 
 
 #define SPI_TRANSACTION_COUNT (4)

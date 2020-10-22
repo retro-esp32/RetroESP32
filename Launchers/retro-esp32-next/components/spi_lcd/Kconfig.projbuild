@@ -1,0 +1,29 @@
+menu "Retro ESP32 Configuration"
+    choice LCD_DRIVER_CHIP
+        prompt "LCD Driver Chip"
+        default LCD_DRIVER_ILI9341
+        help
+            LCD Screen Driver
+
+    config LCD_DRIVER_ILI9341
+        bool "ILI9341"
+
+    config LCD_DRIVER_ILI9342
+        bool "ILI9342/C"
+
+    endchoice
+
+    choice MENU_HOT_KEYS
+        prompt "MENU Key Options"
+        default DEFAULT_MENU_KEY
+        help
+            Select Hot Key (Menu Button)
+
+    config DEFAULT_MENU_KEY
+        bool "Odroid Go MENU Button"
+
+    config COMBO_MENU_KEY
+        bool "START + SELECT as MENU button"
+
+    endchoice
+endmenu    
