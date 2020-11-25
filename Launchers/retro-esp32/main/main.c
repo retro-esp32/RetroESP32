@@ -111,18 +111,13 @@
 */
 //{#pragma region Main
   void app_main(void) {
+    
     nvs_flash_init();
     odroid_system_init();
 
     // Audio
     odroid_audio_init(16000);
-    /*
-    #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-        odroid_settings_Volume_set(4);
-    #else
-        odroid_settings_Volume_set(3);
-    #endif
-    */
+
 
     VOLUME = odroid_settings_Volume_get();
     odroid_settings_Volume_set(VOLUME);
@@ -2556,7 +2551,7 @@
             char file_to_load[256] = "";
             sprintf(file_to_load, "%s/%s", ROM.path, ROM.name);
             bool is_directory = strcmp(&file_to_load[strlen(file_to_load) - 3], "dir") == 0;
-          //  printf("\nfile_to_load:%s\n", file_to_load);
+            printf("\nfile_to_load:%s\n", file_to_load);
             if(is_directory) {
               FOLDER = true;
               PREVIOUS = ROMS.offset;

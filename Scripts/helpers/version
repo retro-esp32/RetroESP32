@@ -10,7 +10,7 @@ SOURCE=""
 # port
 version() {
   clear
-  VERSIONS=("odroid-go" "retro-esp")
+  VERSIONS=("cute-esp32" "odroid-go" "retro-esp" "retro-esp-next")
   OPTION="${monkey}  ${white}Please Select Your ${nc}${magentabg} ${white}Hardware ${nc} ${magenta}Version${nc}"
   echo "--------------------------------------------------------------------------"
   echo -e "${OPTION}"
@@ -54,14 +54,15 @@ replace() {
   clear
 }
 
-echo "--------------------------------------------------------------------------"
-echo -e "${bomb}  ${red}Change Version ${nc}[y/${bold}N${nc}]"
-echo "--------------------------------------------------------------------------"
-read -n 1 -r response
-if [[ "$response" = "y" ]]
-then
-  version
-else
-  VERSION="retro-esp"
-fi
+# echo "--------------------------------------------------------------------------"
+# echo -e "${bomb}  ${red}Change Version ${nc}[y/${bold}N${nc}]"
+# echo "--------------------------------------------------------------------------"
+# read -n 1 -r response
+# if [[ "$response" = "y" ]]
+# then
+#   version
+# else
+#   VERSION="retro-esp"
+# fi
+version
 clear
