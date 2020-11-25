@@ -449,16 +449,17 @@ void send_continue_line(uint16_t *line, int width, int lineCount)
 {
     spi_transaction_t* t;
 
+    #if defined (CONFIG_LCD_DRIVER_CHIP_ODROID_GO) || defined (CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32)
+        t = spi_get_transaction();
 
-    t = spi_get_transaction();
 
+        t->tx_data[0] = 0x3C;   //memory write continue
+        t->length = 8;
+        t->user = (void*)0;
+        t->flags = SPI_TRANS_USE_TXDATA;
 
-    t->tx_data[0] = 0x3C;   //memory write continue
-    t->length = 8;
-    t->user = (void*)0;
-    t->flags = SPI_TRANS_USE_TXDATA;
-
-    spi_put_transaction(t);
+        spi_put_transaction(t);
+    #endif
 
 
     t = spi_get_transaction();
