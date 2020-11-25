@@ -167,6 +167,9 @@ static void  ILI9341_INITIAL ()
     LCD_WriteData(0x00);
     LCD_WriteData(0xEF);
 
+    LCD_WriteCommand(0x36); //240
+    LCD_WriteData(0x40|0x80|0x08);    
+
     LCD_WriteCommand(0x11);    //Exit Sleep
     ets_delay_us(100000);
     LCD_WriteCommand(0x29);    //Display on
@@ -234,8 +237,6 @@ static void spi_master_init()
 
 #define U16x2toU32(m,l) ((((uint32_t)(l>>8|(l&0xFF)<<8))<<16)|(m>>8|(m&0xFF)<<8))
 
-extern uint16_t myPalette[];
-
 void ili9341_write_frame(const uint16_t xs, const uint16_t ys, const uint16_t width, const uint16_t height, const uint8_t * data[]){
     int x, y;
     int i;
@@ -288,9 +289,9 @@ void ili9341_write_frame(const uint16_t xs, const uint16_t ys, const uint16_t wi
                     x += 2;
                     continue;
                 }
-                x1 = myPalette[(unsigned char)(data[y][x])]; x++;
-                y1 = myPalette[(unsigned char)(data[y][x])]; x++;
-                //temp[i] = U16x2toU32(x1,y1);
+                x1 = data[(unsigned char)(data[y+x])]; x++;
+                y1 = data[(unsigned char)(data[y+x])]; x++;
+                temp[i] = U16x2toU32(x1,y1);
             }
             while (READ_PERI_REG(SPI_CMD_REG(SPI_NUM))&SPI_USR);
             for (i=0; i<16; i++) {
