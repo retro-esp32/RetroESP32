@@ -5,7 +5,7 @@ menu "Retro ESP32 Configuration"
         help
             LCD Screen Driver
 
-    config LCD_DRIVER_CHIP_ST7789
+    config LCD_DRIVER_CHIP_CUTE_ESP32
         bool "Cute ESP32 - 2\" [ST7789]"
 
     config LCD_DRIVER_CHIP_ODROID_GO
@@ -14,7 +14,7 @@ menu "Retro ESP32 Configuration"
     config LCD_DRIVER_CHIP_RETRO_ESP32
         bool "Retro ESP32 - 2.6\" [ILI9342]"
 
-    config LCD_DRIVER_CHIP_RETRO_ESP32_V2
+    config LCD_DRIVER_CHIP_RETRO_ESP32_NEXT
         bool "Retro ESP32 V2 - 2.6\" [ILI9342C]"        
 
     endchoice

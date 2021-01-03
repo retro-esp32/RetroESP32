@@ -97,6 +97,7 @@ typedef struct {
 #define MADCTL_MH 0x04
 #define TFT_RGB_BGR 0x08
 
+
 DRAM_ATTR static const ili_init_cmd_t ili_sleep_cmds[] = {
     {TFT_CMD_SWRESET, {0}, 0x80},
     {TFT_CMD_DISPLAY_OFF, {0}, 0x80},
@@ -143,9 +144,9 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
 #endif
 
 /*
- CONFIG_LCD_DRIVER_CHIP_ST7789
+ CONFIG_LCD_DRIVER_CHIP_CUTE_ESP32
 */
-#ifdef CONFIG_LCD_DRIVER_CHIP_ST7789
+#ifdef CONFIG_LCD_DRIVER_CHIP_CUTE_ESP32
 
 DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     {TFT_CMD_SWRESET, {0}, 0x80},
@@ -177,7 +178,10 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
 /*
  CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
 */
-#if defined (CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32) || defined(CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32_V2)
+/*
+ CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
+*/
+#if defined (CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32) || defined(CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32_NEXT)
 DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     // VCI=2.8V
     //************* Start Initial Sequence **********//
@@ -191,7 +195,6 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     {0xC0, {0x1B}, 1},    //Power control   //VRH[5:0]
     {0xC1, {0x12}, 1},    //Power control   //SAP[2:0];BT[3:0]
     {0xC5, {0x32, 0x3C}, 2},    //VCM control
-    {0x36, {(MADCTL_MV | MADCTL_MY | TFT_RGB_BGR)}, 1},    // Memory Access Control
     {0x3A, {0x55}, 1},
     {0xB1, {0x00, 0x1B}, 2},  // Frame Rate Control (1B=70, 1F=61, 10=119)
     {0xB6, {0x0A, 0xA2}, 2},    // Display Function Control
@@ -206,10 +209,12 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     {0x2A, {0x00, 0x00, 0x00, 0xEF}, 4},
     {0x2B, {0x00, 0x00, 0x00, 0x3F}, 4},
 
-    // ILI9342 Specific
-    {0x36, {0x40|0x80|0x08}, 1}, // <-- ROTATE
+    #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32_NEXT
+        {0x36, {(MADCTL_MX | MADCTL_MY | TFT_RGB_BGR)}, 1},    // Memory Access Control
+    #endif
 
     #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
+        {0x36, {(MADCTL_MV | MADCTL_MY | TFT_RGB_BGR)}, 1},    // Memory Access Control
         {0x21, {0}, 0x80}, // <-- INVERT COLORS
     #endif
 
