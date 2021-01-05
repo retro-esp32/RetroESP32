@@ -1699,8 +1699,8 @@
     int count = 0;
 
     free(RECENTS);
-    RECENTS = (char**)malloc(50 * sizeof(void*));
-
+    //RECENTS = (char**)malloc(50 * sizeof(void*));
+    RECENTS = (char**)malloc((MAX_FILES_LIST) * sizeof(void*));
     char file[256] = "/sd/odroid/data";
     sprintf(file, "%s/%s", file, RETROESP_FOLDER);
     sprintf(file, "%s/%s", file, RECENT_FILE);

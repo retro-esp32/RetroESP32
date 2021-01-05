@@ -1,0 +1,85 @@
+#!/bin/bash
+
+FIRMWARE_PATH="$REPO/Firmware"
+
+RETRO_PATH="$REPO/Launchers/retro-esp32/"
+MKFW_PATH="$REPO/Odroid/odroid-go-firmware/tools/mkfw"
+LAUNCHER_PATH=""
+LAUNCHER=""
+BIN=""
+TILE=""
+NAME=""
+
+# set_config_option
+set_config_option() {
+  clear
+  CONFIG="n"
+  OPTION="${memo}  Would you like to run ${magenta}'make menuconfig'? ${nc}[y/${bold}N${nc}]"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${OPTION}"
+  echo "--------------------------------------------------------------------------"
+  read -n 1 -r response
+  if [[ "$response" = "y" ]]
+  then
+    CONFIG="y"
+  fi
+  clear
+}
+
+# get_config_option
+get_config_option() {
+  if [[ "$CONFIG" = "y" ]]
+  then
+    make menuconfig
+  fi
+}
+
+# set_clean_option
+set_clean_option() {
+  clear
+  CLEAN="n"
+  OPTION="${bomb}  Would you like to run ${magenta}'make clean'? ${nc}[y/${bold}N${nc}]"
+  echo "--------------------------------------------------------------------------"
+  echo -e "${OPTION}"
+  echo "--------------------------------------------------------------------------"
+  read -n 1 -r response
+  if [[ "$response" = "y" ]]
+  then
+    CLEAN="y"
+  fi
+  clear
+}
+
+# get_clean_option
+get_clean_option() {
+  if [[ "$CLEAN" = "y" ]]
+  then
+    make clean
+  fi
+}
+
+# DEFUALT
+LAUNCHER="RetroESP32"
+LAUNCHER_PATH=${RETRO_PATH}
+BIN="retro-esp32"
+TILE="retro-esp32"
+NAME="Retro ESP32"
+
+echo "--------------------------------------------------------------------------"
+echo -e "${wrench}  ${green}Compiling ${cyan}Launcher${nc}"
+echo "--------------------------------------------------------------------------"
+
+rm $FIRMWARE_PATH/Bins/bootloader.bin
+rm $FIRMWARE_PATH/Bins/partitions.bin
+
+rm $FIRMWARE_PATH/Bins/retro-esp32.bin
+
+cd $LAUNCHER_PATH
+make -j16 -s
+cp ./build/bootloader/bootloader.bin $FIRMWARE_PATH/Bins/
+cp ./build/partitions.bin $FIRMWARE_PATH/Bins/
+cp ./build/retro-esp32.bin $FIRMWARE_PATH/Bins/
+
+clear
+
+cd $SRC_PATH

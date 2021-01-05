@@ -1,0 +1,32 @@
+#!/bin/bash
+
+deep() {
+  REPO=$(PWD)
+  cd ../../Scripts
+}
+
+#---------------------------------
+# options
+#---------------------------------
+while getopts ":d-:" option; do
+  case $option in
+    d)deep;;
+    *)exit;;
+  esac
+  OPTIONS=false
+done
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/styles
+
+#---------------------------------
+# PATHS
+#---------------------------------
+source helpers/paths
+
+#---------------------------------
+# Goodbye
+#---------------------------------
+source helpers/goodbye

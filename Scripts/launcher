@@ -1,0 +1,83 @@
+#!/bin/bash
+
+SRC_PATH=`pwd`
+REPO=$(dirname $PWD)
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/styles
+
+#---------------------------------
+# Paths
+#---------------------------------
+source helpers/paths
+
+#---------------------------------
+# VERSIONS
+#---------------------------------
+source helpers/version
+
+#---------------------------------
+# LAUNCHER
+#---------------------------------
+source helpers/launcher
+
+#---------------------------------
+# PORT
+#---------------------------------
+source helpers/ports
+
+#---------------------------------
+# BAUD
+#---------------------------------
+BAUD=2000000
+
+
+clear
+ADDRESSES=(
+"0x1000"
+"0x8000"
+"0x10000"
+"0x200000"
+)
+
+NAMES=(
+"bootloader"
+"partitions"
+"${BIN}"
+"${BIN}"
+)
+
+BINS=(
+"$FIRMWARE_PATH/Bins/bootloader.bin"
+"$FIRMWARE_PATH/Bins/partitions.bin"
+"$FIRMWARE_PATH/Bins/${BIN}.bin"
+"$FIRMWARE_PATH/Bins/${BIN}.bin"
+)
+
+clear
+for i in "${!ADDRESSES[@]}"
+do
+  echo "--------------------------------------------------------------------------"
+  echo -e "${game}  Writing ${cyan}${NAMES[i]}${nc} to ${green}${ADDRESSES[i]}${nc}"
+  echo "--------------------------------------------------------------------------"
+  esptool.py \
+  --chip esp32 \
+  --port ${PORT} \
+  --baud ${BAUD} \
+  --before default_reset \
+  --after hard_reset write_flash -z \
+  --flash_mode dio \
+  --flash_freq 80m \
+  --flash_size detect \
+  --no-progress \
+  ${ADDRESSES[i]} ${BINS[i]}
+
+  clear
+done
+
+#---------------------------------
+# Goodbye
+#---------------------------------
+source helpers/goodbye
