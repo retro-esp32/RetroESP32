@@ -44,13 +44,13 @@ replace() {
   echo -e "${robot}  ${green}Replacing ${cyan}EMULATORS${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $SOURCE/Emulators/* $EMULATORS
-  sleep 0.25
+  sleep 1
   clear
   echo "--------------------------------------------------------------------------"
   echo -e "${unicorn}  ${green}Replacing ${cyan}LAUNCHERS${nc} files"
   echo "--------------------------------------------------------------------------"
   cp -R $SOURCE/Launchers/* $LAUNCHERS
-  sleep 0.25
+  sleep 1
   clear
 }
 
