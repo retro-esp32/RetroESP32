@@ -62,6 +62,11 @@ We kept installation of Retro ESP32 super simple.
 - [x] **Favorites List** *(Another First)*
 - [x] **3** Scale levels for *'Core'* Emaulators *(Original, Box, Full Screen)*
 
+## Usage
+> What to press and when
+
+Please see the [Usage](USAGE.md) Document
+
 ## Have your say!
 > Don't be shy, our team is here
 
@@ -85,6 +90,7 @@ This project is licensed under the Creative Commons Attribution Share Alike 4.0 
 * [pebri86](https://github.com/pebri86)
 * [hardkernel](https://github.com/hardkernel)
 * [ducalex](https://github.com/ducalex/)
+
 
 -----
 
