@@ -233,7 +233,7 @@ then
   cd $LAUNCHER_PATH
   get_clean_option
   get_config_option
-  make -j8 -s
+  make -j16 -s
   cp ./build/bootloader/bootloader.bin $FIRMWARE_PATH/Bins/
   cp ./build/partitions.bin $FIRMWARE_PATH/Bins/
 
@@ -275,7 +275,7 @@ then
   cd gnuboy-go
   get_clean_option
   get_config_option
-  make -j8 -s
+  make -j16 -s
   cp ./build/gnuboy-go.bin $FIRMWARE_PATH/Bins/
 
   cd $NES_OPTION_PATH
@@ -286,7 +286,7 @@ then
   cd nesemu-go
   get_clean_option
   get_config_option
-  make -j8 -s
+  make -j16 -s
   cp ./build/nesemu-go.bin $FIRMWARE_PATH/Bins/
 
   #cd $SUPER_GOPLAY_PATH
@@ -299,7 +299,7 @@ then
   cd smsplusgx-go
   get_clean_option
   get_config_option
-  make -j8 -s
+  make -j16 -s
   cp ./build/smsplusgx-go.bin $FIRMWARE_PATH/Bins/
 
 
@@ -311,7 +311,7 @@ then
   cd prosystem-odroid-go
   get_clean_option
   get_config_option
-  make -j8 -s
+  make -j16 -s
   cp ./build/prosystem-go.bin $FIRMWARE_PATH/Bins/
 
   clear
@@ -322,7 +322,7 @@ then
   cd stella-odroid-go
   get_clean_option
   get_config_option
-  make -j8 -s
+  make -j16 -s
   cp ./build/stella-go.bin $FIRMWARE_PATH/Bins/
 
   clear
@@ -332,7 +332,7 @@ then
   cd $HANDY_OPTION_PATH
   get_clean_option
   get_config_option
-  make -j8 -s
+  make -j16 -s
   cp ./build/handy-go.bin $FIRMWARE_PATH/Bins/
 
   clear
@@ -343,7 +343,7 @@ then
   cd odroid-go-pcengine-huexpress/pcengine-go
   get_clean_option
   get_config_option
-  make -j8 -s
+  make -j16 -s
   cp ./build/pcengine-go.bin $FIRMWARE_PATH/Bins/
 
   clear
@@ -354,7 +354,7 @@ then
   cd odroid-go-spectrum-emulator
   get_clean_option
   get_config_option
-  make -j8 -s
+  make -j16 -s
   cp ./build/spectrum.bin $FIRMWARE_PATH/Bins/
 fi
 
