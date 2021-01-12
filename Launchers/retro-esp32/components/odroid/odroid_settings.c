@@ -174,7 +174,7 @@ int32_t odroid_settings_Volume_get()
     err = nvs_get_i32(my_handle, NvsKey_Volume, &result);
     if (err == ESP_OK)
     {
-        //printf("odroid_settings_Volume_get: value=%d\n", result);
+        printf("odroid_settings_Volume_get: value=%d\n", result);
     }
 
     // Close

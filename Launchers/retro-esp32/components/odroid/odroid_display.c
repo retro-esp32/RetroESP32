@@ -26,6 +26,7 @@
 
 const int DUTY_MAX = 0x1fff;
 
+///*
 const gpio_num_t SPI_PIN_NUM_MISO = GPIO_NUM_19;
 const gpio_num_t SPI_PIN_NUM_MOSI = GPIO_NUM_23;
 const gpio_num_t SPI_PIN_NUM_CLK  = GPIO_NUM_18;
@@ -33,6 +34,17 @@ const gpio_num_t SPI_PIN_NUM_CLK  = GPIO_NUM_18;
 const gpio_num_t LCD_PIN_NUM_CS   = GPIO_NUM_5;
 const gpio_num_t LCD_PIN_NUM_DC   = GPIO_NUM_21;
 const gpio_num_t LCD_PIN_NUM_BCKL = GPIO_NUM_14;
+//*/
+
+/*
+const gpio_num_t SPI_PIN_NUM_MISO = GPIO_NUM_19;
+const gpio_num_t SPI_PIN_NUM_MOSI = GPIO_NUM_23;
+const gpio_num_t SPI_PIN_NUM_CLK  = GPIO_NUM_18;
+
+const gpio_num_t LCD_PIN_NUM_CS   = GPIO_NUM_14;
+const gpio_num_t LCD_PIN_NUM_DC   = GPIO_NUM_27;
+const gpio_num_t LCD_PIN_NUM_BCKL = GPIO_NUM_32;
+*/
 
 const int LCD_BACKLIGHT_ON_VALUE = 1;
 const int LCD_SPI_CLOCK_RATE = SPI_MASTER_FREQ_40M;
