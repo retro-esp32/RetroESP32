@@ -1,7 +1,3 @@
-[submodule "Tools/esp-idf"]
-	path = Tools/esp-idf
-	url = git@github.com:OtherCrashOverride/esp-idf.git
-    branch = release/v3.2-odroid
 [submodule "Odroid/odroid-go-firmware"]
 	path = Odroid/odroid-go-firmware
 	url = git@github.com:OtherCrashOverride/odroid-go-firmware.git
