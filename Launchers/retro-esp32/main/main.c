@@ -1,4 +1,4 @@
-//{#pragma region Includes
+
   #include "includes/core.h"
   #include "includes/definitions.h"
   #include "includes/structures.h"
