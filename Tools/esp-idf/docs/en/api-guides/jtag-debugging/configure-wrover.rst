@@ -75,7 +75,7 @@ Linux
     ::
 
         user-name@computer-name:~/esp$ ls -l /dev/ttyUSB*
-        crw-rw---- 1 root dialout 188, 0 Jul 10 19:04 /dev/ttyUSB0
+        crw-rw---- 1 root dialout 188, 0 Jul 10 19:04 /dev/cu.usbserial-AC00UQ47
         crw-rw---- 1 root dialout 188, 1 Jul 10 19:04 /dev/ttyUSB1
 
 
@@ -86,7 +86,7 @@ Linux
     ::
 
         user-name@computer-name:~/esp$ ls -l /dev/ttyUSB*
-        crw-rw-r-- 1 root plugdev 188, 0 Jul 10 19:07 /dev/ttyUSB0
+        crw-rw-r-- 1 root plugdev 188, 0 Jul 10 19:07 /dev/cu.usbserial-AC00UQ47
         crw-rw-r-- 1 root plugdev 188, 1 Jul 10 19:07 /dev/ttyUSB1
 
     If you see similar result and you are a member of ``plugdev`` group, then the set up is complete.

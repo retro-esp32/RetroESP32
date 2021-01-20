@@ -81,10 +81,10 @@ Linux 版的 ESP32 工具链可以从 Espressif 的网站下载：
 
      除了 ``/home/user-name``，应该有具体的安装的主路径。
 
-权限问题 /dev/ttyUSB0
+权限问题 /dev/cu.usbserial-AC00UQ47
 ------------------------------
 
-某些 Linux 版本可能在烧写 ESP32 时会出现 ``Failed to open port /dev/ttyUSB0`` 错误消息。 :ref:`可以通过将当前用户添加到拨出组来解决<linux-dialout-group>`。
+某些 Linux 版本可能在烧写 ESP32 时会出现 ``Failed to open port /dev/cu.usbserial-AC00UQ47`` 错误消息。 :ref:`可以通过将当前用户添加到拨出组来解决<linux-dialout-group>`。
 
 Arch Linux 用户
 ----------------

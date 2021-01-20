@@ -610,7 +610,7 @@ There're some scenarios that we want to flash the target board without IDF. For 
 
 Then use flash arguments as the arguemnts for esptool write_flash arguments::
 
-    python esptool.py --chip esp32 --port /dev/ttyUSB0 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 bootloader/bootloader.bin 0x10000 example_app.bin 0x8000 partition_table_unit_test_app.bin
+    python esptool.py --chip esp32 --port /dev/cu.usbserial-AC00UQ47 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 bootloader/bootloader.bin 0x10000 example_app.bin 0x8000 partition_table_unit_test_app.bin
 
 Building the Bootloader
 =======================

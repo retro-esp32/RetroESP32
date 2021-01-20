@@ -621,7 +621,7 @@ def main():
     parser.add_argument(
         '--port', '-p',
         help='Serial port device',
-        default=os.environ.get('ESPTOOL_PORT', '/dev/ttyUSB0')
+        default=os.environ.get('ESPTOOL_PORT', '/dev/cu.usbserial-AC00UQ47')
     )
 
     parser.add_argument(

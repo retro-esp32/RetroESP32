@@ -10,7 +10,7 @@ SOURCE=""
 # port
 version() {
   clear
-  VERSIONS=("cute-esp32" "odroid-go" "retro-esp" "retro-esp-next")
+  VERSIONS=("cute-esp32" "odroid-go" "retro-esp" "retro-esp-next" "retro-esp-slim")
   OPTION="${monkey}  ${white}Please Select Your ${nc}${magentabg} ${white}Hardware ${nc} ${magenta}Version${nc}"
   echo "--------------------------------------------------------------------------"
   echo -e "${OPTION}"
@@ -41,16 +41,16 @@ version() {
 replace() {
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${robot}  ${green}Replacing ${cyan}EMULATORS${nc} files"
+  echo -e "${robot}  ${green}Replacing CONFIG for ${cyan}EMULATORS${nc} files from ${red}${SOURCE}${nc}"
   echo "--------------------------------------------------------------------------"
   cp -R $SOURCE/Emulators/* $EMULATORS
-  sleep 0.25
+  sleep 1
   clear
   echo "--------------------------------------------------------------------------"
-  echo -e "${unicorn}  ${green}Replacing ${cyan}LAUNCHERS${nc} files"
+  echo -e "${unicorn}  ${green}Replacing CONFIG for ${cyan}LAUNCHERS${nc} files from ${red}${SOURCE}${nc}"
   echo "--------------------------------------------------------------------------"
   cp -R $SOURCE/Launchers/* $LAUNCHERS
-  sleep 0.25
+  sleep 1
   clear
 }
 

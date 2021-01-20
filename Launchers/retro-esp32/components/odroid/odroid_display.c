@@ -784,7 +784,7 @@ void ili9341_init()
     // Initialize SPI
     esp_err_t ret;
    
-    #define TAG "ST7789"
+    #define TAG "TFT LCD"
 	ESP_LOGI(TAG, "SPI_PIN_NUM_MOSI=%d",SPI_PIN_NUM_MOSI);
     ESP_LOGI(TAG, "SPI_PIN_NUM_MISO=%d",SPI_PIN_NUM_MISO);
 	ESP_LOGI(TAG, "SPI_PIN_NUM_CLK=%d",SPI_PIN_NUM_CLK);

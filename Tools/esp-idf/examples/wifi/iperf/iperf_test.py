@@ -14,7 +14,7 @@ The test env Example_ShieldBox do need the following config::
         password: "password"
         outlet: 1
     apc_ip: "192.168.1.88"
-    attenuator_port: "/dev/ttyUSB0"
+    attenuator_port: "/dev/cu.usbserial-AC00UQ47"
     iperf: "/dev/ttyUSB1"
     apc_ip: "192.168.1.88"
     pc_nic: "eth0"

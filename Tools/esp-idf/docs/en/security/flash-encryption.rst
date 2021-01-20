@@ -232,7 +232,7 @@ After encryption is enabled on first boot, reflashing an encrypted image require
 
 Suppose that this is the normal command used to flash plaintext data::
 
-  esptool.py --port /dev/ttyUSB0 --baud 115200 write_flash 0x10000 build/my-app.bin
+  esptool.py --port /dev/cu.usbserial-AC00UQ47 --baud 115200 write_flash 0x10000 build/my-app.bin
 
 Binary app image ``build/my-app.bin`` is written to offset ``0x10000``. This file name and offset need to be used to encrypt the data, as follows::
 
@@ -242,7 +242,7 @@ This example command will encrypts ``my-app.bin`` using the supplied key, and pr
 
 Then, flash the encrypted binary with esptool.py::
 
-    esptool.py --port /dev/ttyUSB0 --baud 115200 write_flash 0x10000 build/my-app-encrypted.bin
+    esptool.py --port /dev/cu.usbserial-AC00UQ47 --baud 115200 write_flash 0x10000 build/my-app-encrypted.bin
 
 No further steps or efuse manipulation is necessary, because the data is already encrypted when we flash it.
 
