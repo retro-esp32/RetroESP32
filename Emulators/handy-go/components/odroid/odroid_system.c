@@ -105,7 +105,7 @@ void odroid_system_led_set(int value)
     if (!system_initialized)
     {
         printf("odroid_system_init not called before use.\n");
-        abort();
+        //abort();
     }
 
     gpio_set_level(GPIO_NUM_2, value);
