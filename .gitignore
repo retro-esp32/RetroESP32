@@ -1,3 +1,7 @@
+# Windows files
+Thumbs.db
+
+# OSX files
 .DS_Store
 
 # Build folder
