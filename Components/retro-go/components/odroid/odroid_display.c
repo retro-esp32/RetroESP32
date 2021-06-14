@@ -159,9 +159,6 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
 /*
  CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
 */
-/*
- CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-*/
 #if defined (CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32) || defined(CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32_NEXT)
 DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     // VCI=2.8V
@@ -195,7 +192,7 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     #endif
 
     #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-        {0x36, {(MADCTL_MV | MADCTL_MY | TFT_RGB_BGR)}, 1},    // Memory Access Control
+        {0x36, {(MADCTL_MX | MADCTL_MY | TFT_RGB_BGR)}, 1},    // Memory Access Control
         {0x21, {0}, 0x80}, // <-- INVERT COLORS
     #endif
 

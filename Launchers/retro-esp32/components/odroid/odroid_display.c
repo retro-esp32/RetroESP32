@@ -1,32 +1,20 @@
 #pragma GCC optimize ("O3")
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "odroid_display.h"
 
 #include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-
 #include "esp_system.h"
-//#include "esp_event.h"
-
-#include "driver/spi_master.h"
+#include "esp_event.h"
 #include "driver/gpio.h"
-
+#include "driver/spi_master.h"
 #include "driver/ledc.h"
 #include "driver/rtc_io.h"
 
-#include "esp_log.h"
+#include <string.h>
 
-#define LCD_HOST    HSPI_HOST
-#define DMA_CHAN    2
 
 const int DUTY_MAX = 0x1fff;
 
-///*
 const gpio_num_t SPI_PIN_NUM_MISO = GPIO_NUM_19;
 const gpio_num_t SPI_PIN_NUM_MOSI = GPIO_NUM_23;
 const gpio_num_t SPI_PIN_NUM_CLK  = GPIO_NUM_18;
@@ -34,22 +22,9 @@ const gpio_num_t SPI_PIN_NUM_CLK  = GPIO_NUM_18;
 const gpio_num_t LCD_PIN_NUM_CS   = GPIO_NUM_5;
 const gpio_num_t LCD_PIN_NUM_DC   = GPIO_NUM_21;
 const gpio_num_t LCD_PIN_NUM_BCKL = GPIO_NUM_14;
-//*/
-
-/*
-const gpio_num_t SPI_PIN_NUM_MISO = GPIO_NUM_19;
-const gpio_num_t SPI_PIN_NUM_MOSI = GPIO_NUM_23;
-const gpio_num_t SPI_PIN_NUM_CLK  = GPIO_NUM_18;
-
-const gpio_num_t LCD_PIN_NUM_CS   = GPIO_NUM_14;
-const gpio_num_t LCD_PIN_NUM_DC   = GPIO_NUM_27;
-const gpio_num_t LCD_PIN_NUM_BCKL = GPIO_NUM_32;
-*/
-
 const int LCD_BACKLIGHT_ON_VALUE = 1;
-const int LCD_SPI_CLOCK_RATE = SPI_MASTER_FREQ_40M;
+const int LCD_SPI_CLOCK_RATE = 40000000;
 
-#define PARALLEL_LINES 16
 
 #define SPI_TRANSACTION_COUNT (4)
 static spi_transaction_t trans[SPI_TRANSACTION_COUNT];
@@ -94,7 +69,7 @@ bool isBackLightIntialized = false;
 */
 typedef struct {
     uint8_t cmd;
-    uint8_t data[16];
+    uint8_t data[128];
     uint8_t databytes; //No of data in data; bit 7 = delay after set; 0xFF = end of cmds.
 } ili_init_cmd_t;
 
@@ -108,7 +83,6 @@ typedef struct {
 #define MADCTL_ML  0x10
 #define MADCTL_MH 0x04
 #define TFT_RGB_BGR 0x08
-
 
 DRAM_ATTR static const ili_init_cmd_t ili_sleep_cmds[] = {
     {TFT_CMD_SWRESET, {0}, 0x80},
@@ -190,9 +164,6 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
 /*
  CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
 */
-/*
- CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-*/
 #if defined (CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32) || defined(CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32_NEXT)
 DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     // VCI=2.8V
@@ -226,7 +197,7 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     #endif
 
     #ifdef CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32
-        {0x36, {(MADCTL_MV | MADCTL_MY | TFT_RGB_BGR)}, 1},    // Memory Access Control
+        {0x36, {(MADCTL_MX | MADCTL_MY | TFT_RGB_BGR)}, 1},    // Memory Access Control
         {0x21, {0}, 0x80}, // <-- INVERT COLORS
     #endif
 
@@ -235,7 +206,6 @@ DRAM_ATTR static const ili_init_cmd_t ili_init_cmds[] = {
     {0, {0}, 0xff}
 };
 #endif
-
 
 static uint16_t* line_buffer_get()
 {
@@ -412,16 +382,9 @@ static void ili_spi_pre_transfer_callback(spi_transaction_t *t)
     gpio_set_level(LCD_PIN_NUM_DC, dc);
 }
 
-
-
 //Initialize the display
 static void ili_init()
 {
-
-    //Initialize non-SPI GPIOs
-    gpio_set_direction(LCD_PIN_NUM_DC, GPIO_MODE_OUTPUT);
-    gpio_set_direction(LCD_PIN_NUM_BCKL, GPIO_MODE_OUTPUT);
-
     int cmd = 0;
 
     //Initialize non-SPI GPIOs
@@ -448,7 +411,6 @@ static void ili_init()
 
 void send_reset_drawing(int left, int top, int width, int height)
 {
-    
     ili_cmd(0x2A);
 
     const uint8_t data1[] = { (left) >> 8, (left) & 0xff, (left + width - 1) >> 8, (left + width - 1) & 0xff };
@@ -458,7 +420,7 @@ void send_reset_drawing(int left, int top, int width, int height)
 
     const uint8_t data2[] = { top >> 8, top & 0xff, (top + height - 1) >> 8, (top + height - 1) & 0xff };
     ili_data(data2, 4);
-   
+
     ili_cmd(0x2C);           //memory write
 }
 
@@ -482,7 +444,8 @@ void send_continue_line(uint16_t *line, int width, int lineCount)
 {
     spi_transaction_t* t;
 
-    #if defined (CONFIG_LCD_DRIVER_CHIP_ODROID_GO) || defined (CONFIG_LCD_DRIVER_CHIP_RETRO_ESP32)
+
+    #if defined (CONFIG_LCD_DRIVER_CHIP_ODROID_GO) || defined (CONFIG_LCD_DRIVER4_CHIP_RETRO_ESP32)
         t = spi_get_transaction();
 
 
@@ -493,6 +456,7 @@ void send_continue_line(uint16_t *line, int width, int lineCount)
 
         spi_put_transaction(t);
     #endif
+
 
     t = spi_get_transaction();
 
@@ -783,34 +747,38 @@ void ili9341_init()
 
     // Initialize SPI
     esp_err_t ret;
-   
-    #define TAG "TFT LCD"
-	ESP_LOGI(TAG, "SPI_PIN_NUM_MOSI=%d",SPI_PIN_NUM_MOSI);
-    ESP_LOGI(TAG, "SPI_PIN_NUM_MISO=%d",SPI_PIN_NUM_MISO);
-	ESP_LOGI(TAG, "SPI_PIN_NUM_CLK=%d",SPI_PIN_NUM_CLK);
-	spi_bus_config_t buscfg = {
-		.sclk_io_num = SPI_PIN_NUM_CLK,
-		.mosi_io_num = SPI_PIN_NUM_MOSI,
-		.miso_io_num = SPI_PIN_NUM_MISO,
-		.quadwp_io_num = -1,
-		.quadhd_io_num = -1
-	};
-    ret = spi_bus_initialize( HSPI_HOST, &buscfg, 1 );
-    ESP_LOGD(TAG, "spi_bus_initialize=%d",ret);
+    //spi_device_handle_t spi;
+    spi_bus_config_t buscfg;
+        memset(&buscfg, 0, sizeof(buscfg));
+
+    buscfg.miso_io_num = SPI_PIN_NUM_MISO;
+    buscfg.mosi_io_num = SPI_PIN_NUM_MOSI;
+    buscfg.sclk_io_num = SPI_PIN_NUM_CLK;
+    buscfg.quadwp_io_num=-1;
+    buscfg.quadhd_io_num=-1;
+
+    spi_device_interface_config_t devcfg;
+        memset(&devcfg, 0, sizeof(devcfg));
+
+    devcfg.clock_speed_hz = LCD_SPI_CLOCK_RATE;
+    devcfg.mode = 0;                                //SPI mode 0
+    devcfg.spics_io_num = LCD_PIN_NUM_CS;               //CS pin
+    devcfg.queue_size = 7;                          //We want to be able to queue 7 transactions at a time
+    devcfg.pre_cb = ili_spi_pre_transfer_callback;  //Specify pre-transfer callback to handle D/C line
+    devcfg.flags = SPI_DEVICE_NO_DUMMY;//0; //SPI_DEVICE_HALFDUPLEX;
+
+    //Initialize the SPI bus
+    //ret=spi_bus_initialize(VSPI_HOST, &buscfg, 1);
+    ret=spi_bus_initialize(HSPI_HOST, &buscfg, 1);
     assert(ret==ESP_OK);
 
-	spi_device_interface_config_t devcfg={
-		.clock_speed_hz = LCD_SPI_CLOCK_RATE,
-		.queue_size = 7,
-		.mode = 2,
-		.flags = SPI_DEVICE_NO_DUMMY,
-        .pre_cb = ili_spi_pre_transfer_callback,
-        .spics_io_num = LCD_PIN_NUM_CS >= 0 ? LCD_PIN_NUM_CS : -1
-	};
+    //Attach the LCD to the SPI bus
+    //ret=spi_bus_add_device(VSPI_HOST, &devcfg, &spi);
+    ret=spi_bus_add_device(HSPI_HOST, &devcfg, &spi);
+    assert(ret==ESP_OK);
 
-	ret = spi_bus_add_device( HSPI_HOST, &devcfg, &spi);
-	ESP_LOGD(TAG, "spi_bus_add_device=%d",ret);
-	assert(ret==ESP_OK);       
+
+
 
 
     //Initialize the LCD

@@ -1,6 +1,6 @@
 . ${IDF_PATH}/add_path.sh
-#export PORT=/dev/cu.usbserial-AC00UQ47
-export PORT=/dev/cu.SLAB_USBtoUART
+#export PORT=/dev/cu.usbserial-AB0JECDI
+export PORT=/dev/cu.usbserial-AB0JECDI
 
 #export OFFSET=0x600000
 export OFFSET=0x100000

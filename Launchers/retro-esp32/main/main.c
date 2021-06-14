@@ -1,4 +1,3 @@
-
   #include "includes/core.h"
   #include "includes/definitions.h"
   #include "includes/structures.h"
@@ -111,6 +110,8 @@
 */
 //{#pragma region Main
   void app_main(void) {
+
+    printf("\n-----\n%s\n-----\n", __func__);
     
     nvs_flash_init();
     odroid_system_init();

@@ -518,7 +518,7 @@ Makefile.componentbuild
 
 .. code:: bash
 
-   python esptool.py --chip esp32 --port /dev/cu.usbserial-AC00UQ47 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 bootloader/bootloader.bin 0x10000 example_app.bin 0x8000 partition_table_unit_test_app.bin
+   python esptool.py --chip esp32 --port /dev/cu.usbserial-AB0JECDI --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 40m --flash_size detect 0x1000 bootloader/bootloader.bin 0x10000 example_app.bin 0x8000 partition_table_unit_test_app.bin
 
 编译 Bootloader
 ---------------
