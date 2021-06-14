@@ -1,0 +1,20 @@
+#!/bin/bash
+
+SRC_PATH=`pwd`
+REPO=$(dirname $PWD)
+
+#---------------------------------
+# Styles
+#---------------------------------
+source helpers/styles
+
+#---------------------------------
+# VERSIONS
+#---------------------------------
+source helpers/version
+
+
+#---------------------------------
+# Goodbye
+#---------------------------------
+source helpers/goodbye
