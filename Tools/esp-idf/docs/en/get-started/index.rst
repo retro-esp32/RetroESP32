@@ -241,7 +241,7 @@ This will compile the application and all the ESP-IDF components, generate bootl
 ::
 
     esptool.py v2.0-beta2
-    Flashing binaries to serial port /dev/cu.usbserial-AB0JECDI (app at offset 0x10000)...
+    Flashing binaries to serial port /dev/cu.usbserial-AC00UQ47 (app at offset 0x10000)...
     esptool.py v2.0-beta2
     Connecting........___
     Uploading stub...
@@ -280,7 +280,7 @@ To see if "hello_world" application is indeed running, type ``make monitor``. Th
 
     $ make monitor
     MONITOR
-    --- idf_monitor on /dev/cu.usbserial-AB0JECDI 115200 ---
+    --- idf_monitor on /dev/cu.usbserial-AC00UQ47 115200 ---
     --- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
     ets Jun  8 2016 00:22:57
 

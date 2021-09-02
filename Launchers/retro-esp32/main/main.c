@@ -149,8 +149,8 @@
 
     GUI = THEMES[USER];
 
-    ili9341_prepare();
-    ili9341_clear(0);
+    //ili9341_prepare();
+    //ili9341_clear(0);
 
     //printf("==============\n%s\n==============\n", "RETRO ESP32");
     switch(esp_reset_reason()) {

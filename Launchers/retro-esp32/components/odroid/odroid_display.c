@@ -436,7 +436,7 @@ void send_continue_wait()
 {
     if(xSemaphoreTake(spi_empty, 1000 / portTICK_RATE_MS) != pdTRUE )
     {
-        abort();
+        //abort();
     }
 }
 

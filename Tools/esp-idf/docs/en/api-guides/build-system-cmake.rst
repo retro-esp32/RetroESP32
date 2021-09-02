@@ -137,7 +137,7 @@ Available targets are: ``flash``, ``app-flash`` (app only), ``bootloader-flash``
 
 When flashing this way, optionally set the ``ESPPORT`` and ``ESPBAUD`` environment variables to specify the serial port and baud rate. You can set environment variables in your operating system or IDE project. Alternatively, set them directly on the command line::
 
-  ESPPORT=/dev/cu.usbserial-AB0JECDI ninja flash
+  ESPPORT=/dev/cu.usbserial-AC00UQ47 ninja flash
 
 .. note:: Providing environment variables at the start of the command like this is Bash shell Syntax. It will work on Linux and macOS. It won't work when using Windows Command Prompt, but it will work when using Bash-like shells on Windows.
 

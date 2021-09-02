@@ -339,10 +339,10 @@ Monitor
 
 To see if "hello_world" application is indeed running, type ``idf.py -p PORT monitor``. This command is launching :doc:`IDF Monitor <idf-monitor>` application::
 
-    $ idf.py -p /dev/cu.usbserial-AB0JECDI monitor
+    $ idf.py -p /dev/cu.usbserial-AC00UQ47 monitor
     Running idf_monitor in directory [...]/esp/hello_world/build
     Executing "python [...]/esp-idf/tools/idf_monitor.py -b 115200 [...]/esp/hello_world/build/hello-world.elf"...
-    --- idf_monitor on /dev/cu.usbserial-AB0JECDI 115200 ---
+    --- idf_monitor on /dev/cu.usbserial-AC00UQ47 115200 ---
     --- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
     ets Jun  8 2016 00:22:57
 

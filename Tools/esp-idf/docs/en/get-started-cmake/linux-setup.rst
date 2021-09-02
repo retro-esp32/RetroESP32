@@ -79,10 +79,10 @@ ESP32 toolchain for Linux is available for download from Espressif website:
     Instead of ``/home/user-name`` there should be a home path specific to your installation.
 
 
-Permission issues /dev/cu.usbserial-AB0JECDI
+Permission issues /dev/cu.usbserial-AC00UQ47
 ------------------------------
 
-With some Linux distributions you may get the ``Failed to open port /dev/cu.usbserial-AB0JECDI`` error message when flashing the ESP32. :ref:`This can be solved by adding the current user to the dialout group<linux-dialout-group-cmake>`.
+With some Linux distributions you may get the ``Failed to open port /dev/cu.usbserial-AC00UQ47`` error message when flashing the ESP32. :ref:`This can be solved by adding the current user to the dialout group<linux-dialout-group-cmake>`.
 
 
 Arch Linux Users
