@@ -3,7 +3,7 @@ menu "Serial flasher config"
 config ESPTOOLPY_PORT
     string "Default serial port"
     depends on !IDF_CMAKE
-    default "/dev/cu.usbserial-AC00UQ47"
+    default "/dev/cu.usbserial-AB0JECDI"
     help
         The serial port that's connected to the ESP chip. This can be overridden by setting the ESPPORT
         environment variable.
