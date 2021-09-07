@@ -40,7 +40,7 @@ Should you ever encounter a locked game, or unresponsive emulator.
 
 
 
-Did you know, you can support us in a few way? We offer multiple sposorship tiers, with different rewards!
+Did you know, you can support us in a few way? We offer multiple sponsorship tiers, with different rewards!
 
 Take a *look*. 
 See what *fits*.

@@ -18,7 +18,7 @@ This only applies to owners of the Hardkernel [Odroid Go](https://www.hardkernel
 
 **If you have purchased a Retro ESP32 from us, you can skip this step.**
 
-[Get the latest Retro Odroid Go Frimware](https://github.com/retro-esp32/Retro-Odroid-Go-Firmware)
+[Get the latest Retro Odroid Go Firmware](https://github.com/retro-esp32/Retro-Odroid-Go-Firmware)
 
 
 
@@ -60,7 +60,7 @@ We kept installation of Retro ESP32 super simple.
 - [x] In game HUD menu
 - [x] **Recently Played** *(First in Launchers Community)*
 - [x] **Favorites List** *(Another First)*
-- [x] **3** Scale levels for *'Core'* Emaulators *(Original, Box, Full Screen)*
+- [x] **3** Scale levels for *'Core'* Emulators *(Original, Box, Full Screen)*
 
 ## Usage
 > What to press and when
@@ -101,7 +101,7 @@ This project is licensed under the Creative Commons Attribution Share Alike 4.0 
 
 
 
-Did you know, you can support us in a few way? We offer multiple sposorship tiers, with different rewards!
+Did you know, you can support us in a few way? We offer multiple sponsorship tiers, with different rewards!
 
 Take a *look*. 
 See what *fits*.
