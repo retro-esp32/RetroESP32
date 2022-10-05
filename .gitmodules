@@ -1,41 +1,41 @@
 [submodule "Odroid/odroid-go-firmware"]
 	path = Odroid/odroid-go-firmware
-	url = git@github.com:OtherCrashOverride/odroid-go-firmware.git
+	url = https://github.com/OtherCrashOverride/odroid-go-firmware.git
 	branch = esp-idf-v3.2
 [submodule "Launchers/emulator-launcher-odroid-go"]
 	path = Launchers/emulator-launcher-odroid-go
-	url = git@github.com:IlyaMZP/emulator-launcher-odroid-go.git
+	url = https://github.com/IlyaMZP/emulator-launcher-odroid-go.git
 [submodule "Emulators/prosystem-odroid-go"]
 	path = Emulators/prosystem-odroid-go
-	url = git@github.com:OtherCrashOverride/prosystem-odroid-go.git
+	url = https://github.com/OtherCrashOverride/prosystem-odroid-go.git
 [submodule "Emulators/stella-odroid-go"]
 	path = Emulators/stella-odroid-go
-	url = git@github.com:OtherCrashOverride/stella-odroid-go.git
+	url = https://github.com/OtherCrashOverride/stella-odroid-go.git
 [submodule "Emulators/frodo-go"]
 	path = Emulators/frodo-go
-	url = git@github.com:OtherCrashOverride/frodo-go.git
+	url = https://github.com/OtherCrashOverride/frodo-go.git
 [submodule "Emulators/go-play"]
 	path = Emulators/go-play
-	url = git@github.com:OtherCrashOverride/go-play.git
+	url = https://github.com/OtherCrashOverride/go-play.git
 [submodule "Emulators/odroid-go-pcengine-huexpress"]
 	path = Emulators/odroid-go-pcengine-huexpress
-	url = git@github.com:pelle7/odroid-go-pcengine-huexpress.git
+	url = https://github.com/pelle7/odroid-go-pcengine-huexpress.git
 [submodule "Emulators/super-go-play"]
 	path = Emulators/super-go-play
-	url = git@github.com:mattkj/super-go-play.git
+	url = https://github.com/mattkj/super-go-play.git
 [submodule "Emulators/pitpo"]
 	path = Emulators/pitpo
-	url = git@github.com:pitpo/go-play.git
+	url = https://github.com/pitpo/go-play.git
 [submodule "Emulators/odroid-go-spectrum-emulator"]
 	path = Emulators/odroid-go-spectrum-emulator
-	url = git@github.com:pelle7/odroid-go-spectrum-emulator.git
+	url = https://github.com/pelle7/odroid-go-spectrum-emulator.git
 	branch = feature/goemu
 [submodule "Emulators/odroid-go-handy"]
 	path = Emulators/odroid-go-handy
-	url = git@github.com:pelle7/odroid-go-handy.git
+	url = https://github.com/pelle7/odroid-go-handy.git
 	branch = develop
 [submodule "Emulators/retro-go"]
 	path = Emulators/retro-go
-	url = git@github.com:ducalex/retro-go.git
+	url = https://github.com/ducalex/retro-go.git
 	branch = master
 
