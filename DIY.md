@@ -9,7 +9,7 @@ If you are considering / curious about the build process of the Retro ESP Launch
 Clone the **Master** [Official Retro ESP32](https://github.com/retro-esp32/RetroESP32/) repo
 
 ```shell
-git clone -b master --single-branch git@github.com:retro-esp32/RetroESP32.git --recursive
+git clone -b master --single-branch https://github.com/retro-esp32/RetroESP32.git --recursive
 cd RetroESP32
 git submodule update --init --recursive
 git submodule foreach git pull origin master
