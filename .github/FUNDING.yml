@@ -1,5 +1,5 @@
-# These are supported funding model platforms
-
-github: [retro-esp32, 32teeth]
+github: [openretroMGB, retro-esp32, 32teeth]
+buy_me_a_coffee: 32teeth
+ko_fi: openretromgb
 patreon: RetroESP32
 custom: ['https://www.paypal.me/32teeth/1.99USD']
